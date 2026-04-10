@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Aerostar | Uniform Can Colour · Perfect Match</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#05080f; --panel:#0a0f1a; --surface:#111827;
+  --b1:rgba(55,95,210,.18); --b2:rgba(255,255,255,.03);
+  --blue:#2d6be4; --bdim:rgba(45,107,228,.4); --bglow:rgba(45,107,228,.1);
+  --text:#eef2ff; --muted:#6a7c9e; --white:#ffffff; --red:#e04e4e;
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);font-size:13px}
+#app{display:flex;height:100vh;overflow:hidden}
+#viewer{flex:1;position:relative;background:radial-gradient(circle at 30% 40%, #0b1022, #020408);overflow:hidden}
+#three-canvas{width:100%;height:100%;display:block;cursor:grab}
+#three-canvas:active{cursor:grabbing}
+.badge{position:absolute;top:22px;left:22px;background:rgba(5,8,15,.82);backdrop-filter:blur(12px);border-radius:60px;padding:6px 18px;pointer-events:none;z-index:10}
+.badge-brand{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:600;letter-spacing:.12em;color:var(--blue);text-transform:uppercase}
+.badge-type{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.drag-hint{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);opacity:.45;pointer-events:none}
+#panel{width:350px;flex-shrink:0;background:var(--panel);border-left:1px solid var(--b1);display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.ph{padding:16px 22px 10px;border-bottom:1px solid var(--b1);flex-shrink:0}
+.logo-row{display:flex;align-items:center;gap:12px}
+.logo-fb{display:flex;align-items:center;gap:8px}
+.logo-fb-star{color:var(--blue);font-size:22px}
+.logo-fb-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:20px;letter-spacing:.08em;color:var(--white)}
+.logo-fb-name em{color:var(--blue);font-style:normal}
+.logo-sub{font-size:8px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.pb{flex:1;overflow-y:auto;padding:16px 20px;scrollbar-width:thin}
+.cs{margin-bottom:24px;border-bottom:1px solid rgba(255,255,255,.04);padding-bottom:16px}
+.cs:last-child{border-bottom:none}
+.st{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--blue);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.st::after{content:'';flex:1;height:1px;background:var(--bdim);opacity:.3}
+.cat-tabs{display:flex;gap:6px;margin-bottom:12px}
+.ct{flex:1;padding:8px 4px;border:1px solid var(--b1);border-radius:10px;background:transparent;color:var(--muted);font-size:11px;cursor:pointer}
+.ct.active{background:var(--bglow);border-color:var(--blue);color:var(--blue)}
+.ct-icon{font-size:14px;display:block;margin-bottom:3px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:6px 12px;border:1px solid var(--b1);border-radius:40px;font-size:11px;color:var(--muted);cursor:pointer;background:transparent}
+.chip.active{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:600}
+.swatches{display:flex;flex-wrap:wrap;gap:8px}
+.sw{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px;border-radius:10px;border:1.5px solid transparent}
+.sw.active{border-color:var(--blue);background:rgba(45,107,228,.12)}
+.sw-dot{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.1);position:relative}
+.sw-dot.met::after{content:'';position:absolute;inset:0;border-radius:50%;background:linear-gradient(135deg,rgba(255,255,255,.5) 0%,transparent 60%)}
+.sw-name{font-size:9px;color:var(--muted)}
+.finish-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.fo{padding:8px 3px 5px;border:1px solid var(--b1);border-radius:12px;text-align:center;cursor:pointer}
+.fo.active{border-color:var(--blue);background:var(--bglow)}
+.fo-ball{width:26px;height:26px;border-radius:50%;margin:0 auto 5px}
+.fo-name{font-size:9px;color:var(--muted)}
+.fo.active .fo-name{color:var(--blue)}
+.cap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.cg{border:1.5px solid var(--b1);border-radius:14px;padding:10px 4px 7px;text-align:center;cursor:pointer;background:var(--surface)}
+.cg.active{border-color:var(--blue);background:var(--bglow)}
+.cg-name{font-size:9px;letter-spacing:.06em;color:var(--muted);margin-top:4px}
+.bare-toggle{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border-radius:40px;padding:8px 14px;margin-bottom:16px}
+.bare-toggle label{font-size:11px;font-weight:500;letter-spacing:.1em;color:var(--text);cursor:pointer}
+.switch{position:relative;display:inline-block;width:44px;height:22px}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:var(--muted);border-radius:34px;transition:.3s}
+.slider:before{position:absolute;content:"";height:16px;width:16px;left:3px;bottom:3px;background-color:white;border-radius:50%;transition:.3s}
+input:checked + .slider{background-color:var(--blue)}
+input:checked + .slider:before{transform:translateX(22px)}
+.label-group-hidden{display:none !important}
+.upload-zone{border:1.5px dashed rgba(45,107,228,.45);border-radius:14px;padding:14px;text-align:center;cursor:pointer;background:var(--surface);position:relative}
+.upload-zone.has-img{border-style:solid;border-color:var(--blue)}
+.up-icon{font-size:22px;opacity:.7;margin-bottom:6px;display:block}
+.up-text{font-size:10px;color:var(--muted)}
+.up-preview{width:100%;max-height:70px;object-fit:contain;border-radius:8px;margin-top:10px;display:none}
+.up-preview.on{display:block}
+.up-clear{position:absolute;top:6px;right:8px;background:var(--red);border:none;border-radius:40px;color:white;padding:2px 9px;font-size:9px;cursor:pointer;display:none}
+.upload-zone.has-img .up-clear{display:block}
+.lcontrols{margin-top:12px;display:none;background:rgba(0,0,0,.2);border-radius:12px;padding:10px}
+.lcontrols.on{display:block}
+.slider-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.slider-row label{width:52px;font-size:9px;color:var(--muted)}
+.slider-row input{flex:1;height:3px;border-radius:4px;background:var(--surface);-webkit-appearance:none}
+.slider-row input::-webkit-slider-thumb{width:12px;height:12px;background:var(--blue);border-radius:50%;cursor:pointer}
+.slider-val{width:30px;font-size:9px;color:var(--blue);text-align:right}
+.dimmed{opacity:.3;pointer-events:none}
+.label-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.lo{border:1.5px solid var(--b1);border-radius:12px;cursor:pointer;background:var(--surface)}
+.lo.active{border-color:var(--blue);background:var(--bglow)}
+.lo-prev{height:48px;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:11px}
+.lo-prev.minimal{background:#f2efe7;color:#101010}
+.lo-prev.bold{background:#0a0a0f;color:#fff}
+.lo-prev.bluegeo{background:#07101f;color:#2d6be4}
+.lo-prev.eco{background:#eef1e1;color:#1f4a2c}
+.lo-name{font-size:8px;text-align:center;padding:5px;color:var(--muted);text-transform:uppercase}
+.brand-in{width:100%;padding:10px 12px;background:var(--surface);border:1.5px solid var(--b1);border-radius:12px;color:white;font-family:'Barlow Condensed';font-size:18px;font-weight:600;text-align:center;letter-spacing:.1em}
+.brand-in:focus{border-color:var(--blue);outline:none}
+.pf{padding:12px 20px 18px;border-top:1px solid var(--b1)}
+.btn-q{width:100%;padding:12px;background:linear-gradient(100deg,#1f56d4,#3e7ce6);border:none;border-radius:40px;color:white;font-family:'Barlow Condensed';font-size:14px;font-weight:600;letter-spacing:.15em;cursor:pointer}
+.btn-q:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(45,107,228,.4)}
+#mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);backdrop-filter:blur(8px);z-index:200;align-items:center;justify-content:center}
+#mo.open{display:flex}
+.modal{background:var(--panel);border:1px solid var(--b1);border-radius:28px;padding:28px;width:480px;max-width:90vw;max-height:90vh;overflow:auto;position:relative}
+.mc{position:absolute;top:16px;right:22px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
+.mt{font-family:'Barlow Condensed';font-size:28px;font-weight:600;color:white}
+.ms{font-size:12px;color:var(--muted);margin-bottom:18px}
+.msum{background:var(--surface);border-radius:16px;padding:14px;margin-bottom:20px}
+.sr{display:flex;justify-content:space-between;padding:5px 0;font-size:11px}
+.sk{color:var(--muted)}.sv{color:white}
+.fg input,.fg textarea,.fg select{width:100%;padding:10px;background:var(--surface);border:1px solid var(--b1);border-radius:12px;color:white;margin-top:4px}
+.btn-sub{width:100%;padding:12px;background:linear-gradient(100deg,#1f56d4,#3e7ce6);border:none;border-radius:40px;color:white;font-weight:600;margin-top:14px;cursor:pointer}
+#suc{display:none;text-align:center}
+#suc.show{display:block}
+@media(max-width:780px){#app{flex-direction:column;height:auto}#viewer{height:52vw;min-height:280px}#panel{width:100%}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="viewer">
+    <canvas id="three-canvas"></canvas>
+    <div class="badge"><div class="badge-brand" id="badge-brand">AEROSTAR</div><div class="badge-type" id="badge-type">Deodorant · 150ml</div></div>
+    <div class="drag-hint">← drag to rotate →</div>
+  </div>
+  <aside id="panel">
+    <div class="ph"><div class="logo-row"><div class="logo-fb"><span class="logo-fb-star">★</span><div class="logo-fb-name">Aero<em>star</em></div></div></div><div class="logo-sub">3D CONFIGURATOR</div></div>
+    <div class="pb">
+      <div class="bare-toggle"><label for="bareModeToggle">⚫ BARE CAN MODE</label><label class="switch"><input type="checkbox" id="bareModeToggle"><span class="slider"></span></label></div>
+      <div class="cs"><div class="st">Category</div><div class="cat-tabs"><button class="ct active" data-cat="beauty"><span class="ct-icon">✧</span>Beauty</button><button class="ct" data-cat="airfresh"><span class="ct-icon">✦</span>Air Care</button><button class="ct" data-cat="household"><span class="ct-icon">⬩</span>Household</button></div><div class="chips" id="prod-chips"></div></div>
+      <div class="cs"><div class="st">Can Size</div><div class="chips" id="size-chips"></div></div>
+      <div class="cs"><div class="st">Body Colour</div><div class="swatches" id="body-swatches"></div></div>
+      <div class="cs"><div class="st">Finish</div><div class="finish-grid" id="finish-grid"></div></div>
+      <div class="cs"><div class="st">Cap Style (AW series)</div><div class="cap-grid" id="cap-grid"></div></div>
+      <div class="cs"><div class="st">Cap Colour</div><div class="swatches" id="cap-swatches"></div></div>
+      <div id="labelSections">
+        <div class="cs"><div class="st">Label Artwork</div><div class="upload-zone" id="upload-zone"><input type="file" id="lbl-file" accept="image/*" style="display:none"><div id="up-ph"><span class="up-icon">⬚</span><div class="up-text"><strong>Upload image / label</strong><br>PNG, JPG wraps can</div></div><img class="up-preview" id="up-preview"><button class="up-clear" id="up-clear">✕ Remove</button></div><div class="lcontrols" id="lcontrols"><div class="slider-row"><label>VERTICAL POS</label><input type="range" id="lpy" min="15" max="85" value="48"><span class="slider-val" id="lpy-val">48%</span></div><div class="slider-row"><label>SCALE</label><input type="range" id="lsc" min="40" max="110" value="82"><span class="slider-val" id="lsc-val">82%</span></div></div></div>
+        <div class="cs" id="lstyle-sec"><div class="st">Label Style</div><div class="label-grid" id="label-grid"></div></div>
+        <div class="cs" id="brand-sec"><div class="st">Brand Name</div><input class="brand-in" id="brand-input" placeholder="YOUR BRAND" maxlength="20" value="AEROSTAR"></div>
+      </div>
+    </div>
+    <div class="pf"><button class="btn-q" id="quoteBtn">REQUEST QUOTE →</button></div>
+  </aside>
+</div>
+<div id="mo"><div class="modal"><button class="mc" id="closeModalBtn">✕</button><div id="fv"><div class="mt">Configure & Quote</div><div class="ms">We’ll reply within 24h</div><div class="msum" id="msum"></div><div class="mgrid" style="display:flex;gap:10px"><div class="fg" style="flex:1"><label>First name</label><input id="f1"></div><div class="fg" style="flex:1"><label>Last name</label><input id="f2"></div></div><div class="fg"><label>Company</label><input id="f3"></div><div class="fg"><label>Email</label><input id="f4"></div><div class="fg"><label>Quantity</label><select id="f5"><option>1k–5k units</option><option>5k–10k units</option><option>10k–50k units</option><option>50k+</option></select></div><div class="fg"><label>Notes</label><textarea id="f6" rows="2"></textarea></div><button class="btn-sub" id="submitQuoteBtn">Send Request</button></div><div id="suc"><div class="suc-icon">✓</div><div class="mt">Quote Sent</div><div class="ms">Aerostar team will contact you</div></div></div></div>
+
+<script>
+// INDUSTRY PROPORTIONS
+const REF_BODY_RADIUS = 0.52;
+const REF_NECK_RATIO = 0.67;
+const REF_CAP_FLARE = 1.15;
+const REF_CAP_HEIGHT_RATIO = 0.28;
+const REF_NECK_RADIUS = REF_BODY_RADIUS * REF_NECK_RATIO;
+const REF_BODY_HEIGHT = 1.72;
+const REF_SHOULDER_HEIGHT = 0.48;
+const REF_NECK_HEIGHT = 0.09;
+const REF_DOME_SY = 0.148;
+const REF_BODY_Y = REF_BODY_RADIUS * REF_DOME_SY;
+const REF_SHLD_Y = REF_BODY_Y + REF_BODY_HEIGHT;
+const REF_NECK_Y = REF_SHLD_Y + REF_SHOULDER_HEIGHT;
+const REF_CAP_BASE_Y = REF_NECK_Y + REF_NECK_HEIGHT;
+const REF_TOTAL_HEIGHT = REF_CAP_BASE_Y + (REF_BODY_HEIGHT * REF_CAP_HEIGHT_RATIO);
+const CAP_STYLE_MULT = { std:{radius:1.0,height:0.95}, cone:{radius:0.95,height:1.22}, wide:{radius:1.12,height:0.72}, trigger:{radius:1.05,height:0.86}, spray:{radius:0.92,height:1.08}, flat:{radius:1.02,height:0.52} };
+const PRODS = { beauty:[{id:'deodorant',name:'Deodorant',sx:1.00,sy:1.00},{id:'hairspray',name:'Hair Spray',sx:1.00,sy:1.20},{id:'bodymist',name:'Body Mist',sx:0.92,sy:1.06},{id:'perfume',name:'Perfume',sx:0.82,sy:0.94}], airfresh:[{id:'roomspray',name:'Room Spray',sx:1.02,sy:1.08},{id:'carfresh',name:'Car Fresh',sx:0.88,sy:0.88},{id:'fabricmist',name:'Fabric Mist',sx:1.00,sy:1.14}], household:[{id:'insecticide',name:'Insecticide',sx:1.00,sy:1.11},{id:'polish',name:'Polish',sx:1.04,sy:1.06},{id:'lubricant',name:'Lubricant',sx:0.96,sy:1.17}] };
+const BODY_COLS = [{id:'silver',hex:'#b6b6ad',name:'Silver',met:true},{id:'black',hex:'#18181c',name:'Black',met:false},{id:'pearl',hex:'#ece8df',name:'Pearl White',met:false},{id:'rose',hex:'#c48b75',name:'Rose Gold',met:true},{id:'gold',hex:'#c9a658',name:'Gold',met:true},{id:'navy',hex:'#14223b',name:'Navy',met:false},{id:'cobalt',hex:'#1c5bc4',name:'Cobalt',met:false},{id:'forest',hex:'#254f35',name:'Forest',met:false},{id:'burgundy',hex:'#651e2c',name:'Burgundy',met:false}];
+const CAP_COLS = [{id:'cblack',hex:'#101012',name:'Black'},{id:'cwhite',hex:'#e3dfd7',name:'White'},{id:'csilver',hex:'#b6b6ad',name:'Silver'},{id:'cblue',hex:'#1f5bc4',name:'Blue'},{id:'cgold',hex:'#c9a658',name:'Gold'},{id:'match',hex:'MATCH',name:'Match Body'}];
+const FINISHES = [{id:'matte',name:'Matte',r:0.92,m:0.00,ball:'#7a7a7a'},{id:'satin',name:'Satin',r:0.48,m:0.16,ball:'#acacac'},{id:'gloss',name:'Gloss',r:0.12,m:0.10,ball:'radial-gradient(#fff,#aaa)'},{id:'metallic',name:'Metallic',r:0.28,m:0.84,ball:'linear-gradient(145deg,#aaa,#eee,#aaa)'},{id:'chrome',name:'Chrome',r:0.06,m:0.98,ball:'radial-gradient(circle at 30% 30%,#fff,#888)'}];
+const CAP_TYPES = [{id:'std',name:'AW50-1'},{id:'cone',name:'AW52-2'},{id:'wide',name:'AW53-3'},{id:'trigger',name:'AW55-5'},{id:'spray',name:'AW51-3'},{id:'flat',name:'AW56-2'}];
+const LSTYLES = [{id:'minimal',cls:'minimal',pre:'LUXE'},{id:'bold',cls:'bold',pre:'BOLD'},{id:'bluegeo',cls:'bluegeo',pre:'AERO'},{id:'eco',cls:'eco',pre:'NATURAL'}];
+
+let S = { cat:'beauty', prod:PRODS.beauty[0], size:'150ml', masterScale:1.0, bcol:BODY_COLS[0], finish:FINISHES[1], capType:CAP_TYPES[0], ccol:CAP_COLS[0], lstyle:LSTYLES[2], brand:'AEROSTAR', uploadImg:null, labelPosY:0.48, labelScale:0.82, bareMode:false };
+
+// THREE SETUP
+const canvas = document.getElementById('three-canvas');
+const renderer = new THREE.WebGLRenderer({canvas,antialias:true});
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.4;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x05080f);
+scene.fog = new THREE.FogExp2(0x05080f, 0.018);
+const camera = new THREE.PerspectiveCamera(42,1,0.1,40);
+camera.position.set(0,1.2,5.9);
+const ambient = new THREE.AmbientLight(0x8a9eff,0.7); scene.add(ambient);
+const key = new THREE.DirectionalLight(0xfff5e0,1.9); key.position.set(4,6,3.5); scene.add(key);
+const fill = new THREE.DirectionalLight(0xaaccff,0.75); fill.position.set(-3,2.5,4); scene.add(fill);
+const rim = new THREE.DirectionalLight(0xffddbb,1.0); rim.position.set(1,3,-5); scene.add(rim);
+const back = new THREE.PointLight(0x3377ff,0.45); back.position.set(0,1.8,-2.2); scene.add(back);
+const groundGlow = (()=>{const gc=document.createElement('canvas');gc.width=512;gc.height=512;const ctx=gc.getContext('2d');const grad=ctx.createRadialGradient(256,256,0,256,256,256);grad.addColorStop(0,'rgba(45,107,228,0.28)');grad.addColorStop(0.6,'rgba(45,107,228,0.05)');grad.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=grad;ctx.fillRect(0,0,512,512);const tex=new THREE.CanvasTexture(gc);const plane=new THREE.Mesh(new THREE.PlaneGeometry(6.5,6.5),new THREE.MeshBasicMaterial({map:tex,transparent:true,depthWrite:false}));plane.rotation.x=-Math.PI/2;plane.position.y=0.002;scene.add(plane);})();
+
+let bodyMat = new THREE.MeshStandardMaterial({color:S.bcol.hex,roughness:S.finish.r,metalness:S.finish.m});
+let labelMat = new THREE.MeshStandardMaterial({roughness:S.finish.r,metalness:S.finish.m,color:0xffffff}); // match body finish exactly
+let capMat = new THREE.MeshStandardMaterial({color:S.ccol.hex==='MATCH'?S.bcol.hex:S.ccol.hex,roughness:0.48,metalness:0.14});
+let actMat = new THREE.MeshStandardMaterial({color:0x262a38,roughness:0.7,metalness:0.12});
+let tBodyCol = new THREE.Color(S.bcol.hex), tCapCol = new THREE.Color(S.ccol.hex==='MATCH'?S.bcol.hex:S.ccol.hex);
+let tR = S.finish.r, tM = S.finish.m;
+let labelTex = null;
+const canGroup = new THREE.Group(); canGroup.position.y = -1.08; scene.add(canGroup);
+
+function getMasterScale() { return S.masterScale * ((S.prod.sx + S.prod.sy) / 2); }
+
+function updateLabelMaterialFinish() {
+  labelMat.roughness = S.finish.r;
+  labelMat.metalness = S.finish.m;
+  labelMat.needsUpdate = true;
+}
+
+function buildCan() {
+  while(canGroup.children.length){ const c=canGroup.children[0]; if(c.geometry) c.geometry.dispose(); canGroup.remove(c); }
+  const master = getMasterScale();
+  const style = CAP_STYLE_MULT[S.capType.id];
+  const capRadius = REF_NECK_RADIUS * REF_CAP_FLARE * style.radius;
+  const capHeight = (REF_BODY_HEIGHT * REF_CAP_HEIGHT_RATIO) * style.height;
+  const dome = new THREE.Mesh(new THREE.SphereGeometry(REF_BODY_RADIUS,48,24,0,Math.PI*2,0,Math.PI*0.48),bodyMat);
+  dome.scale.y=REF_DOME_SY; dome.position.y=0.008; canGroup.add(dome);
+  const bodyCyl = new THREE.Mesh(new THREE.CylinderGeometry(REF_BODY_RADIUS,REF_BODY_RADIUS,REF_BODY_HEIGHT,64,1),bodyMat);
+  bodyCyl.position.y=REF_BODY_Y+REF_BODY_HEIGHT/2; canGroup.add(bodyCyl);
+  if (!S.bareMode) {
+    const labelCyl = new THREE.Mesh(new THREE.CylinderGeometry(REF_BODY_RADIUS+0.002,REF_BODY_RADIUS+0.002,REF_BODY_HEIGHT,72,1,true),labelMat);
+    labelCyl.position.y=REF_BODY_Y+REF_BODY_HEIGHT/2; canGroup.add(labelCyl);
+  }
+  const pts=[]; for(let i=0;i<=28;i++){ const t=i/28; const r = REF_BODY_RADIUS*(1-t) + REF_NECK_RADIUS*t - (t*t*0.03); pts.push(new THREE.Vector2(r, t*REF_SHOULDER_HEIGHT)); }
+  const shoulderGeo = new THREE.LatheGeometry(pts,56);
+  const shoulderMesh = new THREE.Mesh(shoulderGeo,bodyMat);
+  shoulderMesh.position.y=REF_SHLD_Y; canGroup.add(shoulderMesh);
+  const neckCyl = new THREE.Mesh(new THREE.CylinderGeometry(REF_NECK_RADIUS,REF_NECK_RADIUS,REF_NECK_HEIGHT,32),bodyMat);
+  neckCyl.position.y=REF_NECK_Y+REF_NECK_HEIGHT/2; canGroup.add(neckCyl);
+  const baseY = REF_CAP_BASE_Y, CR = capRadius, CBH = capHeight;
+  switch(S.capType.id){
+    case 'std':{ const cb=new THREE.Mesh(new THREE.CylinderGeometry(CR,CR*0.94,CBH,48),capMat); cb.position.y=baseY+CBH/2; canGroup.add(cb); const dc=new THREE.Mesh(new THREE.SphereGeometry(CR,32,16,0,Math.PI*2,0,Math.PI*0.52),capMat); dc.position.y=baseY+CBH; canGroup.add(dc); const act=new THREE.Mesh(new THREE.BoxGeometry(0.12,0.05,0.1),actMat); act.position.set(0,baseY+CBH*0.58,CR+0.035); canGroup.add(act); const nz=new THREE.Mesh(new THREE.CylinderGeometry(0.012,0.012,0.09,8),actMat); nz.rotation.x=Math.PI/2; nz.position.set(0,baseY+CBH*0.58+0.012,CR+0.085); canGroup.add(nz); break; }
+    case 'cone':{ const ring=new THREE.Mesh(new THREE.CylinderGeometry(CR,CR*0.92,CBH*0.22,48),capMat); ring.position.y=baseY+CBH*0.11; canGroup.add(ring); const cone=new THREE.Mesh(new THREE.CylinderGeometry(CR*0.28,CR*0.86,CBH*0.78,36),capMat); cone.position.y=baseY+CBH*0.22+CBH*0.39; canGroup.add(cone); const tip=new THREE.Mesh(new THREE.SphereGeometry(0.028,14),capMat); tip.position.y=baseY+CBH*0.22+CBH*0.78; canGroup.add(tip); break; }
+    case 'wide':{ const wideCap=new THREE.Mesh(new THREE.CylinderGeometry(CR,CR*0.96,CBH,48),capMat); wideCap.position.y=baseY+CBH/2; canGroup.add(wideCap); const td=new THREE.Mesh(new THREE.CylinderGeometry(CR*0.98,CR*0.98,0.035,48),capMat); td.position.y=baseY+CBH; canGroup.add(td); break; }
+    case 'trigger':{ const baseTrig=new THREE.Mesh(new THREE.CylinderGeometry(CR*0.94,CR*0.88,CBH,48),capMat); baseTrig.position.y=baseY+CBH/2; canGroup.add(baseTrig); const bar=new THREE.Mesh(new THREE.BoxGeometry(0.08,0.055,CR*1.9),actMat); bar.position.set(0,baseY+CBH*0.6,0); canGroup.add(bar); const lever=new THREE.Mesh(new THREE.BoxGeometry(0.06,0.13,0.08),actMat); lever.position.set(0,baseY+CBH*0.28,CR*0.48); canGroup.add(lever); const nz=new THREE.Mesh(new THREE.CylinderGeometry(0.012,0.012,0.1,8),actMat); nz.rotation.x=Math.PI/2; nz.position.set(0,baseY+CBH*0.6+0.01,CR+0.07); canGroup.add(nz); break; }
+    case 'spray':{ const sprayRing=new THREE.Mesh(new THREE.CylinderGeometry(CR,CR*0.91,CBH*0.3,48),capMat); sprayRing.position.y=baseY+CBH*0.15; canGroup.add(sprayRing); const sprayCone=new THREE.Mesh(new THREE.CylinderGeometry(CR*0.22,CR*0.85,CBH*0.7,32),capMat); sprayCone.position.y=baseY+CBH*0.3+CBH*0.35; canGroup.add(sprayCone); break; }
+    case 'flat':{ const flatBase=new THREE.Mesh(new THREE.CylinderGeometry(CR,CR*0.94,CBH,48),capMat); flatBase.position.y=baseY+CBH/2; canGroup.add(flatBase); const fd=new THREE.Mesh(new THREE.CylinderGeometry(CR*0.98,CR*0.98,0.03,48),capMat); fd.position.y=baseY+CBH; canGroup.add(fd); const btn=new THREE.Mesh(new THREE.CylinderGeometry(CR*0.35,CR*0.35,0.045,24),actMat); btn.position.y=baseY+CBH+0.028; canGroup.add(btn); break; }
+  }
+  canGroup.scale.set(master, master, master);
+}
+
+function generateLabel(){
+  if(S.bareMode) return;
+  const W=1024,H=512; const cv=document.createElement('canvas'); cv.width=W; cv.height=H; const ctx=cv.getContext('2d');
+  // SOLID BODY COLOUR BACKGROUND - MATCHES METAL PARTS EXACTLY
+  ctx.fillStyle=S.bcol.hex; ctx.fillRect(0,0,W,H);
+  // Optional finish subtle gradient (for metallic/chrome effect)
+  if(S.finish.id==='metallic'||S.finish.id==='chrome'){
+    const grad=ctx.createLinearGradient(0,0,W,0);
+    grad.addColorStop(0,'rgba(0,0,0,0.15)');
+    grad.addColorStop(0.3,'rgba(255,255,255,0.12)');
+    grad.addColorStop(0.6,'rgba(255,255,255,0.2)');
+    grad.addColorStop(1,'rgba(0,0,0,0.1)');
+    ctx.fillStyle=grad; ctx.fillRect(0,0,W,H);
+  }
+  const brand=(S.brand||'YOUR BRAND').toUpperCase().slice(0,18);
+  const prod=S.prod.name;
+  if(S.uploadImg){
+    const img=S.uploadImg; const drawW=W; const drawH=(drawW/img.width)*img.height*S.labelScale;
+    const dy=H*S.labelPosY - drawH/2; ctx.drawImage(img,0,dy,drawW,drawH);
+  } else {
+    const LT=70, LB=442, MID=(LT+LB)/2;
+    // Draw label elements (opaque text and lines, but background remains body colour)
+    switch(S.lstyle.id){
+      case 'minimal':
+        ctx.fillStyle='rgba(0,0,0,0.08)'; ctx.fillRect(0,LT,W,LB-LT);
+        ctx.fillStyle='#131313'; ctx.font='600 82px "Barlow Condensed"'; ctx.textAlign='center'; ctx.fillText(brand,W/2,MID-20);
+        ctx.fillStyle='#4a4a4a'; ctx.font='300 28px Barlow'; ctx.fillText(prod,W/2,MID+58);
+        break;
+      case 'bold':
+        ctx.fillStyle='rgba(8,8,12,0.75)'; ctx.fillRect(0,LT,W,LB-LT);
+        ctx.fillStyle='#ffffff'; ctx.font='700 110px "Barlow Condensed"'; ctx.fillText(brand,W/2,MID-10);
+        ctx.fillStyle='#2d6be4'; ctx.font='500 28px Barlow'; ctx.fillText(prod,W/2,MID+72);
+        break;
+      case 'bluegeo':
+        ctx.fillStyle='rgba(7,16,39,0.7)'; ctx.fillRect(0,LT,W,LB-LT);
+        ctx.fillStyle='#2d6be4'; ctx.font='700 98px "Barlow Condensed"'; ctx.fillText(brand,W/2,MID-12);
+        ctx.fillStyle='#7aaaff'; ctx.font='300 26px Barlow'; ctx.fillText(prod,W/2,MID+70);
+        break;
+      case 'eco':
+        ctx.fillStyle='rgba(238,240,224,0.5)'; ctx.fillRect(0,LT,W,LB-LT);
+        ctx.fillStyle='#2d5a34'; ctx.font='600 86px "Barlow Condensed"'; ctx.fillText(brand,W/2,MID-18);
+        ctx.fillStyle='#558b2f'; ctx.font='22px serif'; ctx.fillText('✧ natural ✧',W/2,MID+44);
+        break;
+    }
+  }
+  if(labelTex) labelTex.dispose();
+  labelTex=new THREE.CanvasTexture(cv); labelTex.encoding=THREE.sRGBEncoding;
+  labelMat.map=labelTex; labelMat.needsUpdate=true;
+  updateLabelMaterialFinish(); // ensure same roughness/metalness as body
+}
+
+function updateCamera(){ const totalH = REF_TOTAL_HEIGHT * getMasterScale(); const midY = canGroup.position.y + totalH/2; const dist = Math.max(4.9, totalH * 1.1); camera.position.set(0, midY + 0.18, dist); camera.lookAt(0, midY, 0); }
+let rotY=0, autoSpin=0, isDrag=false, lastX=0;
+function onMouseDown(x){isDrag=true;lastX=x;rotY=canGroup.rotation.y;autoSpin=0;}
+function onMouseMove(x){if(!isDrag)return;rotY+=(x-lastX)*0.012;lastX=x;}
+function onMouseUp(){isDrag=false;}
+canvas.addEventListener('mousedown',e=>onMouseDown(e.clientX));
+window.addEventListener('mousemove',e=>onMouseMove(e.clientX));
+window.addEventListener('mouseup',onMouseUp);
+canvas.addEventListener('touchstart',e=>{onMouseDown(e.touches[0].clientX); e.preventDefault();});
+canvas.addEventListener('touchmove',e=>{onMouseMove(e.touches[0].clientX); e.preventDefault();});
+canvas.addEventListener('touchend',onMouseUp);
+function animate(){
+  requestAnimationFrame(animate);
+  if(!isDrag) autoSpin+=0.0045;
+  canGroup.rotation.y=rotY+autoSpin;
+  bodyMat.color.lerp(tBodyCol,0.1); bodyMat.roughness+=(tR-bodyMat.roughness)*0.1; bodyMat.metalness+=(tM-bodyMat.metalness)*0.1;
+  let targetCapHex=S.ccol.hex==='MATCH'?S.bcol.hex:S.ccol.hex;
+  capMat.color.lerp(new THREE.Color(targetCapHex),0.1);
+  renderer.render(scene,camera);
+}
+function resize(){const v=document.getElementById('viewer');renderer.setSize(v.clientWidth,v.clientHeight);camera.aspect=v.clientWidth/v.clientHeight;camera.updateProjectionMatrix();}
+window.addEventListener('resize',resize);
+
+// UI RENDERING
+function renderProdChips(){document.getElementById('prod-chips').innerHTML=PRODS[S.cat].map(p=>`<button class="chip${S.prod.id===p.id?' active':''}" data-prod="${p.id}">${p.name}</button>`).join('');}
+function renderBodySwatches(){document.getElementById('body-swatches').innerHTML=BODY_COLS.map(c=>`<div class="sw${S.bcol.id===c.id?' active':''}" data-body="${c.id}"><div class="sw-dot ${c.met?'met':''}" style="background:${c.hex}"></div><div class="sw-name">${c.name}</div></div>`).join('');}
+function renderCapSwatches(){document.getElementById('cap-swatches').innerHTML=CAP_COLS.map(c=>`<div class="sw${S.ccol.id===c.id?' active':''}" data-capcol="${c.id}"><div class="sw-dot" style="background:${c.hex==='MATCH'?S.bcol.hex:c.hex}"></div><div class="sw-name">${c.name}</div></div>`).join('');}
+function renderFinishes(){document.getElementById('finish-grid').innerHTML=FINISHES.map(f=>`<div class="fo${S.finish.id===f.id?' active':''}" data-finish="${f.id}"><div class="fo-ball" style="background:${f.ball}"></div><span class="fo-name">${f.name}</span></div>`).join('');}
+function renderCapGrid(){document.getElementById('cap-grid').innerHTML=CAP_TYPES.map(ct=>`<div class="cg${S.capType.id===ct.id?' active':''}" data-cap="${ct.id}"><svg width="44" height="42" viewBox="0 0 44 42"><path d="${ct.id==='std'?'M14,36 L14,20 Q14,10 22,10 Q30,10 30,20 L30,36 Z':ct.id==='cone'?'M14,36 L14,26 L22,6 L30,26 L30,36 Z':ct.id==='wide'?'M8,36 L8,24 Q8,16 22,16 Q36,16 36,24 L36,36 Z':ct.id==='trigger'?'M12,36 L12,24 L32,24 L32,36 L28,30 L16,30 Z':'M16,36 L16,24 L28,24 L28,36 Z'}" fill="rgba(45,107,228,0.25)" stroke="rgba(45,107,228,0.8)" stroke-width="1.6"/></svg><div class="cg-name">${ct.name}</div></div>`).join('');}
+function renderLabelGrid(){document.getElementById('label-grid').innerHTML=LSTYLES.map(l=>`<div class="lo${S.lstyle.id===l.id?' active':''}" data-lstyle="${l.id}"><div class="lo-prev ${l.cls}">${l.pre}</div><div class="lo-name">${l.id}</div></div>`).join('');}
+function updateBadge(){document.getElementById('badge-brand').innerHTML=(S.brand||'YOUR BRAND').toUpperCase();document.getElementById('badge-type').innerHTML=`${S.prod.name} · ${S.size}`;}
+function applyUniformScale(){ const m=getMasterScale(); canGroup.scale.set(m,m,m); updateCamera(); }
+function setBareMode(enabled){ S.bareMode=enabled; document.getElementById('labelSections').classList.toggle('label-group-hidden',enabled); if(enabled && S.uploadImg){ S.uploadImg=null; const upZone=document.getElementById('upload-zone'); upZone.classList.remove('has-img'); document.getElementById('up-preview').classList.remove('on'); document.getElementById('up-ph').style.display=''; document.getElementById('lcontrols').classList.remove('on'); } buildCan(); generateLabel(); updateCamera(); }
+
+// EVENT BINDINGS
+document.getElementById('prod-chips').addEventListener('click',e=>{if(e.target.classList.contains('chip')){S.prod=PRODS[S.cat].find(p=>p.id===e.target.dataset.prod);renderProdChips();applyUniformScale();generateLabel();updateBadge();}});
+document.getElementById('body-swatches').addEventListener('click',e=>{let sw=e.target.closest('.sw');if(sw){let id=sw.dataset.body;S.bcol=BODY_COLS.find(c=>c.id===id);tBodyCol=new THREE.Color(S.bcol.hex);renderBodySwatches();renderCapSwatches();generateLabel();}});
+document.getElementById('cap-swatches').addEventListener('click',e=>{let sw=e.target.closest('.sw');if(sw){S.ccol=CAP_COLS.find(c=>c.id===sw.dataset.capcol);if(S.ccol.hex!=='MATCH')tCapCol=new THREE.Color(S.ccol.hex);renderCapSwatches();}});
+document.getElementById('finish-grid').addEventListener('click',e=>{let fo=e.target.closest('.fo');if(fo){S.finish=FINISHES.find(f=>f.id===fo.dataset.finish);tR=S.finish.r;tM=S.finish.m;renderFinishes();updateLabelMaterialFinish();generateLabel();}});
+document.getElementById('cap-grid').addEventListener('click',e=>{let cg=e.target.closest('.cg');if(cg){S.capType=CAP_TYPES.find(c=>c.id===cg.dataset.cap);renderCapGrid();buildCan();generateLabel();updateCamera();}});
+document.getElementById('label-grid').addEventListener('click',e=>{if(S.bareMode)return;let lo=e.target.closest('.lo');if(lo){S.lstyle=LSTYLES.find(l=>l.id===lo.dataset.lstyle);renderLabelGrid();generateLabel();}});
+document.querySelectorAll('.ct').forEach(btn=>{btn.addEventListener('click',()=>{S.cat=btn.dataset.cat;S.prod=PRODS[S.cat][0];document.querySelectorAll('.ct').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderProdChips();applyUniformScale();generateLabel();updateBadge();})});
+document.getElementById('size-chips').innerHTML=`<button class="chip" data-scale="0.82">75ml</button><button class="chip" data-scale="0.90">100ml</button><button class="chip active" data-scale="1.00">150ml</button><button class="chip" data-scale="1.08">200ml</button><button class="chip" data-scale="1.18">300ml</button><button class="chip" data-scale="1.28">400ml</button>`;
+document.getElementById('size-chips').addEventListener('click',e=>{let c=e.target.closest('.chip');if(c){document.querySelectorAll('#size-chips .chip').forEach(x=>x.classList.remove('active'));c.classList.add('active');let scale=parseFloat(c.dataset.scale);S.size=c.innerText;S.masterScale=scale;applyUniformScale();updateBadge();}});
+const fileInput=document.getElementById('lbl-file'), upZone=document.getElementById('upload-zone'), upPreview=document.getElementById('up-preview'), upClear=document.getElementById('up-clear');
+upZone.addEventListener('click',()=>{if(!S.bareMode) fileInput.click();});
+fileInput.addEventListener('change',(e)=>{if(S.bareMode)return;const file=e.target.files[0];if(file){const reader=new FileReader();reader.onload=ev=>{const img=new Image();img.onload=()=>{S.uploadImg=img;upPreview.src=ev.target.result;upPreview.classList.add('on');upZone.classList.add('has-img');document.getElementById('up-ph').style.display='none';document.getElementById('lcontrols').classList.add('on');document.getElementById('lstyle-sec').classList.add('dimmed');document.getElementById('brand-sec').classList.add('dimmed');generateLabel();};img.src=ev.target.result;};reader.readAsDataURL(file);}});
+upClear.addEventListener('click',(e)=>{e.stopPropagation();S.uploadImg=null;fileInput.value='';upPreview.classList.remove('on');upZone.classList.remove('has-img');document.getElementById('up-ph').style.display='';document.getElementById('lcontrols').classList.remove('on');document.getElementById('lstyle-sec').classList.remove('dimmed');document.getElementById('brand-sec').classList.remove('dimmed');generateLabel();});
+const lpy=document.getElementById('lpy'), lsc=document.getElementById('lsc');
+lpy.addEventListener('input',()=>{S.labelPosY=lpy.value/100;document.getElementById('lpy-val').innerText=lpy.value+'%';generateLabel();});
+lsc.addEventListener('input',()=>{S.labelScale=lsc.value/100;document.getElementById('lsc-val').innerText=lsc.value+'%';generateLabel();});
+document.getElementById('brand-input').addEventListener('input',e=>{S.brand=e.target.value;updateBadge();if(!S.bareMode) generateLabel();});
+document.getElementById('bareModeToggle').addEventListener('change',(e)=>setBareMode(e.target.checked));
+const modal=document.getElementById('mo'), quoteBtn=document.getElementById('quoteBtn'), closeModalBtn=document.getElementById('closeModalBtn'), submitQuoteBtn=document.getElementById('submitQuoteBtn');
+quoteBtn.addEventListener('click',()=>{document.getElementById('msum').innerHTML=[['Product',`${S.prod.name} · ${S.size}`],['Brand',S.brand],['Body',S.bcol.name],['Finish',S.finish.name],['Cap',S.capType.name],['Cap Color',S.ccol.name],['Label',S.bareMode?'No label (Bare can)':(S.uploadImg?'Custom Artwork':S.lstyle.id)]].map(([k,v])=>`<div class="sr"><span class="sk">${k}</span><span class="sv">${v}</span></div>`).join('');modal.classList.add('open');});
+closeModalBtn.addEventListener('click',()=>{modal.classList.remove('open');document.getElementById('fv').classList.remove('hide');document.getElementById('suc').classList.remove('show');});
+submitQuoteBtn.addEventListener('click',()=>{if(!document.getElementById('f1').value.trim()||!document.getElementById('f4').value.trim()){alert('Please enter name & email');return;}document.getElementById('fv').classList.add('hide');document.getElementById('suc').classList.add('show');});
+modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('open');});
+// INIT
+buildCan(); generateLabel(); updateCamera(); resize(); renderProdChips(); renderBodySwatches(); renderCapSwatches(); renderFinishes(); renderCapGrid(); renderLabelGrid(); updateBadge(); S.brand='AEROSTAR'; document.getElementById('brand-input').value='AEROSTAR'; generateLabel(); animate();
+</script>
+</body>
+</html>

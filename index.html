@@ -409,8 +409,8 @@ renderer.outputEncoding=THREE.sRGBEncoding;
 
 const scene=new THREE.Scene();
 scene.background=new THREE.Color(0xedf1f7);
-scene.fog=new THREE.Fog(0xedf1f7,14,24);
-const camera=new THREE.PerspectiveCamera(38,1,0.1,40);
+scene.fog=new THREE.Fog(0xedf1f7,20,36);
+const camera=new THREE.PerspectiveCamera(32,1,0.1,60);
 
 scene.add(new THREE.AmbientLight(0xffffff,0.95));
 const keyL=new THREE.DirectionalLight(0xfff8f0,1.6); keyL.position.set(3,6,4); scene.add(keyL);
@@ -465,31 +465,146 @@ function buildCan(){
 }
 
 function updateCamera(){
-  const th=REF_TOTAL*getMasterScale(), my=canGroup.position.y+th/2;
-  camera.position.set(0,my+0.2,Math.max(4.8,th*1.12));
-  camera.lookAt(0,my,0);
+  const th=REF_TOTAL*getMasterScale();
+  /* Root cause of the zoom bug: Math.max(4.8, th×1.12) always returned 4.8
+     because th×1.12 < 4.8 for ALL our can sizes — camera never moved.
+     Fix: dist = th × 2.3, so camera always steps back in proportion.
+     With FOV=32° this keeps the can at ~76% of viewport height at every size. */
+  const dist=th*2.3;
+  const lookY=canGroup.position.y+th*0.47;
+  camera.position.set(0,lookY+th*0.04,dist);
+  camera.lookAt(0,lookY,0);
 }
+
+/* ── UV GEOMETRY NOTE ─────────────────────────────────
+   Three.js CylinderGeometry UV mapping:
+     U=0 / U=1 → +Z axis = FRONT FACE (towards camera)
+     U=0.25    → -X axis (left side)
+     U=0.5     → -Z axis (back face)
+     U=0.75    → +X axis (right side)
+
+   Correct canvas aspect ratio for our geometry:
+     Circumference  = 2π × REF_BR = 2π × 0.52 ≈ 3.267 units
+     Body height    = REF_BH = 1.72 units
+     Ratio          = 3.267 / 1.72 ≈ 1.899 : 1
+     → Canvas = 1024 × 539 px (we use 1024 × 540)
+
+   To centre artwork on the front face we set texture.offset.x = 0.5
+   so the middle of the canvas image (x=512) maps to the front face.
+   wrapS = RepeatWrapping ensures seamless tiling at the seam.
+─────────────────────────────────────────────────────── */
+const CANVAS_W=1024, CANVAS_H=540; // matches 3D geometry ratio ≈ 1.9:1
 
 function generateLabel(){
   if(S.bareMode){labelMat.map=null;labelMat.needsUpdate=true;return;}
-  const W=1024,H=512;
+  const W=CANVAS_W, H=CANVAS_H;
   const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
   const ctx=cv.getContext('2d');
+
+  // Base coat = body colour
   ctx.fillStyle=S.bodyColor.hex; ctx.fillRect(0,0,W,H);
+
+  // Metallic/chrome horizontal shimmer
   if(S.finish.id==='metallic'||S.finish.id==='chrome'){
     const g=ctx.createLinearGradient(0,0,W,0);
     g.addColorStop(0,'rgba(0,0,0,.18)'); g.addColorStop(.22,'rgba(255,255,255,.10)');
     g.addColorStop(.50,'rgba(255,255,255,.22)'); g.addColorStop(.78,'rgba(255,255,255,.08)');
     g.addColorStop(1,'rgba(0,0,0,.15)'); ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
   }
+
+  // Uploaded artwork:
+  // We centre horizontally at x = W/2 so it maps to the front face
+  // (texture.offset.x=0.5 below shifts U so W/2 = U=0 = front)
   if(S.designImg){
-    const img=S.designImg, drawW=W*S.labelScale, drawH=(drawW/img.width)*img.height;
-    ctx.drawImage(img,(W-drawW)/2,H*S.labelPosY-drawH/2,drawW,drawH);
+    const img=S.designImg;
+    const drawW=W*S.labelScale;
+    const drawH=(drawW/img.width)*img.height;
+    const dx=W/2-drawW/2;           // centred horizontally → front face
+    const dy=H*S.labelPosY-drawH/2; // vertical position slider
+    ctx.drawImage(img,dx,dy,drawW,drawH);
   }
+
   if(labelTex) labelTex.dispose();
-  labelTex=new THREE.CanvasTexture(cv); labelTex.encoding=THREE.sRGBEncoding;
-  labelMat.map=labelTex; labelMat.color.set(0xffffff);
-  labelMat.roughness=S.finish.r; labelMat.metalness=S.finish.m; labelMat.needsUpdate=true;
+  labelTex=new THREE.CanvasTexture(cv);
+  labelTex.encoding=THREE.sRGBEncoding;
+  labelTex.wrapS=THREE.RepeatWrapping; // seamless horizontal wrap
+  labelTex.offset.x=0.5;              // shift so canvas centre = front face
+  labelMat.map=labelTex;
+  labelMat.color.set(0xffffff);
+  labelMat.roughness=S.finish.r;
+  labelMat.metalness=S.finish.m;
+  labelMat.needsUpdate=true;
+}
+
+/* ── TEMPLATE DOWNLOAD ────────────────────────────────
+   Generates a 2048×1080 PNG showing:
+   - Full 360° wrap canvas with axis labels
+   - Front-face safe zone (centre 50% = 180° front arc)
+   - Recommended label panel (centre 70% ≈ 252° wrap)
+   - Bleed line and dimension annotations
+─────────────────────────────────────────────────────── */
+function downloadTemplate(){
+  const W=2048, H=1080;
+  const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+  const ctx=cv.getContext('2d');
+
+  // Background: body colour
+  ctx.fillStyle=S.bodyColor.hex||'#A7A9AC'; ctx.fillRect(0,0,W,H);
+
+  // Subtle grid
+  ctx.strokeStyle='rgba(255,255,255,0.10)'; ctx.lineWidth=1;
+  for(let x=0;x<=W;x+=W/8){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<=H;y+=H/6){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+
+  // Recommended label panel (70% width, centred = front + sides)
+  const lpW=Math.round(W*0.7), lpX=Math.round((W-lpW)/2);
+  ctx.fillStyle='rgba(255,255,255,0.08)';
+  ctx.fillRect(lpX,0,lpW,H);
+  ctx.strokeStyle='rgba(255,255,255,0.40)'; ctx.lineWidth=2; ctx.setLineDash([8,6]);
+  ctx.strokeRect(lpX,0,lpW,H); ctx.setLineDash([]);
+
+  // Front-face safe zone (50% = centre 180°)
+  const sfW=Math.round(W*0.5), sfX=Math.round((W-sfW)/2);
+  const sfPad=40;
+  ctx.strokeStyle='rgba(255,255,255,0.65)'; ctx.lineWidth=2; ctx.setLineDash([]);
+  ctx.strokeRect(sfX+sfPad,sfPad,sfW-sfPad*2,H-sfPad*2);
+
+  // Centre line
+  ctx.strokeStyle='rgba(255,255,255,0.25)'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.moveTo(W/2,0); ctx.lineTo(W/2,H); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Face labels
+  ctx.font='700 28px Lato,sans-serif'; ctx.textAlign='center'; ctx.fillStyle='rgba(255,255,255,0.5)';
+  ctx.fillText('FRONT FACE',W/2,H/2);
+  ctx.font='500 22px Lato,sans-serif'; ctx.fillStyle='rgba(255,255,255,0.3)';
+  ctx.fillText('LEFT SIDE',lpX+60,H/2);
+  ctx.fillText('RIGHT SIDE',lpX+lpW-60,H/2);
+  ctx.fillText('BACK',80,H/2);
+  ctx.fillText('BACK',W-80,H/2);
+
+  // Dimension annotations
+  ctx.font='700 18px monospace'; ctx.fillStyle='rgba(255,255,255,0.7)'; ctx.textAlign='left';
+  const ann=[
+    {x:12,y:28,t:'FULL WRAP CANVAS — 2048 × 1080 px (1:1 physical scale)'},
+    {x:12,y:54,t:'Front face safe zone: x '+sfX+'–'+(sfX+sfW)+' px (50% of width)'},
+    {x:12,y:80,t:'Recommended label panel: x '+lpX+'–'+(lpX+lpW)+' px (70% of width)'},
+    {x:12,y:H-40,t:'Artwork centred here will appear on the FRONT of the can'},
+  ];
+  ann.forEach(a=>{ctx.fillText(a.t,a.x,a.y);});
+
+  // Corner marks
+  [[0,0],[W,0],[0,H],[W,H]].forEach(([cx,cy])=>{
+    const ox=cx===0?1:-1, oy=cy===0?1:-1;
+    ctx.strokeStyle='rgba(255,255,255,0.6)'; ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(cx+ox*20,cy);ctx.lineTo(cx,cy);ctx.lineTo(cx,cy+oy*20);ctx.stroke();
+  });
+
+  // Download
+  const link=document.createElement('a');
+  link.download='aerostar-label-template-2048x1080.png';
+  link.href=cv.toDataURL('image/png');
+  link.click();
 }
 
 let rotY=0,autoSpin=0,isDrag=false,lastX=0;
@@ -683,14 +798,28 @@ function rStep4(){
       <label class="toggle"><input type="checkbox" ${S.bareMode?'checked':''}
         onchange="S.bareMode=this.checked;buildCan();generateLabel();rebox()"><span class="tgl"></span></label>
     </div>
-    ${!S.bareMode?`<span class="field-label">Artwork File
-      <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:9.5px;margin-left:4px">PNG or JPG — maps 360° around the can surface</span>
-    </span>
+    ${!S.bareMode?`<span class="field-label">Artwork File</span>
+    <div style="background:var(--blue-bg);border:1px solid rgba(21,87,176,.14);border-radius:7px;padding:13px 15px;margin-bottom:12px">
+      <div style="font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.9px;margin-bottom:9px">Artwork Canvas Specification</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11.5px;margin-bottom:10px">
+        <div><span style="color:var(--muted)">Canvas size</span><br><strong style="color:var(--text)">2048 × 1080 px</strong></div>
+        <div><span style="color:var(--muted)">Ratio</span><br><strong style="color:var(--text)">1.9 : 1 (wider than tall)</strong></div>
+        <div><span style="color:var(--muted)">Front-face zone</span><br><strong style="color:var(--text)">Centre 50% of width</strong></div>
+        <div><span style="color:var(--muted)">Label panel</span><br><strong style="color:var(--text)">Centre 70% recommended</strong></div>
+      </div>
+      <div style="font-size:10.5px;color:var(--muted);margin-bottom:10px;line-height:1.5">
+        Place your label artwork <strong style="color:var(--sub)">centred horizontally</strong> — the centre of the canvas maps to the front face of the can.
+      </div>
+      <button onclick="downloadTemplate()" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--blue);border-radius:5px;background:white;color:var(--blue);font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.3px;font-family:inherit">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download Template PNG
+      </button>
+    </div>
     <div class="upload-zone${hasImg?' has':''}" onclick="document.getElementById('fup').click()">
       <input type="file" id="fup" accept="image/*" style="display:none" onchange="onUpload(event)">
       ${!hasImg?`<div class="up-icon-wrap">${IC.upload}</div>
         <div class="up-txt">Upload Artwork File</div>
-        <div class="up-hint">PNG · JPG · Recommended width 2400 px</div>`:''}
+        <div class="up-hint">PNG · JPG · Ideal size 2048 × 1080 px</div>`:''}
       <img id="uprev" class="up-preview${hasImg?' on':''}" src="${hasImg?S.designImg.src:''}">
       <button class="up-clear" onclick="clearDesign(event)">Remove</button>
     </div>

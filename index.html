@@ -2,352 +2,824 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Aerostar | Uniform Can Colour · Perfect Match</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aerostar Contract — Packaging Configurator</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
 :root{
-  --bg:#05080f; --panel:#0a0f1a; --surface:#111827;
-  --b1:rgba(55,95,210,.18); --b2:rgba(255,255,255,.03);
-  --blue:#2d6be4; --bdim:rgba(45,107,228,.4); --bglow:rgba(45,107,228,.1);
-  --text:#eef2ff; --muted:#6a7c9e; --white:#ffffff; --red:#e04e4e;
+  --blue:#1557b0;--blue2:#1e6fd9;--blue-dark:#0a3578;--blue-nav:#0d3a7a;
+  --blue-bg:#f0f5fc;--border:#dde5f0;--bg:#f4f6fb;
+  --text:#0f172a;--sub:#334155;--muted:#64748b;--white:#fff;
 }
+*{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden}
-body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);font-size:13px}
-#app{display:flex;height:100vh;overflow:hidden}
-#viewer{flex:1;position:relative;background:radial-gradient(circle at 30% 40%, #0b1022, #020408);overflow:hidden}
+body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--text);font-size:13px}
+
+/* ─── HEADER ─────────────────────────────────────── */
+.top-bar{background:var(--white);border-bottom:1px solid var(--border);height:62px;display:flex;align-items:center;padding:0 40px;justify-content:space-between;flex-shrink:0}
+.logo-wrap{display:flex;flex-direction:column;user-select:none;line-height:1;gap:0}
+.logo-ltr{display:flex;align-items:center}
+.logo-lt{font-size:27px;font-weight:300;color:#5c6b7a;letter-spacing:-.5px}
+.logo-contract{font-family:Georgia,serif;font-style:italic;color:var(--blue);font-size:13px;padding-left:63px;margin-top:-1px;letter-spacing:.01em}
+.header-right{display:flex;align-items:center;gap:20px}
+.hdr-tag{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase}
+.hdr-sep{width:1px;height:16px;background:var(--border)}
+.hdr-btn{font-size:10.5px;font-weight:700;color:var(--blue);text-decoration:none;border:1.5px solid var(--blue);border-radius:20px;padding:4px 15px;letter-spacing:.4px;transition:all .15s}
+.hdr-btn:hover{background:var(--blue);color:#fff}
+
+/* ─── NAV BAR ────────────────────────────────────── */
+.nav-bar{background:var(--blue-nav);height:36px;display:flex;align-items:center;padding:0 40px;gap:0;flex-shrink:0}
+.nav-bar a{color:rgba(255,255,255,.65);text-decoration:none;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:0 14px;height:36px;display:flex;align-items:center;transition:color .15s}
+.nav-bar a:hover{color:#fff}
+.nav-bar .spacer{flex:1}
+.nb-div{width:1px;height:16px;background:rgba(255,255,255,.15);margin:0 4px}
+
+/* ─── LAYOUT ─────────────────────────────────────── */
+.layout{display:grid;grid-template-columns:1fr 440px;height:calc(100vh - 98px)}
+.left{overflow-y:auto;padding:22px 32px 32px;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.right{position:relative;background:#edf1f7;border-left:1px solid var(--border);overflow:hidden}
 #three-canvas{width:100%;height:100%;display:block;cursor:grab}
 #three-canvas:active{cursor:grabbing}
-.badge{position:absolute;top:22px;left:22px;background:rgba(5,8,15,.82);backdrop-filter:blur(12px);border-radius:60px;padding:6px 18px;pointer-events:none;z-index:10}
-.badge-brand{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:600;letter-spacing:.12em;color:var(--blue);text-transform:uppercase}
-.badge-type{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.drag-hint{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);opacity:.45;pointer-events:none}
-#panel{width:350px;flex-shrink:0;background:var(--panel);border-left:1px solid var(--b1);display:flex;flex-direction:column;height:100vh;overflow:hidden}
-.ph{padding:16px 22px 10px;border-bottom:1px solid var(--b1);flex-shrink:0}
-.logo-row{display:flex;align-items:center;gap:12px}
-.logo-fb{display:flex;align-items:center;gap:8px}
-.logo-fb-star{color:var(--blue);font-size:22px}
-.logo-fb-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:20px;letter-spacing:.08em;color:var(--white)}
-.logo-fb-name em{color:var(--blue);font-style:normal}
-.logo-sub{font-size:8px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);margin-top:6px}
-.pb{flex:1;overflow-y:auto;padding:16px 20px;scrollbar-width:thin}
-.cs{margin-bottom:24px;border-bottom:1px solid rgba(255,255,255,.04);padding-bottom:16px}
-.cs:last-child{border-bottom:none}
-.st{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--blue);margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.st::after{content:'';flex:1;height:1px;background:var(--bdim);opacity:.3}
-.cat-tabs{display:flex;gap:6px;margin-bottom:12px}
-.ct{flex:1;padding:8px 4px;border:1px solid var(--b1);border-radius:10px;background:transparent;color:var(--muted);font-size:11px;cursor:pointer}
-.ct.active{background:var(--bglow);border-color:var(--blue);color:var(--blue)}
-.ct-icon{font-size:14px;display:block;margin-bottom:3px}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{padding:6px 12px;border:1px solid var(--b1);border-radius:40px;font-size:11px;color:var(--muted);cursor:pointer;background:transparent}
-.chip.active{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:600}
-.swatches{display:flex;flex-wrap:wrap;gap:8px}
-.sw{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px;border-radius:10px;border:1.5px solid transparent}
-.sw.active{border-color:var(--blue);background:rgba(45,107,228,.12)}
-.sw-dot{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.1);position:relative}
-.sw-dot.met::after{content:'';position:absolute;inset:0;border-radius:50%;background:linear-gradient(135deg,rgba(255,255,255,.5) 0%,transparent 60%)}
-.sw-name{font-size:9px;color:var(--muted)}
-.finish-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
-.fo{padding:8px 3px 5px;border:1px solid var(--b1);border-radius:12px;text-align:center;cursor:pointer}
-.fo.active{border-color:var(--blue);background:var(--bglow)}
-.fo-ball{width:26px;height:26px;border-radius:50%;margin:0 auto 5px}
-.fo-name{font-size:9px;color:var(--muted)}
-.fo.active .fo-name{color:var(--blue)}
-.cap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.cg{border:1.5px solid var(--b1);border-radius:14px;padding:10px 4px 7px;text-align:center;cursor:pointer;background:var(--surface)}
-.cg.active{border-color:var(--blue);background:var(--bglow)}
-.cg-name{font-size:9px;letter-spacing:.06em;color:var(--muted);margin-top:4px}
-.bare-toggle{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border-radius:40px;padding:8px 14px;margin-bottom:16px}
-.bare-toggle label{font-size:11px;font-weight:500;letter-spacing:.1em;color:var(--text);cursor:pointer}
-.switch{position:relative;display:inline-block;width:44px;height:22px}
-.switch input{opacity:0;width:0;height:0}
-.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:var(--muted);border-radius:34px;transition:.3s}
-.slider:before{position:absolute;content:"";height:16px;width:16px;left:3px;bottom:3px;background-color:white;border-radius:50%;transition:.3s}
-input:checked + .slider{background-color:var(--blue)}
-input:checked + .slider:before{transform:translateX(22px)}
-.label-group-hidden{display:none !important}
-.upload-zone{border:1.5px dashed rgba(45,107,228,.45);border-radius:14px;padding:14px;text-align:center;cursor:pointer;background:var(--surface);position:relative}
-.upload-zone.has-img{border-style:solid;border-color:var(--blue)}
-.up-icon{font-size:22px;opacity:.7;margin-bottom:6px;display:block}
-.up-text{font-size:10px;color:var(--muted)}
-.up-preview{width:100%;max-height:70px;object-fit:contain;border-radius:8px;margin-top:10px;display:none}
+
+/* ─── VIEWER OVERLAYS ────────────────────────────── */
+.can-badge{position:absolute;top:16px;left:16px;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-radius:6px;padding:8px 14px;pointer-events:none;border:1px solid rgba(255,255,255,.8);box-shadow:0 2px 12px rgba(0,0,0,.08)}
+.badge-prod{font-size:11px;font-weight:700;color:var(--blue-dark);letter-spacing:.08em;text-transform:uppercase}
+.badge-spec{font-size:9px;color:var(--muted);margin-top:2px;letter-spacing:.05em}
+.drag-hint{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);opacity:.45;pointer-events:none;display:flex;align-items:center;gap:7px}
+
+/* ─── STEP PROGRESS ──────────────────────────────── */
+.step-progress{display:flex;align-items:center;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:16px 22px;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.sp-item{display:flex;align-items:center;gap:11px;cursor:pointer;flex-shrink:0}
+.sp-num{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--muted);flex-shrink:0;transition:all .2s;letter-spacing:.05em}
+.sp-item.active .sp-num{background:var(--blue);border-color:var(--blue);color:#fff}
+.sp-item.done .sp-num{background:var(--blue-bg);border-color:var(--blue);color:var(--blue)}
+.sp-meta{display:flex;flex-direction:column;gap:1px}
+.sp-step{font-size:8.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.sp-label{font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap}
+.sp-item.active .sp-label{color:var(--blue-dark)}
+.sp-item.active .sp-step{color:var(--blue)}
+.sp-item.done .sp-label{color:var(--blue)}
+.sp-item.done .sp-step{color:var(--blue);opacity:.6}
+.sp-connector{flex:1;height:1px;background:var(--border);margin:0 14px;min-width:16px}
+.sp-connector.past{background:var(--blue);opacity:.25}
+
+/* ─── CONTENT CARD ───────────────────────────────── */
+.box{background:var(--white);border-radius:8px;border:1px solid var(--border);padding:24px 26px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.sec-title{font-size:21px;font-weight:300;color:var(--blue-dark);margin-bottom:20px;letter-spacing:-.3px}
+.sec-rule{height:1px;background:var(--border);margin:18px 0}
+.field-label{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;display:block}
+
+/* ─── CATEGORY TABS ──────────────────────────────── */
+.cat-tabs{display:flex;gap:6px;margin-bottom:18px}
+.ct{flex:1;padding:11px 10px;border:1.5px solid var(--border);border-radius:7px;background:var(--white);color:var(--muted);font-size:11px;font-weight:700;cursor:pointer;text-align:center;transition:all .14s;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:.2px}
+.ct:hover{border-color:var(--blue2)}
+.ct.on{background:var(--blue-bg);border-color:var(--blue);color:var(--blue)}
+.ct svg{opacity:.7}
+.ct.on svg{opacity:1}
+
+/* ─── SIZE PILLS ─────────────────────────────────── */
+.size-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.sz{padding:5px 14px;border-radius:4px;border:1px solid var(--border);font-size:11.5px;font-weight:600;cursor:pointer;background:var(--white);color:var(--muted);transition:all .14s;letter-spacing:.3px}
+.sz:hover{border-color:var(--blue)}
+.sz.on{background:var(--blue);border-color:var(--blue);color:#fff}
+
+/* ─── PRODUCT GRID ───────────────────────────────── */
+.prod-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:18px}
+.pcard{border:1px solid var(--border);border-radius:7px;padding:14px 14px;cursor:pointer;transition:all .14s;background:var(--white);display:flex;align-items:center;gap:12px}
+.pcard:hover{border-color:var(--blue2);box-shadow:0 2px 8px rgba(21,87,176,.08)}
+.pcard.on{border-color:var(--blue);background:var(--blue-bg)}
+.pcard-icon{width:32px;flex-shrink:0;display:flex;justify-content:center;color:var(--muted)}
+.pcard.on .pcard-icon{color:var(--blue)}
+.pcard-text{}
+.pcard-name{font-size:12px;font-weight:700;color:var(--text)}
+.pcard-sub{font-size:10px;color:var(--muted);margin-top:1px}
+.pcard.on .pcard-name{color:var(--blue-dark)}
+.pcard.on .pcard-sub{color:var(--blue);opacity:.8}
+
+/* ─── PANTONE PICKER ─────────────────────────────── */
+.p-search-wrap{position:relative;margin-bottom:10px}
+.p-search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--muted)}
+.psearch{width:100%;padding:8px 11px 8px 32px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:12px;outline:none;color:var(--text);background:var(--white);transition:border-color .14s}
+.psearch:focus{border-color:var(--blue)}
+.pfam-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.pfam-btn{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:4px;border:1px solid var(--border);font-size:10.5px;font-weight:600;cursor:pointer;background:var(--white);color:var(--muted);transition:all .12s;letter-spacing:.2px}
+.pfam-btn:hover{border-color:var(--blue2)}
+.pfam-btn.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.pfam-btn.on .pfam-dot{border-color:rgba(255,255,255,.4)}
+.pfam-dot{width:8px;height:8px;border-radius:50%;border:1px solid rgba(0,0,0,.12);flex-shrink:0}
+.pgrid-color{display:flex;flex-wrap:wrap;gap:5px;max-height:148px;overflow-y:auto;margin-bottom:10px;padding:1px;scrollbar-width:thin}
+.psw{width:30px;height:30px;border-radius:50%;cursor:pointer;border:2px solid transparent;position:relative;transition:transform .12s,border-color .12s;flex-shrink:0}
+.psw:hover{transform:scale(1.16);z-index:2}
+.psw.on{border-color:#0a3578;transform:scale(1.1)}
+.psw-tip{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#0f172a;color:#fff;font-size:9px;padding:4px 8px;border-radius:4px;white-space:nowrap;pointer-events:none;z-index:40;display:none;line-height:1.5;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.psw-tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:#0f172a}
+.psw:hover .psw-tip{display:block}
+.p-selected{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--blue-bg);border-radius:6px;border:1px solid rgba(21,87,176,.14);margin-bottom:10px;min-height:48px}
+.p-sel-swatch{width:32px;height:32px;border-radius:50%;flex-shrink:0;border:1px solid rgba(0,0,0,.1);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.p-sel-info{}
+.p-sel-code{font-size:10px;font-weight:700;color:var(--blue);letter-spacing:.5px}
+.p-sel-name{font-size:12px;color:var(--text);margin-top:1px}
+.custom-row{display:flex;align-items:center;gap:10px;padding-top:4px}
+.custom-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--muted);white-space:nowrap}
+.custom-row input[type=color]{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);padding:2px;cursor:pointer;background:none;flex-shrink:0}
+.hex-input{flex:1;padding:6px 10px;border:1px solid var(--border);border-radius:5px;font-size:11.5px;font-family:'Lato',monospace;color:var(--text);outline:none;letter-spacing:.5px}
+.hex-input:focus{border-color:var(--blue)}
+
+/* ─── CAP GRID ───────────────────────────────────── */
+.cap-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:18px}
+.cg{border:1px solid var(--border);border-radius:7px;padding:12px 6px 10px;text-align:center;cursor:pointer;background:var(--white);transition:all .14s}
+.cg:hover{border-color:var(--blue2);box-shadow:0 2px 8px rgba(21,87,176,.08)}
+.cg.on{border-color:var(--blue);background:var(--blue-bg)}
+.cg-icon{display:flex;justify-content:center;align-items:center;height:34px;color:var(--muted);margin-bottom:6px}
+.cg.on .cg-icon{color:var(--blue)}
+.cg-name{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:.3px;line-height:1.3}
+.cg.on .cg-name{color:var(--blue)}
+.match-toggle{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1px solid var(--border);border-radius:7px;cursor:pointer;background:var(--white);margin-bottom:12px;transition:all .14s}
+.match-toggle:hover{border-color:var(--blue)}
+.match-toggle.on{border-color:var(--blue);background:var(--blue-bg)}
+.match-toggle svg{color:var(--muted);flex-shrink:0}
+.match-toggle.on svg{color:var(--blue)}
+.match-text{font-size:11.5px;font-weight:600;color:var(--muted)}
+.match-toggle.on .match-text{color:var(--blue)}
+.match-check{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;margin-left:auto;flex-shrink:0;transition:all .14s}
+.match-toggle.on .match-check{background:var(--blue);border-color:var(--blue)}
+
+/* ─── FINISH ─────────────────────────────────────── */
+.fin-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:18px}
+.fg{border:1px solid var(--border);border-radius:7px;padding:10px 5px 8px;text-align:center;cursor:pointer;background:var(--white);transition:all .14s}
+.fg:hover{border-color:var(--blue2)}
+.fg.on{border-color:var(--blue);background:var(--blue-bg)}
+.fg-ball{width:30px;height:30px;border-radius:50%;margin:0 auto 6px;border:1px solid rgba(0,0,0,.1);box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.fg-name{font-size:9.5px;font-weight:700;color:var(--muted);letter-spacing:.3px}
+.fg.on .fg-name{color:var(--blue)}
+
+/* ─── BARE TOGGLE ────────────────────────────────── */
+.bare-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--blue-bg);border:1px solid rgba(21,87,176,.12);border-radius:7px;margin-bottom:16px}
+.bare-lbl{font-size:11.5px;font-weight:600;color:var(--sub)}
+.bare-sub{font-size:9.5px;color:var(--muted);margin-top:2px}
+.toggle{position:relative;display:inline-block;width:40px;height:22px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.tgl{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#cbd5e1;border-radius:22px;transition:.25s}
+.tgl:before{position:absolute;content:'';height:16px;width:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.25s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+input:checked+.tgl{background:var(--blue)}
+input:checked+.tgl:before{transform:translateX(18px)}
+
+/* ─── UPLOAD ─────────────────────────────────────── */
+.upload-zone{border:1.5px dashed var(--border);border-radius:7px;padding:22px;text-align:center;cursor:pointer;background:var(--white);position:relative;transition:all .14s}
+.upload-zone:hover,.upload-zone.has{border-color:var(--blue);background:var(--blue-bg)}
+.up-icon-wrap{width:40px;height:40px;border-radius:50%;background:var(--blue-bg);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;color:var(--blue);border:1px solid rgba(21,87,176,.15)}
+.upload-zone.has .up-icon-wrap{background:rgba(21,87,176,.08)}
+.up-txt{font-size:12.5px;font-weight:600;color:var(--sub)}
+.up-hint{font-size:10px;color:var(--muted);margin-top:3px}
+.up-preview{width:100%;max-height:70px;object-fit:contain;border-radius:5px;margin-top:12px;display:none}
 .up-preview.on{display:block}
-.up-clear{position:absolute;top:6px;right:8px;background:var(--red);border:none;border-radius:40px;color:white;padding:2px 9px;font-size:9px;cursor:pointer;display:none}
-.upload-zone.has-img .up-clear{display:block}
-.lcontrols{margin-top:12px;display:none;background:rgba(0,0,0,.2);border-radius:12px;padding:10px}
-.lcontrols.on{display:block}
-.slider-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.slider-row label{width:52px;font-size:9px;color:var(--muted)}
-.slider-row input{flex:1;height:3px;border-radius:4px;background:var(--surface);-webkit-appearance:none}
-.slider-row input::-webkit-slider-thumb{width:12px;height:12px;background:var(--blue);border-radius:50%;cursor:pointer}
-.slider-val{width:30px;font-size:9px;color:var(--blue);text-align:right}
-.dimmed{opacity:.3;pointer-events:none}
-.label-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.lo{border:1.5px solid var(--b1);border-radius:12px;cursor:pointer;background:var(--surface)}
-.lo.active{border-color:var(--blue);background:var(--bglow)}
-.lo-prev{height:48px;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:11px}
-.lo-prev.minimal{background:#f2efe7;color:#101010}
-.lo-prev.bold{background:#0a0a0f;color:#fff}
-.lo-prev.bluegeo{background:#07101f;color:#2d6be4}
-.lo-prev.eco{background:#eef1e1;color:#1f4a2c}
-.lo-name{font-size:8px;text-align:center;padding:5px;color:var(--muted);text-transform:uppercase}
-.brand-in{width:100%;padding:10px 12px;background:var(--surface);border:1.5px solid var(--b1);border-radius:12px;color:white;font-family:'Barlow Condensed';font-size:18px;font-weight:600;text-align:center;letter-spacing:.1em}
-.brand-in:focus{border-color:var(--blue);outline:none}
-.pf{padding:12px 20px 18px;border-top:1px solid var(--b1)}
-.btn-q{width:100%;padding:12px;background:linear-gradient(100deg,#1f56d4,#3e7ce6);border:none;border-radius:40px;color:white;font-family:'Barlow Condensed';font-size:14px;font-weight:600;letter-spacing:.15em;cursor:pointer}
-.btn-q:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(45,107,228,.4)}
-#mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.86);backdrop-filter:blur(8px);z-index:200;align-items:center;justify-content:center}
-#mo.open{display:flex}
-.modal{background:var(--panel);border:1px solid var(--b1);border-radius:28px;padding:28px;width:480px;max-width:90vw;max-height:90vh;overflow:auto;position:relative}
-.mc{position:absolute;top:16px;right:22px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer}
-.mt{font-family:'Barlow Condensed';font-size:28px;font-weight:600;color:white}
-.ms{font-size:12px;color:var(--muted);margin-bottom:18px}
-.msum{background:var(--surface);border-radius:16px;padding:14px;margin-bottom:20px}
-.sr{display:flex;justify-content:space-between;padding:5px 0;font-size:11px}
-.sk{color:var(--muted)}.sv{color:white}
-.fg input,.fg textarea,.fg select{width:100%;padding:10px;background:var(--surface);border:1px solid var(--b1);border-radius:12px;color:white;margin-top:4px}
-.btn-sub{width:100%;padding:12px;background:linear-gradient(100deg,#1f56d4,#3e7ce6);border:none;border-radius:40px;color:white;font-weight:600;margin-top:14px;cursor:pointer}
-#suc{display:none;text-align:center}
-#suc.show{display:block}
-@media(max-width:780px){#app{flex-direction:column;height:auto}#viewer{height:52vw;min-height:280px}#panel{width:100%}}
+.up-clear{position:absolute;top:10px;right:12px;background:#ef4444;border:none;border-radius:4px;color:#fff;padding:3px 10px;font-size:9.5px;cursor:pointer;display:none;font-family:inherit;font-weight:700;letter-spacing:.3px}
+.upload-zone.has .up-clear{display:block}
+.lsliders{border:1px solid var(--border);border-radius:7px;padding:14px;margin-top:10px;display:none;background:var(--white)}
+.lsliders.on{display:block}
+.sl-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.sl-row:last-child{margin-bottom:0}
+.sl-row label{width:58px;font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;flex-shrink:0}
+.sl-row input[type=range]{flex:1;height:3px;border-radius:3px;background:var(--border);-webkit-appearance:none;cursor:pointer}
+.sl-row input[type=range]::-webkit-slider-thumb{width:14px;height:14px;background:var(--blue);border-radius:50%;-webkit-appearance:none;cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 1px var(--blue)}
+.sl-val{width:34px;font-size:10px;color:var(--blue);font-weight:700;text-align:right;letter-spacing:.3px}
+
+/* ─── SUMMARY ────────────────────────────────────── */
+.summary{background:var(--blue-bg);border-radius:7px;padding:14px 16px;margin-bottom:20px;border:1px solid rgba(21,87,176,.12)}
+.sum-head{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--blue);margin-bottom:10px}
+.sum-row{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;padding:4px 0;border-bottom:1px solid rgba(21,87,176,.07)}
+.sum-row:last-child{border-bottom:none}
+.sk{color:var(--muted)}.sv{font-weight:700;color:var(--blue-dark);text-align:right;max-width:55%}
+
+/* ─── FORM ───────────────────────────────────────── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.fc{display:flex;flex-direction:column;gap:5px}
+.fc.full{grid-column:1/-1}
+.flb{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted)}
+.fi{padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:13px;color:var(--text);outline:none;transition:border-color .14s;background:var(--white)}
+.fi:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,87,176,.08)}
+.fta{padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:13px;color:var(--text);outline:none;resize:vertical;min-height:64px;transition:border-color .14s;background:var(--white)}
+.fta:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,87,176,.08)}
+
+/* ─── BUTTONS ────────────────────────────────────── */
+.navrow{display:flex;justify-content:space-between;align-items:center;margin-top:22px;padding-top:18px;border-top:1px solid var(--border)}
+.btn-back{padding:9px 20px;border:1px solid var(--border);border-radius:6px;background:var(--white);color:var(--muted);cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:700;transition:all .14s;letter-spacing:.3px}
+.btn-back:hover{border-color:var(--blue);color:var(--blue)}
+.btn-next{padding:9px 24px;border:none;border-radius:6px;background:var(--blue);color:#fff;cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:700;display:inline-flex;align-items:center;gap:6px;letter-spacing:.3px;transition:background .14s}
+.btn-next:hover{background:var(--blue-dark)}
+.btn-next svg{flex-shrink:0}
+
+/* ─── SUCCESS ────────────────────────────────────── */
+.success-wrap{text-align:center;padding:36px 20px}
+.ok-mark{width:60px;height:60px;border-radius:50%;background:var(--blue-bg);border:2px solid var(--blue);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:var(--blue)}
 </style>
 </head>
 <body>
-<div id="app">
-  <div id="viewer">
-    <canvas id="three-canvas"></canvas>
-    <div class="badge"><div class="badge-brand" id="badge-brand">AEROSTAR</div><div class="badge-type" id="badge-type">Deodorant · 150ml</div></div>
-    <div class="drag-hint">← drag to rotate →</div>
-  </div>
-  <aside id="panel">
-    <div class="ph"><div class="logo-row"><div class="logo-fb"><span class="logo-fb-star">★</span><div class="logo-fb-name">Aero<em>star</em></div></div></div><div class="logo-sub">3D CONFIGURATOR</div></div>
-    <div class="pb">
-      <div class="bare-toggle"><label for="bareModeToggle">⚫ BARE CAN MODE</label><label class="switch"><input type="checkbox" id="bareModeToggle"><span class="slider"></span></label></div>
-      <div class="cs"><div class="st">Category</div><div class="cat-tabs"><button class="ct active" data-cat="beauty"><span class="ct-icon">✧</span>Beauty</button><button class="ct" data-cat="airfresh"><span class="ct-icon">✦</span>Air Care</button><button class="ct" data-cat="household"><span class="ct-icon">⬩</span>Household</button></div><div class="chips" id="prod-chips"></div></div>
-      <div class="cs"><div class="st">Can Size</div><div class="chips" id="size-chips"></div></div>
-      <div class="cs"><div class="st">Body Colour</div><div class="swatches" id="body-swatches"></div></div>
-      <div class="cs"><div class="st">Finish</div><div class="finish-grid" id="finish-grid"></div></div>
-      <div class="cs"><div class="st">Cap Style (AW series)</div><div class="cap-grid" id="cap-grid"></div></div>
-      <div class="cs"><div class="st">Cap Colour</div><div class="swatches" id="cap-swatches"></div></div>
-      <div id="labelSections">
-        <div class="cs"><div class="st">Label Artwork</div><div class="upload-zone" id="upload-zone"><input type="file" id="lbl-file" accept="image/*" style="display:none"><div id="up-ph"><span class="up-icon">⬚</span><div class="up-text"><strong>Upload image / label</strong><br>PNG, JPG wraps can</div></div><img class="up-preview" id="up-preview"><button class="up-clear" id="up-clear">✕ Remove</button></div><div class="lcontrols" id="lcontrols"><div class="slider-row"><label>VERTICAL POS</label><input type="range" id="lpy" min="15" max="85" value="48"><span class="slider-val" id="lpy-val">48%</span></div><div class="slider-row"><label>SCALE</label><input type="range" id="lsc" min="40" max="110" value="82"><span class="slider-val" id="lsc-val">82%</span></div></div></div>
-        <div class="cs" id="lstyle-sec"><div class="st">Label Style</div><div class="label-grid" id="label-grid"></div></div>
-        <div class="cs" id="brand-sec"><div class="st">Brand Name</div><input class="brand-in" id="brand-input" placeholder="YOUR BRAND" maxlength="20" value="AEROSTAR"></div>
-      </div>
+
+<!-- HEADER -->
+<div class="top-bar">
+  <div class="logo-wrap">
+    <div class="logo-ltr">
+      <span class="logo-lt">aer</span>
+      <svg viewBox="0 0 30 30" width="30" height="30" style="display:inline-block;vertical-align:middle">
+        <path d="M15,0 A15,15 0,0,0 15,30 Z" fill="#5c6b7a"/>
+        <path d="M15,0 A15,15 0,0,1 15,30 Z" fill="#1557b0"/>
+        <polygon points="15,4.5 17.3,11.5 24.5,11.5 18.8,15.8 21.1,22.8 15,18.5 8.9,22.8 11.2,15.8 5.5,11.5 12.7,11.5" fill="white"/>
+      </svg>
+      <span class="logo-lt">star</span>
     </div>
-    <div class="pf"><button class="btn-q" id="quoteBtn">REQUEST QUOTE →</button></div>
-  </aside>
+    <div class="logo-contract">Contract</div>
+  </div>
+  <div class="header-right">
+    <span class="hdr-tag">Packaging Configurator</span>
+    <div class="hdr-sep"></div>
+    <a href="#" class="hdr-btn">Feedback</a>
+  </div>
 </div>
-<div id="mo"><div class="modal"><button class="mc" id="closeModalBtn">✕</button><div id="fv"><div class="mt">Configure & Quote</div><div class="ms">We’ll reply within 24h</div><div class="msum" id="msum"></div><div class="mgrid" style="display:flex;gap:10px"><div class="fg" style="flex:1"><label>First name</label><input id="f1"></div><div class="fg" style="flex:1"><label>Last name</label><input id="f2"></div></div><div class="fg"><label>Company</label><input id="f3"></div><div class="fg"><label>Email</label><input id="f4"></div><div class="fg"><label>Quantity</label><select id="f5"><option>1k–5k units</option><option>5k–10k units</option><option>10k–50k units</option><option>50k+</option></select></div><div class="fg"><label>Notes</label><textarea id="f6" rows="2"></textarea></div><button class="btn-sub" id="submitQuoteBtn">Send Request</button></div><div id="suc"><div class="suc-icon">✓</div><div class="mt">Quote Sent</div><div class="ms">Aerostar team will contact you</div></div></div></div>
+
+<!-- NAV BAR -->
+<div class="nav-bar">
+  <a href="#">About Us</a><a href="#">Our Services</a><a href="#">Products</a>
+  <div class="nb-div"></div><a href="#">Contacts</a>
+  <div class="spacer"></div>
+  <a href="#">Online Catalog</a><a href="#">Website</a>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="layout">
+  <div class="left">
+    <div id="snav"></div>
+    <div class="box" id="sbox"></div>
+  </div>
+  <div class="right">
+    <canvas id="three-canvas"></canvas>
+    <div class="can-badge">
+      <div class="badge-prod" id="bdg-name">Select a Product</div>
+      <div class="badge-spec" id="bdg-sub">Configure your packaging below</div>
+    </div>
+    <div class="drag-hint">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12H3m6-6-6 6 6 6"/><path d="M3 12h18m-6-6 6 6-6 6"/></svg>
+      Drag to rotate
+    </div>
+  </div>
+</div>
 
 <script>
-// INDUSTRY PROPORTIONS
-const REF_BODY_RADIUS = 0.52;
-const REF_NECK_RATIO = 0.67;
-const REF_CAP_FLARE = 1.15;
-const REF_CAP_HEIGHT_RATIO = 0.28;
-const REF_NECK_RADIUS = REF_BODY_RADIUS * REF_NECK_RATIO;
-const REF_BODY_HEIGHT = 1.72;
-const REF_SHOULDER_HEIGHT = 0.48;
-const REF_NECK_HEIGHT = 0.09;
-const REF_DOME_SY = 0.148;
-const REF_BODY_Y = REF_BODY_RADIUS * REF_DOME_SY;
-const REF_SHLD_Y = REF_BODY_Y + REF_BODY_HEIGHT;
-const REF_NECK_Y = REF_SHLD_Y + REF_SHOULDER_HEIGHT;
-const REF_CAP_BASE_Y = REF_NECK_Y + REF_NECK_HEIGHT;
-const REF_TOTAL_HEIGHT = REF_CAP_BASE_Y + (REF_BODY_HEIGHT * REF_CAP_HEIGHT_RATIO);
-const CAP_STYLE_MULT = { std:{radius:1.0,height:0.95}, cone:{radius:0.95,height:1.22}, wide:{radius:1.12,height:0.72}, trigger:{radius:1.05,height:0.86}, spray:{radius:0.92,height:1.08}, flat:{radius:1.02,height:0.52} };
-const PRODS = { beauty:[{id:'deodorant',name:'Deodorant',sx:1.00,sy:1.00},{id:'hairspray',name:'Hair Spray',sx:1.00,sy:1.20},{id:'bodymist',name:'Body Mist',sx:0.92,sy:1.06},{id:'perfume',name:'Perfume',sx:0.82,sy:0.94}], airfresh:[{id:'roomspray',name:'Room Spray',sx:1.02,sy:1.08},{id:'carfresh',name:'Car Fresh',sx:0.88,sy:0.88},{id:'fabricmist',name:'Fabric Mist',sx:1.00,sy:1.14}], household:[{id:'insecticide',name:'Insecticide',sx:1.00,sy:1.11},{id:'polish',name:'Polish',sx:1.04,sy:1.06},{id:'lubricant',name:'Lubricant',sx:0.96,sy:1.17}] };
-const BODY_COLS = [{id:'silver',hex:'#b6b6ad',name:'Silver',met:true},{id:'black',hex:'#18181c',name:'Black',met:false},{id:'pearl',hex:'#ece8df',name:'Pearl White',met:false},{id:'rose',hex:'#c48b75',name:'Rose Gold',met:true},{id:'gold',hex:'#c9a658',name:'Gold',met:true},{id:'navy',hex:'#14223b',name:'Navy',met:false},{id:'cobalt',hex:'#1c5bc4',name:'Cobalt',met:false},{id:'forest',hex:'#254f35',name:'Forest',met:false},{id:'burgundy',hex:'#651e2c',name:'Burgundy',met:false}];
-const CAP_COLS = [{id:'cblack',hex:'#101012',name:'Black'},{id:'cwhite',hex:'#e3dfd7',name:'White'},{id:'csilver',hex:'#b6b6ad',name:'Silver'},{id:'cblue',hex:'#1f5bc4',name:'Blue'},{id:'cgold',hex:'#c9a658',name:'Gold'},{id:'match',hex:'MATCH',name:'Match Body'}];
-const FINISHES = [{id:'matte',name:'Matte',r:0.92,m:0.00,ball:'#7a7a7a'},{id:'satin',name:'Satin',r:0.48,m:0.16,ball:'#acacac'},{id:'gloss',name:'Gloss',r:0.12,m:0.10,ball:'radial-gradient(#fff,#aaa)'},{id:'metallic',name:'Metallic',r:0.28,m:0.84,ball:'linear-gradient(145deg,#aaa,#eee,#aaa)'},{id:'chrome',name:'Chrome',r:0.06,m:0.98,ball:'radial-gradient(circle at 30% 30%,#fff,#888)'}];
-const CAP_TYPES = [{id:'std',name:'AW50-1'},{id:'cone',name:'AW52-2'},{id:'wide',name:'AW53-3'},{id:'trigger',name:'AW55-5'},{id:'spray',name:'AW51-3'},{id:'flat',name:'AW56-2'}];
-const LSTYLES = [{id:'minimal',cls:'minimal',pre:'LUXE'},{id:'bold',cls:'bold',pre:'BOLD'},{id:'bluegeo',cls:'bluegeo',pre:'AERO'},{id:'eco',cls:'eco',pre:'NATURAL'}];
+/* ══════════════════════════════════════════════
+   SVG ICON LIBRARY
+══════════════════════════════════════════════ */
+const IC={
+  can:`<svg width="22" height="38" viewBox="0 0 22 38" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="11" width="14" height="23" rx="2.5"/><path d="M4 11 Q4 4 6 3L9 2H13L16 3Q18 4 18 11Z"/><rect x="8" y="1" width="6" height="2" rx="1"/><rect x="5" y="12" width="3" height="21" rx="1.5" opacity=".25" fill="currentColor" stroke="none"/></svg>`,
+  palette:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="8.5" cy="9" r="1.5" fill="currentColor"/><circle cx="15.5" cy="9" r="1.5" fill="currentColor"/><circle cx="12" cy="15" r="1.5" fill="currentColor"/></svg>`,
+  wrench:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>`,
+  upload:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>`,
+  check:`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>`,
+  chevron:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>`,
+  spray:`<svg width="22" height="38" viewBox="0 0 22 38" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="5" y="14" width="12" height="20" rx="2.5"/><path d="M5 14 Q5 8 8 6L11 5H13L16 6Q17 8 17 14Z"/><rect x="8" y="3" width="6" height="3" rx="1.5"/><path d="M11 2 Q15 1 17 0" stroke-dasharray="2 2"/></svg>`,
+  match:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg>`,
+};
 
-let S = { cat:'beauty', prod:PRODS.beauty[0], size:'150ml', masterScale:1.0, bcol:BODY_COLS[0], finish:FINISHES[1], capType:CAP_TYPES[0], ccol:CAP_COLS[0], lstyle:LSTYLES[2], brand:'AEROSTAR', uploadImg:null, labelPosY:0.48, labelScale:0.82, bareMode:false };
+const CAP_SVG={
+  std:`<svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="8" y="16" width="14" height="10" rx="2"/><path d="M8 16 Q8 8 15 8 Q22 8 22 16"/><circle cx="22" cy="20" r="2" stroke-width="1.2"/></svg>`,
+  cone:`<svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="8" y="22" width="14" height="5" rx="1.5"/><path d="M8 22 L15 6 L22 22Z"/></svg>`,
+  wide:`<svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="18" width="22" height="9" rx="2"/><path d="M8 18 Q8 12 15 12 Q22 12 22 18"/></svg>`,
+  trigger:`<svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="8" y="13" width="14" height="12" rx="2"/><line x1="3" y1="18" x2="27" y2="18"/><rect x="11" y="25" width="8" height="4" rx="1"/></svg>`,
+  flat:`<svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="8" y="16" width="14" height="8" rx="2"/><rect x="8" y="24" width="14" height="2" rx="1" fill="currentColor" stroke="none" opacity=".3"/><circle cx="15" cy="27" r="1.5"/></svg>`,
+};
 
-// THREE SETUP
-const canvas = document.getElementById('three-canvas');
-const renderer = new THREE.WebGLRenderer({canvas,antialias:true});
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.4;
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x05080f);
-scene.fog = new THREE.FogExp2(0x05080f, 0.018);
-const camera = new THREE.PerspectiveCamera(42,1,0.1,40);
-camera.position.set(0,1.2,5.9);
-const ambient = new THREE.AmbientLight(0x8a9eff,0.7); scene.add(ambient);
-const key = new THREE.DirectionalLight(0xfff5e0,1.9); key.position.set(4,6,3.5); scene.add(key);
-const fill = new THREE.DirectionalLight(0xaaccff,0.75); fill.position.set(-3,2.5,4); scene.add(fill);
-const rim = new THREE.DirectionalLight(0xffddbb,1.0); rim.position.set(1,3,-5); scene.add(rim);
-const back = new THREE.PointLight(0x3377ff,0.45); back.position.set(0,1.8,-2.2); scene.add(back);
-const groundGlow = (()=>{const gc=document.createElement('canvas');gc.width=512;gc.height=512;const ctx=gc.getContext('2d');const grad=ctx.createRadialGradient(256,256,0,256,256,256);grad.addColorStop(0,'rgba(45,107,228,0.28)');grad.addColorStop(0.6,'rgba(45,107,228,0.05)');grad.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=grad;ctx.fillRect(0,0,512,512);const tex=new THREE.CanvasTexture(gc);const plane=new THREE.Mesh(new THREE.PlaneGeometry(6.5,6.5),new THREE.MeshBasicMaterial({map:tex,transparent:true,depthWrite:false}));plane.rotation.x=-Math.PI/2;plane.position.y=0.002;scene.add(plane);})();
+/* ══════════════════════════════════════════════
+   PANTONE DATA
+══════════════════════════════════════════════ */
+const PANTONE=[
+  {code:'485 C', name:'Red',          hex:'#DA291C',f:'R'},
+  {code:'032 C', name:'Warm Red',     hex:'#EF3340',f:'R'},
+  {code:'1795 C',name:'Flame',        hex:'#C8102E',f:'R'},
+  {code:'200 C', name:'Crimson',      hex:'#A6192E',f:'R'},
+  {code:'202 C', name:'Burgundy',     hex:'#7C2D35',f:'R'},
+  {code:'021 C', name:'Orange',       hex:'#FE5000',f:'O'},
+  {code:'151 C', name:'Tangerine',    hex:'#FF7900',f:'O'},
+  {code:'144 C', name:'Amber',        hex:'#E07000',f:'O'},
+  {code:'715 C', name:'Peach',        hex:'#F4A46A',f:'O'},
+  {code:'012 C', name:'Yellow',       hex:'#FFD900',f:'Y'},
+  {code:'109 C', name:'Gold Yellow',  hex:'#FFD700',f:'Y'},
+  {code:'130 C', name:'Sunflower',    hex:'#F0AC00',f:'Y'},
+  {code:'1235 C',name:'Saffron',      hex:'#FFC72C',f:'Y'},
+  {code:'375 C', name:'Lime',         hex:'#97D700',f:'G'},
+  {code:'368 C', name:'Green',        hex:'#72B542',f:'G'},
+  {code:'354 C', name:'Emerald',      hex:'#00A651',f:'G'},
+  {code:'342 C', name:'Forest',       hex:'#007A53',f:'G'},
+  {code:'3295 C',name:'Teal',         hex:'#00827F',f:'G'},
+  {code:'7729 C',name:'Racing Green', hex:'#215732',f:'G'},
+  {code:'2975 C',name:'Baby Blue',    hex:'#A8D8EA',f:'B'},
+  {code:'279 C', name:'Cornflower',   hex:'#5B9AD3',f:'B'},
+  {code:'285 C', name:'Process Blue', hex:'#0085CA',f:'B'},
+  {code:'300 C', name:'Classic Blue', hex:'#005BAC',f:'B'},
+  {code:'286 C', name:'Royal Blue',   hex:'#003DA5',f:'B'},
+  {code:'072 C', name:'Reflex Blue',  hex:'#10069F',f:'B'},
+  {code:'2758 C',name:'Indigo',       hex:'#1A265A',f:'B'},
+  {code:'2587 C',name:'Lilac',        hex:'#C5B4E3',f:'P'},
+  {code:'2577 C',name:'Lavender',     hex:'#9B8EC4',f:'P'},
+  {code:'2665 C',name:'Violet',       hex:'#7B68EE',f:'P'},
+  {code:'266 C', name:'Grape',        hex:'#7B5EA7',f:'P'},
+  {code:'2627 C',name:'Plum',         hex:'#4B3488',f:'P'},
+  {code:'269 C', name:'Deep Purple',  hex:'#2D1160',f:'P'},
+  {code:'1895 C',name:'Baby Pink',    hex:'#FFB6C1',f:'K'},
+  {code:'210 C', name:'Rose',         hex:'#F9A8C9',f:'K'},
+  {code:'812 C', name:'Hot Pink',     hex:'#FF5DA0',f:'K'},
+  {code:'212 C', name:'Fuchsia',      hex:'#E95F9A',f:'K'},
+  {code:'218 C', name:'Magenta',      hex:'#D31C81',f:'K'},
+  {code:'2395 C',name:'Deep Pink',    hex:'#B40068',f:'K'},
+  {code:'9180 C',name:'Cream',        hex:'#F5ECD7',f:'N'},
+  {code:'468 C', name:'Sand',         hex:'#D4B896',f:'N'},
+  {code:'476 C', name:'Brown',        hex:'#6F4E37',f:'N'},
+  {code:'CG-2 C',name:'Light Gray',   hex:'#C8C9C7',f:'N'},
+  {code:'CG-6 C',name:'Mid Gray',     hex:'#9E9E9C',f:'N'},
+  {code:'CG-10',name:'Dark Gray',     hex:'#63666A',f:'N'},
+  {code:'Black C',name:'Black',       hex:'#2B2926',f:'N'},
+  {code:'White', name:'White',        hex:'#F8F8F8',f:'N'},
+  {code:'877 C', name:'Silver',       hex:'#A7A9AC',f:'M',met:true},
+  {code:'871 C', name:'Old Gold',     hex:'#85754E',f:'M',met:true},
+  {code:'872 C', name:'Gold',         hex:'#9A7B4F',f:'M',met:true},
+  {code:'873 C', name:'Antique Gold', hex:'#876C3B',f:'M',met:true},
+  {code:'875 C', name:'Copper',       hex:'#965A38',f:'M',met:true},
+  {code:'876 C', name:'Bronze',       hex:'#7D5D3B',f:'M',met:true},
+];
+const FAM_COL={R:'#DA291C',O:'#FE5000',Y:'#FFD900',G:'#72B542',B:'#005BAC',P:'#7B5EA7',K:'#E95F9A',N:'#9E9E9C',M:'#9A7B4F'};
+const FAM_NAME={All:'All',R:'Red',O:'Orange',Y:'Yellow',G:'Green',B:'Blue',P:'Purple',K:'Pink',N:'Neutral',M:'Metallic'};
 
-let bodyMat = new THREE.MeshStandardMaterial({color:S.bcol.hex,roughness:S.finish.r,metalness:S.finish.m});
-let labelMat = new THREE.MeshStandardMaterial({roughness:S.finish.r,metalness:S.finish.m,color:0xffffff}); // match body finish exactly
-let capMat = new THREE.MeshStandardMaterial({color:S.ccol.hex==='MATCH'?S.bcol.hex:S.ccol.hex,roughness:0.48,metalness:0.14});
-let actMat = new THREE.MeshStandardMaterial({color:0x262a38,roughness:0.7,metalness:0.12});
-let tBodyCol = new THREE.Color(S.bcol.hex), tCapCol = new THREE.Color(S.ccol.hex==='MATCH'?S.bcol.hex:S.ccol.hex);
-let tR = S.finish.r, tM = S.finish.m;
-let labelTex = null;
-const canGroup = new THREE.Group(); canGroup.position.y = -1.08; scene.add(canGroup);
+/* ── PRODUCT / SIZE DATA ────────────────────────── */
+const PRODUCTS={
+  beauty:[
+    {id:'deodorant',name:'Deodorant',   sub:'Antiperspirant · Body',sx:1.00,sy:1.00},
+    {id:'hairspray',name:'Hair Spray',  sub:'Styling · Hold',       sx:1.00,sy:1.20},
+    {id:'bodymist', name:'Body Mist',   sub:'Fragrance · Mist',     sx:0.92,sy:1.06},
+    {id:'perfume',  name:'Perfume',     sub:'Fine Fragrance',       sx:0.82,sy:0.94},
+  ],
+  airfresh:[
+    {id:'roomspray',name:'Room Spray',  sub:'Air Care · Home',  sx:1.02,sy:1.08},
+    {id:'carfresh', name:'Car Fresh',   sub:'Auto · Cabin',     sx:0.88,sy:0.90},
+    {id:'fabric',   name:'Fabric Mist', sub:'Textile · Refresh',sx:1.00,sy:1.14},
+  ],
+};
+const SIZES=[
+  {ml:'75 ml',scale:0.82},{ml:'100 ml',scale:0.90},{ml:'150 ml',scale:1.00},
+  {ml:'200 ml',scale:1.08},{ml:'300 ml',scale:1.18},{ml:'400 ml',scale:1.28},
+];
+const CAP_TYPES=[
+  {id:'std',    name:'AW50',  sub:'Round',  cs:{r:1.0,h:0.95}},
+  {id:'cone',   name:'AW52',  sub:'Cone',   cs:{r:0.95,h:1.22}},
+  {id:'wide',   name:'AW53',  sub:'Wide',   cs:{r:1.12,h:0.72}},
+  {id:'trigger',name:'AW55',  sub:'Trigger',cs:{r:1.05,h:0.86}},
+  {id:'flat',   name:'AW56',  sub:'Flat',   cs:{r:1.02,h:0.52}},
+];
+const FINISHES=[
+  {id:'matte',   name:'Matte',    r:0.92,m:0.00,ball:'linear-gradient(135deg,#8a8a8a,#6a6a6a)'},
+  {id:'satin',   name:'Satin',    r:0.48,m:0.16,ball:'linear-gradient(135deg,#c8c8c8,#a0a0a0)'},
+  {id:'gloss',   name:'Gloss',    r:0.12,m:0.10,ball:'radial-gradient(circle at 35% 35%,#eee 0%,#aaa 100%)'},
+  {id:'metallic',name:'Metallic', r:0.28,m:0.84,ball:'linear-gradient(145deg,#a8a8a8,#efefef,#a0a0a0)'},
+  {id:'chrome',  name:'Chrome',   r:0.06,m:0.98,ball:'radial-gradient(circle at 28% 28%,#fff 0%,#ccc 45%,#777 100%)'},
+];
 
-function getMasterScale() { return S.masterScale * ((S.prod.sx + S.prod.sy) / 2); }
+/* ── STATE ──────────────────────────────────────── */
+let S={
+  step:1, category:'beauty', prod:PRODUCTS.beauty[0], size:SIZES[2],
+  bodyColor:PANTONE.find(p=>p.code==='877 C'),
+  capMatchBody:false, capColor:PANTONE.find(p=>p.code==='Black C'),
+  capType:CAP_TYPES[0], finish:FINISHES[1],
+  designImg:null, labelPosY:0.48, labelScale:0.82, bareMode:false,
+  pfam:'All', psearch:'',
+};
 
-function updateLabelMaterialFinish() {
-  labelMat.roughness = S.finish.r;
-  labelMat.metalness = S.finish.m;
-  labelMat.needsUpdate = true;
+/* ── THREE.JS CONSTANTS ─────────────────────────── */
+const REF_BR=0.52,REF_BH=1.72,REF_DOME_SY=0.148;
+const REF_SH=0.48,REF_NR=0.35,REF_NH=0.09,REF_CAP_FLARE=1.15;
+const REF_BY=REF_BR*REF_DOME_SY;
+const REF_SY=REF_BY+REF_BH,REF_NY=REF_SY+REF_SH;
+const REF_CAP_BASE=REF_NY+REF_NH,REF_CAP_H=REF_BH*0.28;
+const REF_TOTAL=REF_CAP_BASE+REF_CAP_H;
+
+/* ── THREE.JS SETUP ─────────────────────────────── */
+const canvas3=document.getElementById('three-canvas');
+const renderer=new THREE.WebGLRenderer({canvas:canvas3,antialias:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.2;
+renderer.outputEncoding=THREE.sRGBEncoding;
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0xedf1f7);
+scene.fog=new THREE.Fog(0xedf1f7,14,24);
+const camera=new THREE.PerspectiveCamera(38,1,0.1,40);
+
+scene.add(new THREE.AmbientLight(0xffffff,0.95));
+const keyL=new THREE.DirectionalLight(0xfff8f0,1.6); keyL.position.set(3,6,4); scene.add(keyL);
+const fillL=new THREE.DirectionalLight(0xd0e8ff,0.7); fillL.position.set(-4,2,3); scene.add(fillL);
+const rimL=new THREE.DirectionalLight(0xffffff,0.6); rimL.position.set(0,4,-5); scene.add(rimL);
+const topL=new THREE.DirectionalLight(0xffffff,0.35); topL.position.set(0,8,0); scene.add(topL);
+
+(()=>{
+  const gc=document.createElement('canvas'); gc.width=256; gc.height=256;
+  const ctx=gc.getContext('2d');
+  const g=ctx.createRadialGradient(128,128,0,128,128,128);
+  g.addColorStop(0,'rgba(21,87,176,0.16)'); g.addColorStop(0.5,'rgba(21,87,176,0.04)'); g.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=g; ctx.fillRect(0,0,256,256);
+  const pl=new THREE.Mesh(new THREE.PlaneGeometry(5,5),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(gc),transparent:true,depthWrite:false}));
+  pl.rotation.x=-Math.PI/2; pl.position.y=0.001; scene.add(pl);
+})();
+
+let bodyMat=new THREE.MeshStandardMaterial({color:new THREE.Color(S.bodyColor.hex),roughness:S.finish.r,metalness:S.finish.m});
+let labelMat=new THREE.MeshStandardMaterial({roughness:S.finish.r,metalness:S.finish.m,transparent:true});
+let capMat=new THREE.MeshStandardMaterial({color:new THREE.Color(S.capColor.hex),roughness:0.45,metalness:0.18});
+let actMat=new THREE.MeshStandardMaterial({color:0x2a2a30,roughness:0.72,metalness:0.15});
+let tBodyCol=new THREE.Color(S.bodyColor.hex);
+let tCapCol=new THREE.Color(S.capColor.hex);
+let tR=S.finish.r,tM=S.finish.m;
+let labelTex=null;
+const canGroup=new THREE.Group(); scene.add(canGroup);
+
+function getMasterScale(){return S.size.scale*((S.prod.sx+S.prod.sy)/2);}
+
+function buildCan(){
+  while(canGroup.children.length){const c=canGroup.children[0];if(c.geometry)c.geometry.dispose();canGroup.remove(c);}
+  const cs=S.capType.cs, CR=REF_NR*REF_CAP_FLARE*cs.r, CBH=REF_CAP_H*cs.h, by=REF_CAP_BASE;
+  const dome=new THREE.Mesh(new THREE.SphereGeometry(REF_BR,48,24,0,Math.PI*2,0,Math.PI*0.48),bodyMat);
+  dome.scale.y=REF_DOME_SY; dome.position.y=0.008; canGroup.add(dome);
+  const body=new THREE.Mesh(new THREE.CylinderGeometry(REF_BR,REF_BR,REF_BH,64,1),bodyMat);
+  body.position.y=REF_BY+REF_BH/2; canGroup.add(body);
+  if(!S.bareMode){
+    const lc=new THREE.Mesh(new THREE.CylinderGeometry(REF_BR+0.003,REF_BR+0.003,REF_BH,72,1,true),labelMat);
+    lc.position.y=REF_BY+REF_BH/2; canGroup.add(lc);
+  }
+  const pts=[]; for(let i=0;i<=28;i++){const t=i/28;pts.push(new THREE.Vector2(REF_BR*(1-t)+REF_NR*t-(t*t*0.03),t*REF_SH));}
+  const sh=new THREE.Mesh(new THREE.LatheGeometry(pts,56),bodyMat); sh.position.y=REF_SY; canGroup.add(sh);
+  const neck=new THREE.Mesh(new THREE.CylinderGeometry(REF_NR,REF_NR,REF_NH,32),bodyMat); neck.position.y=REF_NY+REF_NH/2; canGroup.add(neck);
+  switch(S.capType.id){
+    case'std':{const cb=new THREE.Mesh(new THREE.CylinderGeometry(CR,CR*0.94,CBH,48),capMat); cb.position.y=by+CBH/2; canGroup.add(cb); const dc=new THREE.Mesh(new THREE.SphereGeometry(CR,32,16,0,Math.PI*2,0,Math.PI*0.52),capMat); dc.position.y=by+CBH; canGroup.add(dc); const act=new THREE.Mesh(new THREE.BoxGeometry(0.12,0.05,0.10),actMat); act.position.set(0,by+CBH*0.58,CR+0.035); canGroup.add(act); const nz=new THREE.Mesh(new THREE.CylinderGeometry(0.012,0.012,0.09,8),actMat); nz.rotation.x=Math.PI/2; nz.position.set(0,by+CBH*0.58+0.012,CR+0.085); canGroup.add(nz); break;}
+    case'cone':{const ring=new THREE.Mesh(new THREE.CylinderGeometry(CR,CR*0.92,CBH*0.22,48),capMat); ring.position.y=by+CBH*0.11; canGroup.add(ring); const cone=new THREE.Mesh(new THREE.CylinderGeometry(CR*0.28,CR*0.86,CBH*0.78,36),capMat); cone.position.y=by+CBH*0.22+CBH*0.39; canGroup.add(cone); const tip=new THREE.Mesh(new THREE.SphereGeometry(0.028,14),capMat); tip.position.y=by+CBH; canGroup.add(tip); break;}
+    case'wide':{const wc=new THREE.Mesh(new THREE.CylinderGeometry(CR,CR*0.96,CBH,48),capMat); wc.position.y=by+CBH/2; canGroup.add(wc); const td=new THREE.Mesh(new THREE.CylinderGeometry(CR*0.98,CR*0.98,0.034,48),capMat); td.position.y=by+CBH; canGroup.add(td); break;}
+    case'trigger':{const bt=new THREE.Mesh(new THREE.CylinderGeometry(CR*0.94,CR*0.88,CBH,48),capMat); bt.position.y=by+CBH/2; canGroup.add(bt); const bar=new THREE.Mesh(new THREE.BoxGeometry(0.08,0.055,CR*1.9),actMat); bar.position.set(0,by+CBH*0.6,0); canGroup.add(bar); const lev=new THREE.Mesh(new THREE.BoxGeometry(0.06,0.13,0.08),actMat); lev.position.set(0,by+CBH*0.28,CR*0.48); canGroup.add(lev); const nz2=new THREE.Mesh(new THREE.CylinderGeometry(0.012,0.012,0.1,8),actMat); nz2.rotation.x=Math.PI/2; nz2.position.set(0,by+CBH*0.6+0.01,CR+0.07); canGroup.add(nz2); break;}
+    case'flat':{const fb=new THREE.Mesh(new THREE.CylinderGeometry(CR,CR*0.94,CBH,48),capMat); fb.position.y=by+CBH/2; canGroup.add(fb); const fd=new THREE.Mesh(new THREE.CylinderGeometry(CR*0.98,CR*0.98,0.03,48),capMat); fd.position.y=by+CBH; canGroup.add(fd); const btn=new THREE.Mesh(new THREE.CylinderGeometry(CR*0.35,CR*0.35,0.045,24),actMat); btn.position.y=by+CBH+0.028; canGroup.add(btn); break;}
+  }
+  const m=getMasterScale(); canGroup.scale.set(m,m,m); updateCamera();
 }
 
-function buildCan() {
-  while(canGroup.children.length){ const c=canGroup.children[0]; if(c.geometry) c.geometry.dispose(); canGroup.remove(c); }
-  const master = getMasterScale();
-  const style = CAP_STYLE_MULT[S.capType.id];
-  const capRadius = REF_NECK_RADIUS * REF_CAP_FLARE * style.radius;
-  const capHeight = (REF_BODY_HEIGHT * REF_CAP_HEIGHT_RATIO) * style.height;
-  const dome = new THREE.Mesh(new THREE.SphereGeometry(REF_BODY_RADIUS,48,24,0,Math.PI*2,0,Math.PI*0.48),bodyMat);
-  dome.scale.y=REF_DOME_SY; dome.position.y=0.008; canGroup.add(dome);
-  const bodyCyl = new THREE.Mesh(new THREE.CylinderGeometry(REF_BODY_RADIUS,REF_BODY_RADIUS,REF_BODY_HEIGHT,64,1),bodyMat);
-  bodyCyl.position.y=REF_BODY_Y+REF_BODY_HEIGHT/2; canGroup.add(bodyCyl);
-  if (!S.bareMode) {
-    const labelCyl = new THREE.Mesh(new THREE.CylinderGeometry(REF_BODY_RADIUS+0.002,REF_BODY_RADIUS+0.002,REF_BODY_HEIGHT,72,1,true),labelMat);
-    labelCyl.position.y=REF_BODY_Y+REF_BODY_HEIGHT/2; canGroup.add(labelCyl);
-  }
-  const pts=[]; for(let i=0;i<=28;i++){ const t=i/28; const r = REF_BODY_RADIUS*(1-t) + REF_NECK_RADIUS*t - (t*t*0.03); pts.push(new THREE.Vector2(r, t*REF_SHOULDER_HEIGHT)); }
-  const shoulderGeo = new THREE.LatheGeometry(pts,56);
-  const shoulderMesh = new THREE.Mesh(shoulderGeo,bodyMat);
-  shoulderMesh.position.y=REF_SHLD_Y; canGroup.add(shoulderMesh);
-  const neckCyl = new THREE.Mesh(new THREE.CylinderGeometry(REF_NECK_RADIUS,REF_NECK_RADIUS,REF_NECK_HEIGHT,32),bodyMat);
-  neckCyl.position.y=REF_NECK_Y+REF_NECK_HEIGHT/2; canGroup.add(neckCyl);
-  const baseY = REF_CAP_BASE_Y, CR = capRadius, CBH = capHeight;
-  switch(S.capType.id){
-    case 'std':{ const cb=new THREE.Mesh(new THREE.CylinderGeometry(CR,CR*0.94,CBH,48),capMat); cb.position.y=baseY+CBH/2; canGroup.add(cb); const dc=new THREE.Mesh(new THREE.SphereGeometry(CR,32,16,0,Math.PI*2,0,Math.PI*0.52),capMat); dc.position.y=baseY+CBH; canGroup.add(dc); const act=new THREE.Mesh(new THREE.BoxGeometry(0.12,0.05,0.1),actMat); act.position.set(0,baseY+CBH*0.58,CR+0.035); canGroup.add(act); const nz=new THREE.Mesh(new THREE.CylinderGeometry(0.012,0.012,0.09,8),actMat); nz.rotation.x=Math.PI/2; nz.position.set(0,baseY+CBH*0.58+0.012,CR+0.085); canGroup.add(nz); break; }
-    case 'cone':{ const ring=new THREE.Mesh(new THREE.CylinderGeometry(CR,CR*0.92,CBH*0.22,48),capMat); ring.position.y=baseY+CBH*0.11; canGroup.add(ring); const cone=new THREE.Mesh(new THREE.CylinderGeometry(CR*0.28,CR*0.86,CBH*0.78,36),capMat); cone.position.y=baseY+CBH*0.22+CBH*0.39; canGroup.add(cone); const tip=new THREE.Mesh(new THREE.SphereGeometry(0.028,14),capMat); tip.position.y=baseY+CBH*0.22+CBH*0.78; canGroup.add(tip); break; }
-    case 'wide':{ const wideCap=new THREE.Mesh(new THREE.CylinderGeometry(CR,CR*0.96,CBH,48),capMat); wideCap.position.y=baseY+CBH/2; canGroup.add(wideCap); const td=new THREE.Mesh(new THREE.CylinderGeometry(CR*0.98,CR*0.98,0.035,48),capMat); td.position.y=baseY+CBH; canGroup.add(td); break; }
-    case 'trigger':{ const baseTrig=new THREE.Mesh(new THREE.CylinderGeometry(CR*0.94,CR*0.88,CBH,48),capMat); baseTrig.position.y=baseY+CBH/2; canGroup.add(baseTrig); const bar=new THREE.Mesh(new THREE.BoxGeometry(0.08,0.055,CR*1.9),actMat); bar.position.set(0,baseY+CBH*0.6,0); canGroup.add(bar); const lever=new THREE.Mesh(new THREE.BoxGeometry(0.06,0.13,0.08),actMat); lever.position.set(0,baseY+CBH*0.28,CR*0.48); canGroup.add(lever); const nz=new THREE.Mesh(new THREE.CylinderGeometry(0.012,0.012,0.1,8),actMat); nz.rotation.x=Math.PI/2; nz.position.set(0,baseY+CBH*0.6+0.01,CR+0.07); canGroup.add(nz); break; }
-    case 'spray':{ const sprayRing=new THREE.Mesh(new THREE.CylinderGeometry(CR,CR*0.91,CBH*0.3,48),capMat); sprayRing.position.y=baseY+CBH*0.15; canGroup.add(sprayRing); const sprayCone=new THREE.Mesh(new THREE.CylinderGeometry(CR*0.22,CR*0.85,CBH*0.7,32),capMat); sprayCone.position.y=baseY+CBH*0.3+CBH*0.35; canGroup.add(sprayCone); break; }
-    case 'flat':{ const flatBase=new THREE.Mesh(new THREE.CylinderGeometry(CR,CR*0.94,CBH,48),capMat); flatBase.position.y=baseY+CBH/2; canGroup.add(flatBase); const fd=new THREE.Mesh(new THREE.CylinderGeometry(CR*0.98,CR*0.98,0.03,48),capMat); fd.position.y=baseY+CBH; canGroup.add(fd); const btn=new THREE.Mesh(new THREE.CylinderGeometry(CR*0.35,CR*0.35,0.045,24),actMat); btn.position.y=baseY+CBH+0.028; canGroup.add(btn); break; }
-  }
-  canGroup.scale.set(master, master, master);
+function updateCamera(){
+  const th=REF_TOTAL*getMasterScale(), my=canGroup.position.y+th/2;
+  camera.position.set(0,my+0.2,Math.max(4.8,th*1.12));
+  camera.lookAt(0,my,0);
 }
 
 function generateLabel(){
-  if(S.bareMode) return;
-  const W=1024,H=512; const cv=document.createElement('canvas'); cv.width=W; cv.height=H; const ctx=cv.getContext('2d');
-  // SOLID BODY COLOUR BACKGROUND - MATCHES METAL PARTS EXACTLY
-  ctx.fillStyle=S.bcol.hex; ctx.fillRect(0,0,W,H);
-  // Optional finish subtle gradient (for metallic/chrome effect)
+  if(S.bareMode){labelMat.map=null;labelMat.needsUpdate=true;return;}
+  const W=1024,H=512;
+  const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+  const ctx=cv.getContext('2d');
+  ctx.fillStyle=S.bodyColor.hex; ctx.fillRect(0,0,W,H);
   if(S.finish.id==='metallic'||S.finish.id==='chrome'){
-    const grad=ctx.createLinearGradient(0,0,W,0);
-    grad.addColorStop(0,'rgba(0,0,0,0.15)');
-    grad.addColorStop(0.3,'rgba(255,255,255,0.12)');
-    grad.addColorStop(0.6,'rgba(255,255,255,0.2)');
-    grad.addColorStop(1,'rgba(0,0,0,0.1)');
-    ctx.fillStyle=grad; ctx.fillRect(0,0,W,H);
+    const g=ctx.createLinearGradient(0,0,W,0);
+    g.addColorStop(0,'rgba(0,0,0,.18)'); g.addColorStop(.22,'rgba(255,255,255,.10)');
+    g.addColorStop(.50,'rgba(255,255,255,.22)'); g.addColorStop(.78,'rgba(255,255,255,.08)');
+    g.addColorStop(1,'rgba(0,0,0,.15)'); ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
   }
-  const brand=(S.brand||'YOUR BRAND').toUpperCase().slice(0,18);
-  const prod=S.prod.name;
-  if(S.uploadImg){
-    const img=S.uploadImg; const drawW=W; const drawH=(drawW/img.width)*img.height*S.labelScale;
-    const dy=H*S.labelPosY - drawH/2; ctx.drawImage(img,0,dy,drawW,drawH);
-  } else {
-    const LT=70, LB=442, MID=(LT+LB)/2;
-    // Draw label elements (opaque text and lines, but background remains body colour)
-    switch(S.lstyle.id){
-      case 'minimal':
-        ctx.fillStyle='rgba(0,0,0,0.08)'; ctx.fillRect(0,LT,W,LB-LT);
-        ctx.fillStyle='#131313'; ctx.font='600 82px "Barlow Condensed"'; ctx.textAlign='center'; ctx.fillText(brand,W/2,MID-20);
-        ctx.fillStyle='#4a4a4a'; ctx.font='300 28px Barlow'; ctx.fillText(prod,W/2,MID+58);
-        break;
-      case 'bold':
-        ctx.fillStyle='rgba(8,8,12,0.75)'; ctx.fillRect(0,LT,W,LB-LT);
-        ctx.fillStyle='#ffffff'; ctx.font='700 110px "Barlow Condensed"'; ctx.fillText(brand,W/2,MID-10);
-        ctx.fillStyle='#2d6be4'; ctx.font='500 28px Barlow'; ctx.fillText(prod,W/2,MID+72);
-        break;
-      case 'bluegeo':
-        ctx.fillStyle='rgba(7,16,39,0.7)'; ctx.fillRect(0,LT,W,LB-LT);
-        ctx.fillStyle='#2d6be4'; ctx.font='700 98px "Barlow Condensed"'; ctx.fillText(brand,W/2,MID-12);
-        ctx.fillStyle='#7aaaff'; ctx.font='300 26px Barlow'; ctx.fillText(prod,W/2,MID+70);
-        break;
-      case 'eco':
-        ctx.fillStyle='rgba(238,240,224,0.5)'; ctx.fillRect(0,LT,W,LB-LT);
-        ctx.fillStyle='#2d5a34'; ctx.font='600 86px "Barlow Condensed"'; ctx.fillText(brand,W/2,MID-18);
-        ctx.fillStyle='#558b2f'; ctx.font='22px serif'; ctx.fillText('✧ natural ✧',W/2,MID+44);
-        break;
-    }
+  if(S.designImg){
+    const img=S.designImg, drawW=W*S.labelScale, drawH=(drawW/img.width)*img.height;
+    ctx.drawImage(img,(W-drawW)/2,H*S.labelPosY-drawH/2,drawW,drawH);
   }
   if(labelTex) labelTex.dispose();
   labelTex=new THREE.CanvasTexture(cv); labelTex.encoding=THREE.sRGBEncoding;
-  labelMat.map=labelTex; labelMat.needsUpdate=true;
-  updateLabelMaterialFinish(); // ensure same roughness/metalness as body
+  labelMat.map=labelTex; labelMat.color.set(0xffffff);
+  labelMat.roughness=S.finish.r; labelMat.metalness=S.finish.m; labelMat.needsUpdate=true;
 }
 
-function updateCamera(){ const totalH = REF_TOTAL_HEIGHT * getMasterScale(); const midY = canGroup.position.y + totalH/2; const dist = Math.max(4.9, totalH * 1.1); camera.position.set(0, midY + 0.18, dist); camera.lookAt(0, midY, 0); }
-let rotY=0, autoSpin=0, isDrag=false, lastX=0;
-function onMouseDown(x){isDrag=true;lastX=x;rotY=canGroup.rotation.y;autoSpin=0;}
-function onMouseMove(x){if(!isDrag)return;rotY+=(x-lastX)*0.012;lastX=x;}
-function onMouseUp(){isDrag=false;}
-canvas.addEventListener('mousedown',e=>onMouseDown(e.clientX));
-window.addEventListener('mousemove',e=>onMouseMove(e.clientX));
-window.addEventListener('mouseup',onMouseUp);
-canvas.addEventListener('touchstart',e=>{onMouseDown(e.touches[0].clientX); e.preventDefault();});
-canvas.addEventListener('touchmove',e=>{onMouseMove(e.touches[0].clientX); e.preventDefault();});
-canvas.addEventListener('touchend',onMouseUp);
+let rotY=0,autoSpin=0,isDrag=false,lastX=0;
+canvas3.addEventListener('mousedown',e=>{isDrag=true;lastX=e.clientX;rotY=canGroup.rotation.y;autoSpin=0;});
+window.addEventListener('mousemove',e=>{if(isDrag){rotY+=(e.clientX-lastX)*0.012;lastX=e.clientX;}});
+window.addEventListener('mouseup',()=>{isDrag=false;});
+canvas3.addEventListener('touchstart',e=>{isDrag=true;lastX=e.touches[0].clientX;rotY=canGroup.rotation.y;autoSpin=0;e.preventDefault();},{passive:false});
+canvas3.addEventListener('touchmove',e=>{if(isDrag){rotY+=(e.touches[0].clientX-lastX)*0.012;lastX=e.touches[0].clientX;}e.preventDefault();},{passive:false});
+canvas3.addEventListener('touchend',()=>{isDrag=false;});
+
 function animate(){
   requestAnimationFrame(animate);
-  if(!isDrag) autoSpin+=0.0045;
+  if(!isDrag) autoSpin+=0.005;
   canGroup.rotation.y=rotY+autoSpin;
-  bodyMat.color.lerp(tBodyCol,0.1); bodyMat.roughness+=(tR-bodyMat.roughness)*0.1; bodyMat.metalness+=(tM-bodyMat.metalness)*0.1;
-  let targetCapHex=S.ccol.hex==='MATCH'?S.bcol.hex:S.ccol.hex;
-  capMat.color.lerp(new THREE.Color(targetCapHex),0.1);
+  bodyMat.color.lerp(tBodyCol,0.09);
+  bodyMat.roughness+=(tR-bodyMat.roughness)*0.09;
+  bodyMat.metalness+=(tM-bodyMat.metalness)*0.09;
+  capMat.color.lerp(S.capMatchBody?tBodyCol:tCapCol,0.09);
   renderer.render(scene,camera);
 }
-function resize(){const v=document.getElementById('viewer');renderer.setSize(v.clientWidth,v.clientHeight);camera.aspect=v.clientWidth/v.clientHeight;camera.updateProjectionMatrix();}
+
+function resize(){
+  const r=document.querySelector('.right');
+  renderer.setSize(r.clientWidth,r.clientHeight);
+  camera.aspect=r.clientWidth/r.clientHeight;
+  camera.updateProjectionMatrix();
+}
 window.addEventListener('resize',resize);
 
-// UI RENDERING
-function renderProdChips(){document.getElementById('prod-chips').innerHTML=PRODS[S.cat].map(p=>`<button class="chip${S.prod.id===p.id?' active':''}" data-prod="${p.id}">${p.name}</button>`).join('');}
-function renderBodySwatches(){document.getElementById('body-swatches').innerHTML=BODY_COLS.map(c=>`<div class="sw${S.bcol.id===c.id?' active':''}" data-body="${c.id}"><div class="sw-dot ${c.met?'met':''}" style="background:${c.hex}"></div><div class="sw-name">${c.name}</div></div>`).join('');}
-function renderCapSwatches(){document.getElementById('cap-swatches').innerHTML=CAP_COLS.map(c=>`<div class="sw${S.ccol.id===c.id?' active':''}" data-capcol="${c.id}"><div class="sw-dot" style="background:${c.hex==='MATCH'?S.bcol.hex:c.hex}"></div><div class="sw-name">${c.name}</div></div>`).join('');}
-function renderFinishes(){document.getElementById('finish-grid').innerHTML=FINISHES.map(f=>`<div class="fo${S.finish.id===f.id?' active':''}" data-finish="${f.id}"><div class="fo-ball" style="background:${f.ball}"></div><span class="fo-name">${f.name}</span></div>`).join('');}
-function renderCapGrid(){document.getElementById('cap-grid').innerHTML=CAP_TYPES.map(ct=>`<div class="cg${S.capType.id===ct.id?' active':''}" data-cap="${ct.id}"><svg width="44" height="42" viewBox="0 0 44 42"><path d="${ct.id==='std'?'M14,36 L14,20 Q14,10 22,10 Q30,10 30,20 L30,36 Z':ct.id==='cone'?'M14,36 L14,26 L22,6 L30,26 L30,36 Z':ct.id==='wide'?'M8,36 L8,24 Q8,16 22,16 Q36,16 36,24 L36,36 Z':ct.id==='trigger'?'M12,36 L12,24 L32,24 L32,36 L28,30 L16,30 Z':'M16,36 L16,24 L28,24 L28,36 Z'}" fill="rgba(45,107,228,0.25)" stroke="rgba(45,107,228,0.8)" stroke-width="1.6"/></svg><div class="cg-name">${ct.name}</div></div>`).join('');}
-function renderLabelGrid(){document.getElementById('label-grid').innerHTML=LSTYLES.map(l=>`<div class="lo${S.lstyle.id===l.id?' active':''}" data-lstyle="${l.id}"><div class="lo-prev ${l.cls}">${l.pre}</div><div class="lo-name">${l.id}</div></div>`).join('');}
-function updateBadge(){document.getElementById('badge-brand').innerHTML=(S.brand||'YOUR BRAND').toUpperCase();document.getElementById('badge-type').innerHTML=`${S.prod.name} · ${S.size}`;}
-function applyUniformScale(){ const m=getMasterScale(); canGroup.scale.set(m,m,m); updateCamera(); }
-function setBareMode(enabled){ S.bareMode=enabled; document.getElementById('labelSections').classList.toggle('label-group-hidden',enabled); if(enabled && S.uploadImg){ S.uploadImg=null; const upZone=document.getElementById('upload-zone'); upZone.classList.remove('has-img'); document.getElementById('up-preview').classList.remove('on'); document.getElementById('up-ph').style.display=''; document.getElementById('lcontrols').classList.remove('on'); } buildCan(); generateLabel(); updateCamera(); }
+function updateBadge(){
+  document.getElementById('bdg-name').textContent=S.prod.name.toUpperCase()+' · '+S.size.ml;
+  document.getElementById('bdg-sub').textContent='PMS '+S.bodyColor.code+' · '+S.finish.name+' Finish';
+}
 
-// EVENT BINDINGS
-document.getElementById('prod-chips').addEventListener('click',e=>{if(e.target.classList.contains('chip')){S.prod=PRODS[S.cat].find(p=>p.id===e.target.dataset.prod);renderProdChips();applyUniformScale();generateLabel();updateBadge();}});
-document.getElementById('body-swatches').addEventListener('click',e=>{let sw=e.target.closest('.sw');if(sw){let id=sw.dataset.body;S.bcol=BODY_COLS.find(c=>c.id===id);tBodyCol=new THREE.Color(S.bcol.hex);renderBodySwatches();renderCapSwatches();generateLabel();}});
-document.getElementById('cap-swatches').addEventListener('click',e=>{let sw=e.target.closest('.sw');if(sw){S.ccol=CAP_COLS.find(c=>c.id===sw.dataset.capcol);if(S.ccol.hex!=='MATCH')tCapCol=new THREE.Color(S.ccol.hex);renderCapSwatches();}});
-document.getElementById('finish-grid').addEventListener('click',e=>{let fo=e.target.closest('.fo');if(fo){S.finish=FINISHES.find(f=>f.id===fo.dataset.finish);tR=S.finish.r;tM=S.finish.m;renderFinishes();updateLabelMaterialFinish();generateLabel();}});
-document.getElementById('cap-grid').addEventListener('click',e=>{let cg=e.target.closest('.cg');if(cg){S.capType=CAP_TYPES.find(c=>c.id===cg.dataset.cap);renderCapGrid();buildCan();generateLabel();updateCamera();}});
-document.getElementById('label-grid').addEventListener('click',e=>{if(S.bareMode)return;let lo=e.target.closest('.lo');if(lo){S.lstyle=LSTYLES.find(l=>l.id===lo.dataset.lstyle);renderLabelGrid();generateLabel();}});
-document.querySelectorAll('.ct').forEach(btn=>{btn.addEventListener('click',()=>{S.cat=btn.dataset.cat;S.prod=PRODS[S.cat][0];document.querySelectorAll('.ct').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderProdChips();applyUniformScale();generateLabel();updateBadge();})});
-document.getElementById('size-chips').innerHTML=`<button class="chip" data-scale="0.82">75ml</button><button class="chip" data-scale="0.90">100ml</button><button class="chip active" data-scale="1.00">150ml</button><button class="chip" data-scale="1.08">200ml</button><button class="chip" data-scale="1.18">300ml</button><button class="chip" data-scale="1.28">400ml</button>`;
-document.getElementById('size-chips').addEventListener('click',e=>{let c=e.target.closest('.chip');if(c){document.querySelectorAll('#size-chips .chip').forEach(x=>x.classList.remove('active'));c.classList.add('active');let scale=parseFloat(c.dataset.scale);S.size=c.innerText;S.masterScale=scale;applyUniformScale();updateBadge();}});
-const fileInput=document.getElementById('lbl-file'), upZone=document.getElementById('upload-zone'), upPreview=document.getElementById('up-preview'), upClear=document.getElementById('up-clear');
-upZone.addEventListener('click',()=>{if(!S.bareMode) fileInput.click();});
-fileInput.addEventListener('change',(e)=>{if(S.bareMode)return;const file=e.target.files[0];if(file){const reader=new FileReader();reader.onload=ev=>{const img=new Image();img.onload=()=>{S.uploadImg=img;upPreview.src=ev.target.result;upPreview.classList.add('on');upZone.classList.add('has-img');document.getElementById('up-ph').style.display='none';document.getElementById('lcontrols').classList.add('on');document.getElementById('lstyle-sec').classList.add('dimmed');document.getElementById('brand-sec').classList.add('dimmed');generateLabel();};img.src=ev.target.result;};reader.readAsDataURL(file);}});
-upClear.addEventListener('click',(e)=>{e.stopPropagation();S.uploadImg=null;fileInput.value='';upPreview.classList.remove('on');upZone.classList.remove('has-img');document.getElementById('up-ph').style.display='';document.getElementById('lcontrols').classList.remove('on');document.getElementById('lstyle-sec').classList.remove('dimmed');document.getElementById('brand-sec').classList.remove('dimmed');generateLabel();});
-const lpy=document.getElementById('lpy'), lsc=document.getElementById('lsc');
-lpy.addEventListener('input',()=>{S.labelPosY=lpy.value/100;document.getElementById('lpy-val').innerText=lpy.value+'%';generateLabel();});
-lsc.addEventListener('input',()=>{S.labelScale=lsc.value/100;document.getElementById('lsc-val').innerText=lsc.value+'%';generateLabel();});
-document.getElementById('brand-input').addEventListener('input',e=>{S.brand=e.target.value;updateBadge();if(!S.bareMode) generateLabel();});
-document.getElementById('bareModeToggle').addEventListener('change',(e)=>setBareMode(e.target.checked));
-const modal=document.getElementById('mo'), quoteBtn=document.getElementById('quoteBtn'), closeModalBtn=document.getElementById('closeModalBtn'), submitQuoteBtn=document.getElementById('submitQuoteBtn');
-quoteBtn.addEventListener('click',()=>{document.getElementById('msum').innerHTML=[['Product',`${S.prod.name} · ${S.size}`],['Brand',S.brand],['Body',S.bcol.name],['Finish',S.finish.name],['Cap',S.capType.name],['Cap Color',S.ccol.name],['Label',S.bareMode?'No label (Bare can)':(S.uploadImg?'Custom Artwork':S.lstyle.id)]].map(([k,v])=>`<div class="sr"><span class="sk">${k}</span><span class="sv">${v}</span></div>`).join('');modal.classList.add('open');});
-closeModalBtn.addEventListener('click',()=>{modal.classList.remove('open');document.getElementById('fv').classList.remove('hide');document.getElementById('suc').classList.remove('show');});
-submitQuoteBtn.addEventListener('click',()=>{if(!document.getElementById('f1').value.trim()||!document.getElementById('f4').value.trim()){alert('Please enter name & email');return;}document.getElementById('fv').classList.add('hide');document.getElementById('suc').classList.add('show');});
-modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('open');});
-// INIT
-buildCan(); generateLabel(); updateCamera(); resize(); renderProdChips(); renderBodySwatches(); renderCapSwatches(); renderFinishes(); renderCapGrid(); renderLabelGrid(); updateBadge(); S.brand='AEROSTAR'; document.getElementById('brand-input').value='AEROSTAR'; generateLabel(); animate();
+/* ══════════════════════════════════════════════
+   STEP PROGRESS NAV
+══════════════════════════════════════════════ */
+const NAV_STEPS=[
+  {n:'01',label:'Can Selection'},
+  {n:'02',label:'Body Colour'},
+  {n:'03',label:'Cap & Finish'},
+  {n:'04',label:'Design & Artwork'},
+];
+function renderNav(){
+  document.getElementById('snav').innerHTML=`<div class="step-progress">`+
+    NAV_STEPS.map((st,i)=>{
+      const s=i+1, isActive=s===S.step, isDone=s<S.step;
+      const cl=isActive?'sp-item active':isDone?'sp-item done':'sp-item';
+      const numContent=isDone?IC.check:st.n;
+      return`${i>0?`<div class="sp-connector${isDone?' past':''}"></div>`:''}
+        <div class="${cl}" onclick="if(${s}<=${S.step})goStep(${s})">
+          <div class="sp-num">${numContent}</div>
+          <div class="sp-meta">
+            <div class="sp-step">Step ${st.n}</div>
+            <div class="sp-label">${st.label}</div>
+          </div>
+        </div>`;
+    }).join('')+`</div>`;
+}
+
+/* ══════════════════════════════════════════════
+   PANTONE PICKER COMPONENT
+══════════════════════════════════════════════ */
+function renderPicker(prop){
+  const cur=S[prop];
+  const fams=['All','R','O','Y','G','B','P','K','N','M'];
+  const q=S.psearch.toLowerCase();
+  let list=S.pfam==='All'?PANTONE:PANTONE.filter(c=>c.f===S.pfam);
+  if(q) list=PANTONE.filter(c=>c.code.toLowerCase().includes(q)||c.name.toLowerCase().includes(q));
+
+  const famH=fams.map(f=>{
+    const dot=f!=='All'?`<span class="pfam-dot" style="background:${FAM_COL[f]}"></span>`:'';
+    return`<div class="pfam-btn${S.pfam===f?' on':''}" onclick="S.pfam='${f}';S.psearch='';rebox()">${dot}${FAM_NAME[f]}</div>`;
+  }).join('');
+
+  const swH=list.map(c=>{
+    const sh=c.met?'box-shadow:inset 0 0 0 1px rgba(255,255,255,.3),0 1px 4px rgba(0,0,0,.25)':'box-shadow:0 1px 4px rgba(0,0,0,.18)';
+    return`<div class="psw${cur&&cur.code===c.code?' on':''}" style="background:${c.hex};${sh}"
+      onclick="pickColor('${prop}','${c.code}')">
+      <span class="psw-tip">PMS ${c.code} — ${c.name}</span></div>`;
+  }).join('');
+
+  const selH=cur?`<div class="p-selected">
+    <div class="p-sel-swatch" style="background:${cur.hex}"></div>
+    <div class="p-sel-info">
+      <div class="p-sel-code">PMS ${cur.code}</div>
+      <div class="p-sel-name">${cur.name}</div>
+    </div>
+  </div>`:`<div class="p-selected" style="opacity:.4;font-size:11px;color:var(--muted)">No colour selected</div>`;
+
+  return`<div class="p-search-wrap">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input class="psearch" placeholder="Search PMS code or colour name…" value="${S.psearch}" oninput="S.psearch=this.value;rebox()">
+  </div>
+  <div class="pfam-row">${famH}</div>
+  <div class="pgrid-color">${swH||'<span style="font-size:11px;color:var(--muted);padding:4px">No results</span>'}</div>
+  ${selH}
+  <div class="custom-row">
+    <span class="custom-lbl">Custom</span>
+    <input type="color" value="${cur?cur.hex:'#1557b0'}" onchange="pickHex('${prop}',this.value)">
+    <input class="hex-input" type="text" placeholder="#RRGGBB" value="${cur?cur.hex:''}"
+      oninput="if(this.value.match(/^#[0-9a-fA-F]{6}$/)) pickHex('${prop}',this.value)">
+  </div>`;
+}
+
+/* ══════════════════════════════════════════════
+   STEP RENDERERS
+══════════════════════════════════════════════ */
+function rStep1(){
+  const cats={beauty:'Beauty & Personal Care',airfresh:'Air Freshener & Home'};
+  const catIco={beauty:IC.can,airfresh:IC.spray};
+  const prods=PRODUCTS[S.category];
+  return`<h2 class="sec-title">Can Selection</h2>
+    <span class="field-label">Product Category</span>
+    <div class="cat-tabs">
+      ${Object.entries(cats).map(([k,v])=>`<div class="ct${S.category===k?' on':''}"
+        onclick="S.category='${k}';S.prod=PRODUCTS['${k}'][0];rebox()">
+        <span style="display:flex;align-items:center">${catIco[k]}</span>${v}
+      </div>`).join('')}
+    </div>
+    <span class="field-label">Product Type</span>
+    <div class="prod-grid">
+      ${prods.map(p=>`<div class="pcard${S.prod.id===p.id?' on':''}"
+        onclick="S.prod=PRODUCTS[S.category].find(x=>x.id==='${p.id}');buildCan();updateBadge();rebox()">
+        <div class="pcard-icon">${IC.can}</div>
+        <div class="pcard-text">
+          <div class="pcard-name">${p.name}</div>
+          <div class="pcard-sub">${p.sub}</div>
+        </div>
+      </div>`).join('')}
+    </div>
+    <span class="field-label">Fill Volume</span>
+    <div class="size-row">
+      ${SIZES.map(sz=>`<div class="sz${S.size.ml===sz.ml?' on':''}"
+        onclick="S.size=SIZES.find(x=>x.ml==='${sz.ml}');buildCan();updateBadge();rebox()">${sz.ml}</div>`).join('')}
+    </div>
+    <div class="navrow"><div></div>
+      <button class="btn-next" onclick="ns()">Body Colour ${IC.chevron}</button></div>`;
+}
+
+function rStep2(){
+  return`<h2 class="sec-title">Body Colour</h2>
+    <span class="field-label">Pantone Colour Selection</span>
+    ${renderPicker('bodyColor')}
+    <div class="navrow">
+      <button class="btn-back" onclick="ps()">Back</button>
+      <button class="btn-next" onclick="ns()">Cap & Finish ${IC.chevron}</button>
+    </div>`;
+}
+
+function rStep3(){
+  return`<h2 class="sec-title">Cap & Finish</h2>
+    <span class="field-label">Cap Profile</span>
+    <div class="cap-grid">
+      ${CAP_TYPES.map(ct=>`<div class="cg${S.capType.id===ct.id?' on':''}"
+        onclick="S.capType=CAP_TYPES.find(x=>x.id==='${ct.id}');buildCan();rebox()">
+        <div class="cg-icon">${CAP_SVG[ct.id]}</div>
+        <div class="cg-name">${ct.name}</div>
+        <div style="font-size:8.5px;color:var(--muted);margin-top:2px;letter-spacing:.2px">${ct.sub}</div>
+      </div>`).join('')}
+    </div>
+    <span class="field-label">Surface Finish</span>
+    <div class="fin-grid">
+      ${FINISHES.map(f=>`<div class="fg${S.finish.id===f.id?' on':''}"
+        onclick="S.finish=FINISHES.find(x=>x.id==='${f.id}');tR=S.finish.r;tM=S.finish.m;generateLabel();updateBadge();rebox()">
+        <div class="fg-ball" style="background:${f.ball}"></div>
+        <div class="fg-name">${f.name}</div>
+      </div>`).join('')}
+    </div>
+    <span class="field-label">Cap Colour</span>
+    <div class="match-toggle${S.capMatchBody?' on':''}" onclick="S.capMatchBody=!S.capMatchBody;rebox()">
+      ${IC.match}
+      <span class="match-text">${S.capMatchBody?'Matched to body colour — click to change':'Match body colour'}</span>
+      <div class="match-check">${S.capMatchBody?IC.check:''}</div>
+    </div>
+    ${!S.capMatchBody?renderPicker('capColor'):''}
+    <div class="navrow">
+      <button class="btn-back" onclick="ps()">Back</button>
+      <button class="btn-next" onclick="ns()">Design & Artwork ${IC.chevron}</button>
+    </div>`;
+}
+
+function rStep4(){
+  const hasImg=!!S.designImg;
+  return`<h2 class="sec-title">Design & Artwork</h2>
+    <div class="bare-row">
+      <div>
+        <div class="bare-lbl">Bare Can Mode</div>
+        <div class="bare-sub">Apply uniform colour only — no label wrap</div>
+      </div>
+      <label class="toggle"><input type="checkbox" ${S.bareMode?'checked':''}
+        onchange="S.bareMode=this.checked;buildCan();generateLabel();rebox()"><span class="tgl"></span></label>
+    </div>
+    ${!S.bareMode?`<span class="field-label">Artwork File
+      <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:9.5px;margin-left:4px">PNG or JPG — maps 360° around the can surface</span>
+    </span>
+    <div class="upload-zone${hasImg?' has':''}" onclick="document.getElementById('fup').click()">
+      <input type="file" id="fup" accept="image/*" style="display:none" onchange="onUpload(event)">
+      ${!hasImg?`<div class="up-icon-wrap">${IC.upload}</div>
+        <div class="up-txt">Upload Artwork File</div>
+        <div class="up-hint">PNG · JPG · Recommended width 2400 px</div>`:''}
+      <img id="uprev" class="up-preview${hasImg?' on':''}" src="${hasImg?S.designImg.src:''}">
+      <button class="up-clear" onclick="clearDesign(event)">Remove</button>
+    </div>
+    ${hasImg?`<div class="lsliders on">
+      <div class="sl-row">
+        <label>Position</label>
+        <input type="range" min="15" max="85" value="${Math.round(S.labelPosY*100)}"
+          oninput="S.labelPosY=this.value/100;document.getElementById('lpyv').textContent=this.value+'%';generateLabel()">
+        <span class="sl-val" id="lpyv">${Math.round(S.labelPosY*100)}%</span>
+      </div>
+      <div class="sl-row">
+        <label>Scale</label>
+        <input type="range" min="30" max="110" value="${Math.round(S.labelScale*100)}"
+          oninput="S.labelScale=this.value/100;document.getElementById('lscv').textContent=this.value+'%';generateLabel()">
+        <span class="sl-val" id="lscv">${Math.round(S.labelScale*100)}%</span>
+      </div>
+    </div>`:''}`:
+    `<div style="padding:16px 0;font-size:12px;color:var(--muted);text-align:center;letter-spacing:.3px">
+      Bare can — colour coat applied without label artwork
+    </div>`}
+    <div class="navrow">
+      <button class="btn-back" onclick="ps()">Back</button>
+      <button class="btn-next" onclick="ns()">Review & Submit ${IC.chevron}</button>
+    </div>`;
+}
+
+function rStep5(){
+  const capStr=S.capMatchBody
+    ?'Match Body — '+S.bodyColor.name
+    :'PMS '+S.capColor.code+' — '+S.capColor.name;
+  return`<h2 class="sec-title">Review & Submit</h2>
+    <div class="summary">
+      <div class="sum-head">Configuration Summary</div>
+      <div class="sum-row"><span class="sk">Product</span><span class="sv">${S.prod.name} · ${S.size.ml}</span></div>
+      <div class="sum-row"><span class="sk">Body Colour</span><span class="sv">PMS ${S.bodyColor.code} — ${S.bodyColor.name}</span></div>
+      <div class="sum-row"><span class="sk">Surface Finish</span><span class="sv">${S.finish.name}</span></div>
+      <div class="sum-row"><span class="sk">Cap Profile</span><span class="sv">${S.capType.name} ${S.capType.sub}</span></div>
+      <div class="sum-row"><span class="sk">Cap Colour</span><span class="sv">${capStr}</span></div>
+      <div class="sum-row"><span class="sk">Artwork</span><span class="sv">${S.bareMode?'Bare can':S.designImg?'Custom artwork uploaded':'No artwork'}</span></div>
+    </div>
+    <span class="field-label">Contact Details</span>
+    <div class="form-grid">
+      <div class="fc"><div class="flb">First Name</div><input class="fi" type="text" placeholder="First name"></div>
+      <div class="fc"><div class="flb">Company</div><input class="fi" type="text" placeholder="Organisation"></div>
+    </div>
+    <div class="form-grid">
+      <div class="fc"><div class="flb">Email Address</div><input class="fi" type="email" placeholder="name@company.com"></div>
+      <div class="fc"><div class="flb">Telephone</div><input class="fi" type="tel" placeholder="+00 000 000 0000"></div>
+    </div>
+    <div class="form-grid">
+      <div class="fc"><div class="flb">Required Quantity</div>
+        <select class="fi"><option>1 000 – 5 000 units</option><option>5 000 – 10 000 units</option><option>10 000 – 50 000 units</option><option>50 000+ units</option></select>
+      </div>
+      <div class="fc"><div class="flb">Lead Time Required</div>
+        <select class="fi"><option>Standard — 8 to 12 weeks</option><option>Express — 4 to 6 weeks</option><option>No fixed deadline</option></select>
+      </div>
+    </div>
+    <div class="form-grid"><div class="fc full"><div class="flb">Additional Notes</div>
+      <textarea class="fta" placeholder="Special requirements, certifications, or questions…"></textarea>
+    </div></div>
+    <div class="navrow">
+      <button class="btn-back" onclick="ps()">Back</button>
+      <button class="btn-next" onclick="submitForm()">Submit Request ${IC.chevron}</button>
+    </div>`;
+}
+
+/* ── ACTIONS ────────────────────────────────────── */
+function rebox(){
+  renderNav();
+  const b=document.getElementById('sbox');
+  if(S.step===1) b.innerHTML=rStep1();
+  else if(S.step===2) b.innerHTML=rStep2();
+  else if(S.step===3) b.innerHTML=rStep3();
+  else if(S.step===4) b.innerHTML=rStep4();
+  else if(S.step===5) b.innerHTML=rStep5();
+}
+function ns(){if(S.step<5){S.step++;rebox();}}
+function ps(){if(S.step>1){S.step--;rebox();}}
+function goStep(n){S.step=n;rebox();}
+function pickColor(prop,code){
+  const c=PANTONE.find(x=>x.code===code); if(!c)return;
+  S[prop]=c;
+  if(prop==='bodyColor'){tBodyCol=new THREE.Color(c.hex);generateLabel();updateBadge();}
+  if(prop==='capColor'){tCapCol=new THREE.Color(c.hex);}
+  rebox();
+}
+function pickHex(prop,hex){
+  if(!/^#[0-9a-fA-F]{6}$/.test(hex))return;
+  S[prop]={code:'Custom',name:'Custom colour',hex,f:'N'};
+  if(prop==='bodyColor'){tBodyCol=new THREE.Color(hex);generateLabel();updateBadge();}
+  if(prop==='capColor'){tCapCol=new THREE.Color(hex);}
+  rebox();
+}
+function onUpload(e){
+  const f=e.target.files[0]; if(!f)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{const img=new Image(); img.onload=()=>{S.designImg=img;generateLabel();rebox();}; img.src=ev.target.result;};
+  reader.readAsDataURL(f);
+}
+function clearDesign(e){
+  e.stopPropagation(); S.designImg=null;
+  const fup=document.getElementById('fup'); if(fup)fup.value='';
+  generateLabel(); rebox();
+}
+function submitForm(){
+  document.getElementById('sbox').innerHTML=`<div class="success-wrap">
+    <div class="ok-mark">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div style="font-size:21px;font-weight:300;color:var(--blue-dark);margin-bottom:10px;letter-spacing:-.2px">Request Submitted</div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.7;max-width:320px;margin:0 auto">
+      Your packaging specification has been received.<br>A member of the Aerostar team will respond within one business day.
+    </div>
+    <button class="btn-next" style="margin:24px auto 0;display:inline-flex" onclick="resetAll()">New Configuration ${IC.chevron}</button>
+  </div>`;
+}
+function resetAll(){
+  S={step:1,category:'beauty',prod:PRODUCTS.beauty[0],size:SIZES[2],
+    bodyColor:PANTONE.find(p=>p.code==='877 C'),capMatchBody:false,
+    capColor:PANTONE.find(p=>p.code==='Black C'),capType:CAP_TYPES[0],
+    finish:FINISHES[1],designImg:null,labelPosY:0.48,labelScale:0.82,bareMode:false,
+    pfam:'All',psearch:''};
+  tBodyCol=new THREE.Color(S.bodyColor.hex); tCapCol=new THREE.Color(S.capColor.hex);
+  tR=S.finish.r; tM=S.finish.m;
+  buildCan(); generateLabel(); updateBadge(); rebox();
+}
+
+/* ── INIT ───────────────────────────────────────── */
+resize(); buildCan(); generateLabel(); updateBadge(); rebox(); animate();
 </script>
 </body>
 </html>

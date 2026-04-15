@@ -522,7 +522,7 @@ const botL  = new THREE.DirectionalLight(0xf0f5ff, 0.18); botL.position.set(0,  
 
 /* ── MATERIALS ── */
 let bodyMat  = new THREE.MeshStandardMaterial({ color: new THREE.Color(S.bodyColor.hex), roughness: S.finish.r, metalness: S.finish.m });
-let labelMat = new THREE.MeshStandardMaterial({ roughness: S.finish.r, metalness: S.finish.m, transparent: true, color: 0xffffff });
+let labelMat = new THREE.MeshStandardMaterial({ roughness: S.finish.r, metalness: S.finish.m, transparent: false, color: 0xffffff });
 let capMat   = new THREE.MeshStandardMaterial({ color: new THREE.Color(S.capMatchBody ? S.bodyColor.hex : S.capColor.hex), roughness: 0.42, metalness: 0.02 });
 let ringMat  = new THREE.MeshStandardMaterial({ color: 0x888888, roughness: 0.40, metalness: 0.60 });
 let tBodyCol = new THREE.Color(S.bodyColor.hex);
@@ -683,7 +683,7 @@ function generateLabel() {
   const cv = document.createElement("canvas"); cv.width = W; cv.height = H;
   const ctx = cv.getContext("2d");
 
-  /* Base coat */
+  /* Base coat — body colour covers the full cylinder */
   ctx.fillStyle = S.bodyColor.hex; ctx.fillRect(0, 0, W, H);
 
   /* Metallic shimmer for metallic/chrome finishes */
@@ -698,12 +698,18 @@ function generateLabel() {
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
   }
 
-  /* User artwork centred on canvas → front face */
+  /* User artwork — draw at full opacity on a white panel so it always shows clearly */
   if (S.designImg && !S.bareMode) {
     const img = S.designImg;
     const dw = W * S.labelScale;
     const dh = (dw / img.width) * img.height;
-    ctx.drawImage(img, W/2 - dw/2, H * S.labelPosY - dh/2, dw, dh);
+    const dx = W/2 - dw/2;
+    const dy = H * S.labelPosY - dh/2;
+    /* White backing panel behind the artwork */
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(dx, dy, dw, dh);
+    ctx.globalAlpha = 1.0;
+    ctx.drawImage(img, dx, dy, dw, dh);
   }
 
   if (labelTex) labelTex.dispose();
@@ -1007,7 +1013,7 @@ function rStep4(){
       </div>
       <div style="font-size:10.5px;color:var(--muted);margin-bottom:10px;line-height:1.5">Centre your artwork horizontally — the canvas centre maps to the front face of the can.</div>
       <span class="field-label" style="margin-top:6px;display:block">Example Templates — click to apply</span>
-      <div class="tpl-grid">\${renderTemplateGrid()}</div>
+      <div class="tpl-grid">${renderTemplateGrid()}</div>
       <div style="font-size:9.5px;color:var(--muted);margin-top:2px;margin-bottom:10px">Or upload your own artwork below ↓</div>
       <button onclick="downloadTemplate()" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--blue);border-radius:5px;background:white;color:var(--blue);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">${IC.dl} Download Template PNG</button>
     </div>

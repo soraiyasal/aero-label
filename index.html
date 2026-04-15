@@ -495,8 +495,8 @@ const Y_cap_bot   = Y_body_top + 0.012;
 const canvas3 = document.getElementById("c3");
 const renderer = new THREE.WebGLRenderer({ canvas: canvas3, antialias: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.toneMapping = THREE.LinearToneMapping;
-renderer.toneMappingExposure = 1.0;
+renderer.toneMapping = THREE.ReinhardToneMapping;
+renderer.toneMappingExposure = 0.88;
 renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -507,8 +507,8 @@ scene.background = new THREE.Color(0xecf0f7);
 const camera = new THREE.PerspectiveCamera(28, 1, 0.001, 10);
 
 /* ── STUDIO LIGHTING ── */
-scene.add(new THREE.AmbientLight(0xffffff, 0.65));
-const keyL = new THREE.DirectionalLight(0xfff9f0, 1.85);
+scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+const keyL = new THREE.DirectionalLight(0xfff9f0, 1.20);
 keyL.position.set(-0.3, 0.8, 0.6);
 keyL.castShadow = true;
 keyL.shadow.mapSize.set(2048, 2048);
@@ -516,7 +516,7 @@ keyL.shadow.camera.left = -0.2; keyL.shadow.camera.right = 0.2;
 keyL.shadow.camera.top  =  0.4; keyL.shadow.camera.bottom = -0.1;
 keyL.shadow.radius = 8; keyL.shadow.bias = -0.0005;
 scene.add(keyL);
-const fillL = new THREE.DirectionalLight(0xeef4ff, 0.75); fillL.position.set(0.5, 0.2, 0.4);   scene.add(fillL);
+const fillL = new THREE.DirectionalLight(0xeef4ff, 0.55); fillL.position.set(0.5, 0.2, 0.4);   scene.add(fillL);
 const rimL  = new THREE.DirectionalLight(0xffffff, 0.30); rimL.position.set(0,   0.6, -0.7);   scene.add(rimL);
 const botL  = new THREE.DirectionalLight(0xf0f5ff, 0.18); botL.position.set(0,  -0.5,  0.3);   scene.add(botL);
 

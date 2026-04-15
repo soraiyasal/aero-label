@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aerostar Contract — Packaging Configurator</title>
-<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 :root{
   --blue:#1557b0;--blue2:#1e6fd9;--blue-dark:#0a3578;--blue-nav:#0d3a7a;
@@ -14,215 +14,188 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden}
-body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--text);font-size:13px}
+body{font-family:"Lato",sans-serif;background:var(--bg);color:var(--text);font-size:13px}
 
-/* ─── HEADER ─────────────────────────────────────── */
-.top-bar{background:var(--white);border-bottom:1px solid var(--border);height:62px;display:flex;align-items:center;padding:0 40px;justify-content:space-between;flex-shrink:0}
-.logo-wrap{display:flex;flex-direction:column;user-select:none;line-height:1;gap:0}
+/* ── HEADER ── */
+.top-bar{background:var(--white);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 32px;justify-content:space-between;flex-shrink:0}
+.logo-wrap{display:flex;flex-direction:column;user-select:none;line-height:1;flex-shrink:0}
 .logo-ltr{display:flex;align-items:center}
-.logo-lt{font-size:27px;font-weight:300;color:#5c6b7a;letter-spacing:-.5px}
-.logo-contract{font-family:Georgia,serif;font-style:italic;color:var(--blue);font-size:13px;padding-left:63px;margin-top:-1px;letter-spacing:.01em}
-.header-right{display:flex;align-items:center;gap:20px}
-.hdr-tag{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase}
-.hdr-sep{width:1px;height:16px;background:var(--border)}
-.hdr-btn{font-size:10.5px;font-weight:700;color:var(--blue);text-decoration:none;border:1.5px solid var(--blue);border-radius:20px;padding:4px 15px;letter-spacing:.4px;transition:all .15s}
+.logo-lt{font-size:24px;font-weight:300;color:#5c6b7a;letter-spacing:-.5px}
+.logo-contract{font-family:Georgia,serif;font-style:italic;color:var(--blue);font-size:12px;padding-left:56px;margin-top:-1px}
+.hdr-right{display:flex;align-items:center;gap:14px;flex-shrink:0}
+.hdr-tag{font-size:9.5px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;white-space:nowrap}
+.hdr-sep{width:1px;height:14px;background:var(--border);flex-shrink:0}
+.hdr-btn{font-size:10px;font-weight:700;color:var(--blue);text-decoration:none;border:1.5px solid var(--blue);border-radius:20px;padding:3px 12px;white-space:nowrap;transition:all .15s}
 .hdr-btn:hover{background:var(--blue);color:#fff}
 
-/* ─── NAV BAR ────────────────────────────────────── */
-.nav-bar{background:var(--blue-nav);height:36px;display:flex;align-items:center;padding:0 40px;gap:0;flex-shrink:0}
-.nav-bar a{color:rgba(255,255,255,.65);text-decoration:none;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:0 14px;height:36px;display:flex;align-items:center;transition:color .15s}
+.nav-bar{background:var(--blue-nav);height:34px;display:flex;align-items:center;padding:0 32px;flex-shrink:0;overflow:hidden}
+.nav-bar a{color:rgba(255,255,255,.65);text-decoration:none;font-size:9.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:0 12px;height:34px;display:flex;align-items:center;transition:color .15s;white-space:nowrap;flex-shrink:0}
 .nav-bar a:hover{color:#fff}
 .nav-bar .spacer{flex:1}
-.nb-div{width:1px;height:16px;background:rgba(255,255,255,.15);margin:0 4px}
+.nb-div{width:1px;height:14px;background:rgba(255,255,255,.15);margin:0 2px;flex-shrink:0}
 
-/* ─── LAYOUT ─────────────────────────────────────── */
-.layout{display:grid;grid-template-columns:1fr 440px;height:calc(100vh - 98px)}
-.left{overflow-y:auto;padding:22px 32px 32px;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
-.right{position:relative;background:#edf1f7;border-left:1px solid var(--border);overflow:hidden}
-#three-canvas{width:100%;height:100%;display:block;cursor:grab}
-#three-canvas:active{cursor:grabbing}
+/* ── MAIN LAYOUT ── */
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 430px;height:calc(100vh - 94px);overflow:hidden}
 
-/* ─── VIEWER OVERLAYS ────────────────────────────── */
-.can-badge{position:absolute;top:16px;left:16px;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-radius:6px;padding:8px 14px;pointer-events:none;border:1px solid rgba(255,255,255,.8);box-shadow:0 2px 12px rgba(0,0,0,.08)}
-.badge-prod{font-size:11px;font-weight:700;color:var(--blue-dark);letter-spacing:.08em;text-transform:uppercase}
-.badge-spec{font-size:9px;color:var(--muted);margin-top:2px;letter-spacing:.05em}
-.drag-hint{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);opacity:.45;pointer-events:none;display:flex;align-items:center;gap:7px}
+/* ── LEFT PANEL ── */
+.left{
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:18px 20px 28px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--border) transparent;
+  min-width:0;
+}
 
-/* ─── STEP PROGRESS ──────────────────────────────── */
-.step-progress{display:flex;align-items:center;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:16px 22px;margin-bottom:18px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
-.sp-item{display:flex;align-items:center;gap:11px;cursor:pointer;flex-shrink:0}
-.sp-num{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--muted);flex-shrink:0;transition:all .2s;letter-spacing:.05em}
+/* ── RIGHT PANEL (3D viewer) ── */
+.right{position:relative;background:radial-gradient(ellipse at 50% 40%,#f8f9fc 0%,#e6eaf2 100%);border-left:1px solid var(--border);overflow:hidden;flex-shrink:0}
+#c3{width:100%;height:100%;display:block;cursor:grab;touch-action:none;user-select:none}
+#c3:active{cursor:grabbing}
+.can-badge{position:absolute;top:14px;left:14px;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-radius:6px;padding:7px 12px;pointer-events:none;border:1px solid rgba(255,255,255,.8);box-shadow:0 2px 12px rgba(0,0,0,.08);max-width:200px}
+.badge-prod{font-size:10.5px;font-weight:700;color:var(--blue-dark);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.badge-spec{font-size:8.5px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.drag-hint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);opacity:.4;pointer-events:none;display:flex;align-items:center;gap:6px;white-space:nowrap}
+
+/* ── STEP PROGRESS ── */
+.step-progress{display:flex;align-items:center;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px 16px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden}
+.sp-item{display:flex;align-items:center;gap:8px;cursor:pointer;flex-shrink:0;min-width:0}
+.sp-num{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--muted);flex-shrink:0;transition:all .2s}
 .sp-item.active .sp-num{background:var(--blue);border-color:var(--blue);color:#fff}
 .sp-item.done .sp-num{background:var(--blue-bg);border-color:var(--blue);color:var(--blue)}
-.sp-meta{display:flex;flex-direction:column;gap:1px}
-.sp-step{font-size:8.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
-.sp-label{font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap}
-.sp-item.active .sp-label{color:var(--blue-dark)}
-.sp-item.active .sp-step{color:var(--blue)}
-.sp-item.done .sp-label{color:var(--blue)}
-.sp-item.done .sp-step{color:var(--blue);opacity:.6}
-.sp-connector{flex:1;height:1px;background:var(--border);margin:0 14px;min-width:16px}
-.sp-connector.past{background:var(--blue);opacity:.25}
+.sp-meta{display:flex;flex-direction:column;gap:1px;min-width:0}
+.sp-step{font-size:8px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)}
+.sp-label{font-size:10.5px;font-weight:600;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sp-item.active .sp-label{color:var(--blue-dark)}.sp-item.active .sp-step{color:var(--blue)}
+.sp-item.done .sp-label,.sp-item.done .sp-step{color:var(--blue);opacity:.8}
+.sp-connector{flex:1;height:1px;background:var(--border);margin:0 8px;min-width:8px}
+.sp-connector.past{background:var(--blue);opacity:.3}
 
-/* ─── CONTENT CARD ───────────────────────────────── */
-.box{background:var(--white);border-radius:8px;border:1px solid var(--border);padding:24px 26px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
-.sec-title{font-size:21px;font-weight:300;color:var(--blue-dark);margin-bottom:20px;letter-spacing:-.3px}
-.sec-rule{height:1px;background:var(--border);margin:18px 0}
-.field-label{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;display:block}
+/* ── CONTENT BOX ── */
+.box{background:var(--white);border-radius:8px;border:1px solid var(--border);padding:20px 20px;box-shadow:0 1px 3px rgba(0,0,0,.04);min-width:0;overflow:hidden}
+.sec-title{font-size:18px;font-weight:300;color:var(--blue-dark);margin-bottom:16px;letter-spacing:-.2px}
+.field-label{font-size:8.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.9px;margin-bottom:7px;display:block}
 
-/* ─── CATEGORY TABS ──────────────────────────────── */
-.cat-tabs{display:flex;gap:6px;margin-bottom:18px}
-.ct{flex:1;padding:11px 10px;border:1.5px solid var(--border);border-radius:7px;background:var(--white);color:var(--muted);font-size:11px;font-weight:700;cursor:pointer;text-align:center;transition:all .14s;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:.2px}
-.ct:hover{border-color:var(--blue2)}
-.ct.on{background:var(--blue-bg);border-color:var(--blue);color:var(--blue)}
-.ct svg{opacity:.7}
-.ct.on svg{opacity:1}
+/* ── CATEGORY TABS ── */
+.cat-tabs{display:flex;gap:6px;margin-bottom:16px}
+.ct{flex:1;padding:9px 6px;border:1.5px solid var(--border);border-radius:7px;background:var(--white);color:var(--muted);font-size:10.5px;font-weight:700;cursor:pointer;text-align:center;transition:all .12s;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ct:hover{border-color:var(--blue2)}.ct.on{background:var(--blue-bg);border-color:var(--blue);color:var(--blue)}
 
-/* ─── SIZE PILLS ─────────────────────────────────── */
-.size-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
-.sz{padding:5px 14px;border-radius:4px;border:1px solid var(--border);font-size:11.5px;font-weight:600;cursor:pointer;background:var(--white);color:var(--muted);transition:all .14s;letter-spacing:.3px}
-.sz:hover{border-color:var(--blue)}
-.sz.on{background:var(--blue);border-color:var(--blue);color:#fff}
+/* ── SIZE PILLS ── */
+.size-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:16px}
+.sz{padding:4px 11px;border-radius:4px;border:1px solid var(--border);font-size:11px;font-weight:600;cursor:pointer;background:var(--white);color:var(--muted);transition:all .14s;letter-spacing:.2px;white-space:nowrap}
+.sz:hover{border-color:var(--blue)}.sz.on{background:var(--blue);border-color:var(--blue);color:#fff}
 
-/* ─── PRODUCT GRID ───────────────────────────────── */
-.prod-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:18px}
-.pcard{border:1px solid var(--border);border-radius:7px;padding:14px 14px;cursor:pointer;transition:all .14s;background:var(--white);display:flex;align-items:center;gap:12px}
-.pcard:hover{border-color:var(--blue2);box-shadow:0 2px 8px rgba(21,87,176,.08)}
-.pcard.on{border-color:var(--blue);background:var(--blue-bg)}
-.pcard-icon{width:32px;flex-shrink:0;display:flex;justify-content:center;color:var(--muted)}
-.pcard.on .pcard-icon{color:var(--blue)}
-.pcard-text{}
-.pcard-name{font-size:12px;font-weight:700;color:var(--text)}
-.pcard-sub{font-size:10px;color:var(--muted);margin-top:1px}
-.pcard.on .pcard-name{color:var(--blue-dark)}
-.pcard.on .pcard-sub{color:var(--blue);opacity:.8}
+/* ── PRODUCT CARDS ── */
+.prod-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-bottom:16px}
+.pcard{border:1px solid var(--border);border-radius:7px;padding:11px 10px;cursor:pointer;transition:all .14s;background:var(--white);display:flex;align-items:center;gap:10px;min-width:0;overflow:hidden}
+.pcard:hover{border-color:var(--blue2);box-shadow:0 2px 8px rgba(21,87,176,.08)}.pcard.on{border-color:var(--blue);background:var(--blue-bg)}
+.pcard-icon{width:24px;flex-shrink:0;display:flex;justify-content:center;color:var(--muted)}.pcard.on .pcard-icon{color:var(--blue)}
+.pcard-text{min-width:0;overflow:hidden}
+.pcard-name{font-size:11.5px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pcard-sub{font-size:9.5px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pcard.on .pcard-name{color:var(--blue-dark)}.pcard.on .pcard-sub{color:var(--blue)}
 
-/* ─── PANTONE PICKER ─────────────────────────────── */
-.p-search-wrap{position:relative;margin-bottom:10px}
-.p-search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--muted)}
-.psearch{width:100%;padding:8px 11px 8px 32px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:12px;outline:none;color:var(--text);background:var(--white);transition:border-color .14s}
+/* ── PANTONE PICKER ── */
+.ptabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
+.pfam-btn{display:flex;align-items:center;gap:4px;padding:3px 9px;border-radius:4px;border:1px solid var(--border);font-size:10px;font-weight:600;cursor:pointer;background:var(--white);color:var(--muted);transition:all .12s;white-space:nowrap}
+.pfam-btn:hover{border-color:var(--blue2)}.pfam-btn.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.pfam-dot{width:7px;height:7px;border-radius:50%;border:1px solid rgba(0,0,0,.12);flex-shrink:0}
+.p-search-wrap{position:relative;margin-bottom:9px}
+.p-search-wrap svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--muted)}
+.psearch{width:100%;padding:7px 10px 7px 30px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:11.5px;outline:none;color:var(--text);background:var(--white);transition:border-color .14s}
 .psearch:focus{border-color:var(--blue)}
-.pfam-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
-.pfam-btn{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:4px;border:1px solid var(--border);font-size:10.5px;font-weight:600;cursor:pointer;background:var(--white);color:var(--muted);transition:all .12s;letter-spacing:.2px}
-.pfam-btn:hover{border-color:var(--blue2)}
-.pfam-btn.on{background:var(--blue);border-color:var(--blue);color:#fff}
-.pfam-btn.on .pfam-dot{border-color:rgba(255,255,255,.4)}
-.pfam-dot{width:8px;height:8px;border-radius:50%;border:1px solid rgba(0,0,0,.12);flex-shrink:0}
-.pgrid-color{display:flex;flex-wrap:wrap;gap:5px;max-height:148px;overflow-y:auto;margin-bottom:10px;padding:1px;scrollbar-width:thin}
-.psw{width:30px;height:30px;border-radius:50%;cursor:pointer;border:2px solid transparent;position:relative;transition:transform .12s,border-color .12s;flex-shrink:0}
-.psw:hover{transform:scale(1.16);z-index:2}
-.psw.on{border-color:#0a3578;transform:scale(1.1)}
-.psw-tip{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#0f172a;color:#fff;font-size:9px;padding:4px 8px;border-radius:4px;white-space:nowrap;pointer-events:none;z-index:40;display:none;line-height:1.5;box-shadow:0 4px 12px rgba(0,0,0,.2)}
-.psw-tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:#0f172a}
-.psw:hover .psw-tip{display:block}
-.p-selected{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--blue-bg);border-radius:6px;border:1px solid rgba(21,87,176,.14);margin-bottom:10px;min-height:48px}
-.p-sel-swatch{width:32px;height:32px;border-radius:50%;flex-shrink:0;border:1px solid rgba(0,0,0,.1);box-shadow:0 1px 4px rgba(0,0,0,.15)}
-.p-sel-info{}
-.p-sel-code{font-size:10px;font-weight:700;color:var(--blue);letter-spacing:.5px}
-.p-sel-name{font-size:12px;color:var(--text);margin-top:1px}
-.custom-row{display:flex;align-items:center;gap:10px;padding-top:4px}
-.custom-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--muted);white-space:nowrap}
-.custom-row input[type=color]{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);padding:2px;cursor:pointer;background:none;flex-shrink:0}
-.hex-input{flex:1;padding:6px 10px;border:1px solid var(--border);border-radius:5px;font-size:11.5px;font-family:'Lato',monospace;color:var(--text);outline:none;letter-spacing:.5px}
+.pgrid-color{display:flex;flex-wrap:wrap;gap:5px;max-height:140px;overflow-y:auto;margin-bottom:9px;padding:2px;scrollbar-width:thin}
+.psw{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;position:relative;transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease;flex-shrink:0;will-change:transform;transform:translateZ(0);backface-visibility:hidden}
+.psw:hover{transform:translateZ(0) scale(1.08);z-index:2;box-shadow:0 2px 8px rgba(0,0,0,.16)}.psw.on{border-color:#0a3578 !important;transform:translateZ(0) scale(1.04)}
+.p-selected{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--blue-bg);border-radius:6px;border:1px solid rgba(21,87,176,.14);margin-bottom:9px;min-height:44px;min-width:0;overflow:hidden}
+.p-sel-swatch{width:28px;height:28px;border-radius:50%;flex-shrink:0;border:1px solid rgba(0,0,0,.1);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.p-sel-code{font-size:9.5px;font-weight:700;color:var(--blue);letter-spacing:.4px}
+.p-sel-name{font-size:11px;color:var(--text);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.custom-row{display:flex;align-items:center;gap:8px;padding-top:3px}
+.custom-lbl{font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);white-space:nowrap;flex-shrink:0}
+.custom-row input[type=color]{width:30px;height:30px;border-radius:50%;border:1px solid var(--border);padding:2px;cursor:pointer;background:none;flex-shrink:0}
+.hex-input{flex:1;min-width:0;padding:6px 9px;border:1px solid var(--border);border-radius:5px;font-size:11px;font-family:"Lato",monospace;color:var(--text);outline:none}
 .hex-input:focus{border-color:var(--blue)}
 
-/* ─── CAP GRID ───────────────────────────────────── */
-.cap-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:18px}
-.cg{border:1px solid var(--border);border-radius:7px;padding:12px 6px 10px;text-align:center;cursor:pointer;background:var(--white);transition:all .14s}
-.cg:hover{border-color:var(--blue2);box-shadow:0 2px 8px rgba(21,87,176,.08)}
-.cg.on{border-color:var(--blue);background:var(--blue-bg)}
-.cg-icon{display:flex;justify-content:center;align-items:center;height:34px;color:var(--muted);margin-bottom:6px}
-.cg.on .cg-icon{color:var(--blue)}
-.cg-name{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:.3px;line-height:1.3}
-.cg.on .cg-name{color:var(--blue)}
-.match-toggle{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1px solid var(--border);border-radius:7px;cursor:pointer;background:var(--white);margin-bottom:12px;transition:all .14s}
-.match-toggle:hover{border-color:var(--blue)}
-.match-toggle.on{border-color:var(--blue);background:var(--blue-bg)}
-.match-toggle svg{color:var(--muted);flex-shrink:0}
-.match-toggle.on svg{color:var(--blue)}
-.match-text{font-size:11.5px;font-weight:600;color:var(--muted)}
+/* ── MATCH TOGGLE ── */
+.match-toggle{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:7px;cursor:pointer;background:var(--white);margin-bottom:10px;transition:all .14s;min-width:0;overflow:hidden}
+.match-toggle:hover{border-color:var(--blue)}.match-toggle.on{border-color:var(--blue);background:var(--blue-bg)}
+.match-toggle svg{color:var(--muted);flex-shrink:0}.match-toggle.on svg{color:var(--blue)}
+.match-text{font-size:11px;font-weight:600;color:var(--muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .match-toggle.on .match-text{color:var(--blue)}
-.match-check{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;margin-left:auto;flex-shrink:0;transition:all .14s}
+.match-check{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .14s}
 .match-toggle.on .match-check{background:var(--blue);border-color:var(--blue)}
 
-/* ─── FINISH ─────────────────────────────────────── */
-.fin-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:18px}
-.fg{border:1px solid var(--border);border-radius:7px;padding:10px 5px 8px;text-align:center;cursor:pointer;background:var(--white);transition:all .14s}
-.fg:hover{border-color:var(--blue2)}
-.fg.on{border-color:var(--blue);background:var(--blue-bg)}
-.fg-ball{width:30px;height:30px;border-radius:50%;margin:0 auto 6px;border:1px solid rgba(0,0,0,.1);box-shadow:0 1px 4px rgba(0,0,0,.12)}
-.fg-name{font-size:9.5px;font-weight:700;color:var(--muted);letter-spacing:.3px}
-.fg.on .fg-name{color:var(--blue)}
+/* ── FINISH GRID ── */
+.fin-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:16px}
+.fg{border:1px solid var(--border);border-radius:7px;padding:8px 4px 6px;text-align:center;cursor:pointer;background:var(--white);transition:all .14s;overflow:hidden}
+.fg:hover{border-color:var(--blue2)}.fg.on{border-color:var(--blue);background:var(--blue-bg)}
+.fg-ball{width:26px;height:26px;border-radius:50%;margin:0 auto 5px;border:1px solid rgba(0,0,0,.1);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.fg-name{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fg.on .fg-name{color:var(--blue)}
 
-/* ─── BARE TOGGLE ────────────────────────────────── */
-.bare-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--blue-bg);border:1px solid rgba(21,87,176,.12);border-radius:7px;margin-bottom:16px}
-.bare-lbl{font-size:11.5px;font-weight:600;color:var(--sub)}
-.bare-sub{font-size:9.5px;color:var(--muted);margin-top:2px}
-.toggle{position:relative;display:inline-block;width:40px;height:22px;flex-shrink:0}
+/* ── BARE TOGGLE ── */
+.bare-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--blue-bg);border:1px solid rgba(21,87,176,.12);border-radius:7px;margin-bottom:14px;gap:10px}
+.bare-lbl{font-size:11px;font-weight:600;color:var(--sub)}.bare-sub{font-size:9px;color:var(--muted);margin-top:1px}
+.toggle{position:relative;display:inline-block;width:38px;height:20px;flex-shrink:0}
 .toggle input{opacity:0;width:0;height:0}
-.tgl{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#cbd5e1;border-radius:22px;transition:.25s}
-.tgl:before{position:absolute;content:'';height:16px;width:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.25s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.tgl{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#cbd5e1;border-radius:20px;transition:.25s}
+.tgl:before{position:absolute;content:"";height:14px;width:14px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.25s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 input:checked+.tgl{background:var(--blue)}
 input:checked+.tgl:before{transform:translateX(18px)}
 
-/* ─── UPLOAD ─────────────────────────────────────── */
-.upload-zone{border:1.5px dashed var(--border);border-radius:7px;padding:22px;text-align:center;cursor:pointer;background:var(--white);position:relative;transition:all .14s}
+/* ── UPLOAD ── */
+.upload-zone{border:1.5px dashed var(--border);border-radius:7px;padding:18px 14px;text-align:center;cursor:pointer;background:var(--white);position:relative;transition:all .14s;overflow:hidden}
 .upload-zone:hover,.upload-zone.has{border-color:var(--blue);background:var(--blue-bg)}
-.up-icon-wrap{width:40px;height:40px;border-radius:50%;background:var(--blue-bg);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;color:var(--blue);border:1px solid rgba(21,87,176,.15)}
-.upload-zone.has .up-icon-wrap{background:rgba(21,87,176,.08)}
-.up-txt{font-size:12.5px;font-weight:600;color:var(--sub)}
-.up-hint{font-size:10px;color:var(--muted);margin-top:3px}
-.up-preview{width:100%;max-height:70px;object-fit:contain;border-radius:5px;margin-top:12px;display:none}
-.up-preview.on{display:block}
-.up-clear{position:absolute;top:10px;right:12px;background:#ef4444;border:none;border-radius:4px;color:#fff;padding:3px 10px;font-size:9.5px;cursor:pointer;display:none;font-family:inherit;font-weight:700;letter-spacing:.3px}
+.up-icon-wrap{width:36px;height:36px;border-radius:50%;background:var(--blue-bg);display:flex;align-items:center;justify-content:center;margin:0 auto 9px;color:var(--blue);border:1px solid rgba(21,87,176,.15)}
+.up-txt{font-size:12px;font-weight:600;color:var(--sub)}.up-hint{font-size:9.5px;color:var(--muted);margin-top:2px}
+.up-preview{width:100%;max-height:56px;object-fit:contain;border-radius:5px;margin-top:10px;display:none}.up-preview.on{display:block}
+.up-clear{position:absolute;top:8px;right:10px;background:#ef4444;border:none;border-radius:4px;color:#fff;padding:2px 8px;font-size:9px;cursor:pointer;display:none;font-family:inherit;font-weight:700}
 .upload-zone.has .up-clear{display:block}
-.lsliders{border:1px solid var(--border);border-radius:7px;padding:14px;margin-top:10px;display:none;background:var(--white)}
-.lsliders.on{display:block}
-.sl-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
-.sl-row:last-child{margin-bottom:0}
-.sl-row label{width:58px;font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;flex-shrink:0}
-.sl-row input[type=range]{flex:1;height:3px;border-radius:3px;background:var(--border);-webkit-appearance:none;cursor:pointer}
-.sl-row input[type=range]::-webkit-slider-thumb{width:14px;height:14px;background:var(--blue);border-radius:50%;-webkit-appearance:none;cursor:pointer;border:2px solid #fff;box-shadow:0 0 0 1px var(--blue)}
-.sl-val{width:34px;font-size:10px;color:var(--blue);font-weight:700;text-align:right;letter-spacing:.3px}
+.lsliders{border:1px solid var(--border);border-radius:7px;padding:12px;margin-top:8px;display:none;background:var(--white)}.lsliders.on{display:block}
+.sl-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}.sl-row:last-child{margin-bottom:0}
+.sl-row label{width:52px;font-size:8.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;flex-shrink:0}
+.sl-row input[type=range]{flex:1;height:3px;border-radius:3px;background:var(--border);-webkit-appearance:none;cursor:pointer;min-width:0}
+.sl-row input[type=range]::-webkit-slider-thumb{width:13px;height:13px;background:var(--blue);border-radius:50%;-webkit-appearance:none;border:2px solid #fff;box-shadow:0 0 0 1px var(--blue)}
+.sl-val{width:30px;font-size:9.5px;color:var(--blue);font-weight:700;text-align:right;flex-shrink:0}
 
-/* ─── SUMMARY ────────────────────────────────────── */
-.summary{background:var(--blue-bg);border-radius:7px;padding:14px 16px;margin-bottom:20px;border:1px solid rgba(21,87,176,.12)}
-.sum-head{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--blue);margin-bottom:10px}
-.sum-row{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;padding:4px 0;border-bottom:1px solid rgba(21,87,176,.07)}
-.sum-row:last-child{border-bottom:none}
-.sk{color:var(--muted)}.sv{font-weight:700;color:var(--blue-dark);text-align:right;max-width:55%}
+/* ── SPEC INFO BOX ── */
+.spec-box{background:var(--blue-bg);border:1px solid rgba(21,87,176,.14);border-radius:7px;padding:11px 14px;margin-bottom:12px}
+.spec-head{font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--blue);margin-bottom:8px}
+.spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 12px}
+.spec-item{}
+.spec-key{font-size:9px;color:var(--muted)}
+.spec-val{font-size:11px;font-weight:700;color:var(--text)}
 
-/* ─── FORM ───────────────────────────────────────── */
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
-.fc{display:flex;flex-direction:column;gap:5px}
-.fc.full{grid-column:1/-1}
-.flb{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted)}
-.fi{padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:13px;color:var(--text);outline:none;transition:border-color .14s;background:var(--white)}
+/* ── SUMMARY & FORM ── */
+.summary{background:var(--blue-bg);border-radius:7px;padding:12px 14px;margin-bottom:18px;border:1px solid rgba(21,87,176,.12)}
+.sum-head{font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--blue);margin-bottom:8px}
+.sum-row{display:flex;justify-content:space-between;align-items:baseline;font-size:11.5px;padding:3.5px 0;border-bottom:1px solid rgba(21,87,176,.07);gap:8px}.sum-row:last-child{border-bottom:none}
+.sk{color:var(--muted);flex-shrink:0}.sv{font-weight:700;color:var(--blue-dark);text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.fc{display:flex;flex-direction:column;gap:4px;min-width:0}.fc.full{grid-column:1/-1}
+.flb{font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
+.fi{padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:12.5px;color:var(--text);outline:none;transition:border-color .14s;background:var(--white);width:100%}
 .fi:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,87,176,.08)}
-.fta{padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:13px;color:var(--text);outline:none;resize:vertical;min-height:64px;transition:border-color .14s;background:var(--white)}
+.fta{padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:12.5px;color:var(--text);outline:none;resize:vertical;min-height:60px;background:var(--white);width:100%}
 .fta:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,87,176,.08)}
 
-/* ─── BUTTONS ────────────────────────────────────── */
-.navrow{display:flex;justify-content:space-between;align-items:center;margin-top:22px;padding-top:18px;border-top:1px solid var(--border)}
-.btn-back{padding:9px 20px;border:1px solid var(--border);border-radius:6px;background:var(--white);color:var(--muted);cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:700;transition:all .14s;letter-spacing:.3px}
+/* ── BUTTONS ── */
+.navrow{display:flex;justify-content:space-between;align-items:center;margin-top:20px;padding-top:16px;border-top:1px solid var(--border);gap:10px}
+.btn-back{padding:8px 16px;border:1px solid var(--border);border-radius:6px;background:var(--white);color:var(--muted);cursor:pointer;font-family:inherit;font-size:12px;font-weight:700;transition:all .14s;white-space:nowrap;flex-shrink:0}
 .btn-back:hover{border-color:var(--blue);color:var(--blue)}
-.btn-next{padding:9px 24px;border:none;border-radius:6px;background:var(--blue);color:#fff;cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:700;display:inline-flex;align-items:center;gap:6px;letter-spacing:.3px;transition:background .14s}
+.btn-next{padding:8px 20px;border:none;border-radius:6px;background:var(--blue);color:#fff;cursor:pointer;font-family:inherit;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:5px;transition:background .14s;white-space:nowrap;flex-shrink:0}
 .btn-next:hover{background:var(--blue-dark)}
-.btn-next svg{flex-shrink:0}
-
-/* ─── SUCCESS ────────────────────────────────────── */
-.success-wrap{text-align:center;padding:36px 20px}
-.ok-mark{width:60px;height:60px;border-radius:50%;background:var(--blue-bg);border:2px solid var(--blue);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;color:var(--blue)}
+.success-wrap{text-align:center;padding:32px 16px}
+.ok-mark{width:56px;height:56px;border-radius:50%;background:var(--blue-bg);border:2px solid var(--blue);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--blue)}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="top-bar">
   <div class="logo-wrap">
     <div class="logo-ltr">
       <span class="logo-lt">aer</span>
-      <svg viewBox="0 0 30 30" width="30" height="30" style="display:inline-block;vertical-align:middle">
+      <svg viewBox="0 0 30 30" width="28" height="28" style="display:inline-block;vertical-align:middle">
         <path d="M15,0 A15,15 0,0,0 15,30 Z" fill="#5c6b7a"/>
         <path d="M15,0 A15,15 0,0,1 15,30 Z" fill="#1557b0"/>
         <polygon points="15,4.5 17.3,11.5 24.5,11.5 18.8,15.8 21.1,22.8 15,18.5 8.9,22.8 11.2,15.8 5.5,11.5 12.7,11.5" fill="white"/>
@@ -231,14 +204,12 @@ input:checked+.tgl:before{transform:translateX(18px)}
     </div>
     <div class="logo-contract">Contract</div>
   </div>
-  <div class="header-right">
+  <div class="hdr-right">
     <span class="hdr-tag">Packaging Configurator</span>
     <div class="hdr-sep"></div>
     <a href="#" class="hdr-btn">Feedback</a>
   </div>
 </div>
-
-<!-- NAV BAR -->
 <div class="nav-bar">
   <a href="#">About Us</a><a href="#">Our Services</a><a href="#">Products</a>
   <div class="nb-div"></div><a href="#">Contacts</a>
@@ -246,509 +217,581 @@ input:checked+.tgl:before{transform:translateX(18px)}
   <a href="#">Online Catalog</a><a href="#">Website</a>
 </div>
 
-<!-- MAIN LAYOUT -->
 <div class="layout">
   <div class="left">
     <div id="snav"></div>
     <div class="box" id="sbox"></div>
   </div>
   <div class="right">
-    <canvas id="three-canvas"></canvas>
+    <canvas id="c3"></canvas>
     <div class="can-badge">
-      <div class="badge-prod" id="bdg-name">Select a Product</div>
-      <div class="badge-spec" id="bdg-sub">Configure your packaging below</div>
+      <div class="badge-prod" id="bdg-name">400 ml Air Freshener</div>
+      <div class="badge-spec" id="bdg-sub">Label: 204 × 160 mm</div>
     </div>
     <div class="drag-hint">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12H3m6-6-6 6 6 6"/><path d="M3 12h18m-6-6 6 6-6 6"/></svg>
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M5 12L9 8M5 12L9 16"/><path d="M5 12h14m0 0l-4-4m4 4l-4 4"/></svg>
       Drag to rotate
     </div>
   </div>
 </div>
 
 <script>
-/* ══════════════════════════════════════════════
-   SVG ICON LIBRARY
-══════════════════════════════════════════════ */
+/* ════════════════════════════════════════════
+   SVG ICONS
+════════════════════════════════════════════ */
 const IC={
-  can:`<svg width="22" height="38" viewBox="0 0 22 38" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="11" width="14" height="23" rx="2.5"/><path d="M4 11 Q4 4 6 3L9 2H13L16 3Q18 4 18 11Z"/><rect x="8" y="1" width="6" height="2" rx="1"/><rect x="5" y="12" width="3" height="21" rx="1.5" opacity=".25" fill="currentColor" stroke="none"/></svg>`,
-  palette:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="8.5" cy="9" r="1.5" fill="currentColor"/><circle cx="15.5" cy="9" r="1.5" fill="currentColor"/><circle cx="12" cy="15" r="1.5" fill="currentColor"/></svg>`,
-  wrench:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>`,
-  upload:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>`,
+  can:`<svg width="22" height="38" viewBox="0 0 22 38" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="11" width="14" height="23" rx="2.5"/><path d="M4 11 Q4 4 6 3L9 2H13L16 3Q18 4 18 11Z"/><rect x="8" y="1" width="6" height="2" rx="1"/></svg>`,
+  spray:`<svg width="22" height="38" viewBox="0 0 22 38" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="5" y="14" width="12" height="20" rx="2.5"/><path d="M5 14 Q5 8 8 6L11 5H13L16 6Q17 8 17 14Z"/><rect x="8" y="3" width="6" height="3" rx="1.5"/></svg>`,
   check:`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>`,
   chevron:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>`,
-  spray:`<svg width="22" height="38" viewBox="0 0 22 38" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="5" y="14" width="12" height="20" rx="2.5"/><path d="M5 14 Q5 8 8 6L11 5H13L16 6Q17 8 17 14Z"/><rect x="8" y="3" width="6" height="3" rx="1.5"/><path d="M11 2 Q15 1 17 0" stroke-dasharray="2 2"/></svg>`,
+  upload:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>`,
   match:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg>`,
+  dl:`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`,
 };
-
-const CAP_SVG={
-  std:`<svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="8" y="16" width="14" height="10" rx="2"/><path d="M8 16 Q8 8 15 8 Q22 8 22 16"/><circle cx="22" cy="20" r="2" stroke-width="1.2"/></svg>`,
-  cone:`<svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="8" y="22" width="14" height="5" rx="1.5"/><path d="M8 22 L15 6 L22 22Z"/></svg>`,
-  wide:`<svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="18" width="22" height="9" rx="2"/><path d="M8 18 Q8 12 15 12 Q22 12 22 18"/></svg>`,
-  trigger:`<svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="8" y="13" width="14" height="12" rx="2"/><line x1="3" y1="18" x2="27" y2="18"/><rect x="11" y="25" width="8" height="4" rx="1"/></svg>`,
-  flat:`<svg width="30" height="30" viewBox="0 0 30 30" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="8" y="16" width="14" height="8" rx="2"/><rect x="8" y="24" width="14" height="2" rx="1" fill="currentColor" stroke="none" opacity=".3"/><circle cx="15" cy="27" r="1.5"/></svg>`,
-};
-
-/* ══════════════════════════════════════════════
+/* ════════════════════════════════════════════
    PANTONE DATA
-══════════════════════════════════════════════ */
+════════════════════════════════════════════ */
 const PANTONE=[
-  {code:'485 C', name:'Red',          hex:'#DA291C',f:'R'},
-  {code:'032 C', name:'Warm Red',     hex:'#EF3340',f:'R'},
-  {code:'1795 C',name:'Flame',        hex:'#C8102E',f:'R'},
-  {code:'200 C', name:'Crimson',      hex:'#A6192E',f:'R'},
-  {code:'202 C', name:'Burgundy',     hex:'#7C2D35',f:'R'},
-  {code:'021 C', name:'Orange',       hex:'#FE5000',f:'O'},
-  {code:'151 C', name:'Tangerine',    hex:'#FF7900',f:'O'},
-  {code:'144 C', name:'Amber',        hex:'#E07000',f:'O'},
-  {code:'715 C', name:'Peach',        hex:'#F4A46A',f:'O'},
-  {code:'012 C', name:'Yellow',       hex:'#FFD900',f:'Y'},
-  {code:'109 C', name:'Gold Yellow',  hex:'#FFD700',f:'Y'},
-  {code:'130 C', name:'Sunflower',    hex:'#F0AC00',f:'Y'},
-  {code:'1235 C',name:'Saffron',      hex:'#FFC72C',f:'Y'},
-  {code:'375 C', name:'Lime',         hex:'#97D700',f:'G'},
-  {code:'368 C', name:'Green',        hex:'#72B542',f:'G'},
-  {code:'354 C', name:'Emerald',      hex:'#00A651',f:'G'},
-  {code:'342 C', name:'Forest',       hex:'#007A53',f:'G'},
-  {code:'3295 C',name:'Teal',         hex:'#00827F',f:'G'},
-  {code:'7729 C',name:'Racing Green', hex:'#215732',f:'G'},
-  {code:'2975 C',name:'Baby Blue',    hex:'#A8D8EA',f:'B'},
-  {code:'279 C', name:'Cornflower',   hex:'#5B9AD3',f:'B'},
-  {code:'285 C', name:'Process Blue', hex:'#0085CA',f:'B'},
-  {code:'300 C', name:'Classic Blue', hex:'#005BAC',f:'B'},
-  {code:'286 C', name:'Royal Blue',   hex:'#003DA5',f:'B'},
-  {code:'072 C', name:'Reflex Blue',  hex:'#10069F',f:'B'},
-  {code:'2758 C',name:'Indigo',       hex:'#1A265A',f:'B'},
-  {code:'2587 C',name:'Lilac',        hex:'#C5B4E3',f:'P'},
-  {code:'2577 C',name:'Lavender',     hex:'#9B8EC4',f:'P'},
-  {code:'2665 C',name:'Violet',       hex:'#7B68EE',f:'P'},
-  {code:'266 C', name:'Grape',        hex:'#7B5EA7',f:'P'},
-  {code:'2627 C',name:'Plum',         hex:'#4B3488',f:'P'},
-  {code:'269 C', name:'Deep Purple',  hex:'#2D1160',f:'P'},
-  {code:'1895 C',name:'Baby Pink',    hex:'#FFB6C1',f:'K'},
-  {code:'210 C', name:'Rose',         hex:'#F9A8C9',f:'K'},
-  {code:'812 C', name:'Hot Pink',     hex:'#FF5DA0',f:'K'},
-  {code:'212 C', name:'Fuchsia',      hex:'#E95F9A',f:'K'},
-  {code:'218 C', name:'Magenta',      hex:'#D31C81',f:'K'},
-  {code:'2395 C',name:'Deep Pink',    hex:'#B40068',f:'K'},
-  {code:'9180 C',name:'Cream',        hex:'#F5ECD7',f:'N'},
-  {code:'468 C', name:'Sand',         hex:'#D4B896',f:'N'},
-  {code:'476 C', name:'Brown',        hex:'#6F4E37',f:'N'},
-  {code:'CG-2 C',name:'Light Gray',   hex:'#C8C9C7',f:'N'},
-  {code:'CG-6 C',name:'Mid Gray',     hex:'#9E9E9C',f:'N'},
-  {code:'CG-10',name:'Dark Gray',     hex:'#63666A',f:'N'},
-  {code:'Black C',name:'Black',       hex:'#2B2926',f:'N'},
-  {code:'White', name:'White',        hex:'#F8F8F8',f:'N'},
-  {code:'877 C', name:'Silver',       hex:'#A7A9AC',f:'M',met:true},
-  {code:'871 C', name:'Old Gold',     hex:'#85754E',f:'M',met:true},
-  {code:'872 C', name:'Gold',         hex:'#9A7B4F',f:'M',met:true},
-  {code:'873 C', name:'Antique Gold', hex:'#876C3B',f:'M',met:true},
-  {code:'875 C', name:'Copper',       hex:'#965A38',f:'M',met:true},
-  {code:'876 C', name:'Bronze',       hex:'#7D5D3B',f:'M',met:true},
+  {code:"485 C", name:"Red",          hex:"#DA291C",f:"R"},
+  {code:"032 C", name:"Warm Red",     hex:"#EF3340",f:"R"},
+  {code:"1795 C",name:"Flame",        hex:"#C8102E",f:"R"},
+  {code:"200 C", name:"Crimson",      hex:"#A6192E",f:"R"},
+  {code:"202 C", name:"Burgundy",     hex:"#7C2D35",f:"R"},
+  {code:"021 C", name:"Orange",       hex:"#FE5000",f:"O"},
+  {code:"151 C", name:"Tangerine",    hex:"#FF7900",f:"O"},
+  {code:"144 C", name:"Amber",        hex:"#E07000",f:"O"},
+  {code:"715 C", name:"Peach",        hex:"#F4A46A",f:"O"},
+  {code:"012 C", name:"Yellow",       hex:"#FFD900",f:"Y"},
+  {code:"109 C", name:"Gold Yellow",  hex:"#FFD700",f:"Y"},
+  {code:"130 C", name:"Sunflower",    hex:"#F0AC00",f:"Y"},
+  {code:"1235 C",name:"Saffron",      hex:"#FFC72C",f:"Y"},
+  {code:"375 C", name:"Lime",         hex:"#97D700",f:"G"},
+  {code:"368 C", name:"Green",        hex:"#72B542",f:"G"},
+  {code:"354 C", name:"Emerald",      hex:"#00A651",f:"G"},
+  {code:"342 C", name:"Forest",       hex:"#007A53",f:"G"},
+  {code:"3295 C",name:"Teal",         hex:"#00827F",f:"G"},
+  {code:"7729 C",name:"Racing Green", hex:"#215732",f:"G"},
+  {code:"2975 C",name:"Baby Blue",    hex:"#A8D8EA",f:"B"},
+  {code:"279 C", name:"Cornflower",   hex:"#5B9AD3",f:"B"},
+  {code:"285 C", name:"Process Blue", hex:"#0085CA",f:"B"},
+  {code:"300 C", name:"Classic Blue", hex:"#005BAC",f:"B"},
+  {code:"286 C", name:"Royal Blue",   hex:"#003DA5",f:"B"},
+  {code:"072 C", name:"Reflex Blue",  hex:"#10069F",f:"B"},
+  {code:"2758 C",name:"Indigo",       hex:"#1A265A",f:"B"},
+  {code:"2587 C",name:"Lilac",        hex:"#C5B4E3",f:"P"},
+  {code:"2577 C",name:"Lavender",     hex:"#9B8EC4",f:"P"},
+  {code:"2665 C",name:"Violet",       hex:"#7B68EE",f:"P"},
+  {code:"266 C", name:"Grape",        hex:"#7B5EA7",f:"P"},
+  {code:"2627 C",name:"Plum",         hex:"#4B3488",f:"P"},
+  {code:"269 C", name:"Deep Purple",  hex:"#2D1160",f:"P"},
+  {code:"1895 C",name:"Baby Pink",    hex:"#FFB6C1",f:"K"},
+  {code:"210 C", name:"Rose",         hex:"#F9A8C9",f:"K"},
+  {code:"812 C", name:"Hot Pink",     hex:"#FF5DA0",f:"K"},
+  {code:"212 C", name:"Fuchsia",      hex:"#E95F9A",f:"K"},
+  {code:"218 C", name:"Magenta",      hex:"#D31C81",f:"K"},
+  {code:"2395 C",name:"Deep Pink",    hex:"#B40068",f:"K"},
+  {code:"9180 C",name:"Cream",        hex:"#F5ECD7",f:"N"},
+  {code:"468 C", name:"Sand",         hex:"#D4B896",f:"N"},
+  {code:"476 C", name:"Brown",        hex:"#6F4E37",f:"N"},
+  {code:"CG-2 C",name:"Light Gray",   hex:"#C8C9C7",f:"N"},
+  {code:"CG-6 C",name:"Mid Gray",     hex:"#9E9E9C",f:"N"},
+  {code:"CG-10", name:"Dark Gray",    hex:"#63666A",f:"N"},
+  {code:"Black C",name:"Black",       hex:"#2B2926",f:"N"},
+  {code:"White",  name:"White",       hex:"#F8F8F8",f:"N"},
+  {code:"877 C",  name:"Silver",      hex:"#A7A9AC",f:"M",met:true},
+  {code:"871 C",  name:"Old Gold",    hex:"#85754E",f:"M",met:true},
+  {code:"872 C",  name:"Gold",        hex:"#9A7B4F",f:"M",met:true},
+  {code:"873 C",  name:"Antique Gold",hex:"#876C3B",f:"M",met:true},
+  {code:"875 C",  name:"Copper",      hex:"#965A38",f:"M",met:true},
+  {code:"876 C",  name:"Bronze",      hex:"#7D5D3B",f:"M",met:true},
 ];
-const FAM_COL={R:'#DA291C',O:'#FE5000',Y:'#FFD900',G:'#72B542',B:'#005BAC',P:'#7B5EA7',K:'#E95F9A',N:'#9E9E9C',M:'#9A7B4F'};
-const FAM_NAME={All:'All',R:'Red',O:'Orange',Y:'Yellow',G:'Green',B:'Blue',P:'Purple',K:'Pink',N:'Neutral',M:'Metallic'};
+const FAM_COL={R:"#DA291C",O:"#FE5000",Y:"#FFD900",G:"#72B542",B:"#005BAC",P:"#7B5EA7",K:"#E95F9A",N:"#9E9E9C",M:"#9A7B4F"};
+const FAM_NAME={All:"All",R:"Red",O:"Orange",Y:"Yellow",G:"Green",B:"Blue",P:"Purple",K:"Pink",N:"Neutral",M:"Metallic"};
 
-/* ── PRODUCT / SIZE DATA ────────────────────────── */
+/* ════════════════════════════════════════════
+   PRODUCTS / SIZES / CAPS / FINISHES
+════════════════════════════════════════════ */
 const PRODUCTS={
   beauty:[
-    {id:'deodorant',name:'Deodorant',   sub:'Antiperspirant · Body',sx:1.00,sy:1.00},
-    {id:'hairspray',name:'Hair Spray',  sub:'Styling · Hold',       sx:1.00,sy:1.20},
-    {id:'bodymist', name:'Body Mist',   sub:'Fragrance · Mist',     sx:0.92,sy:1.06},
-    {id:'perfume',  name:'Perfume',     sub:'Fine Fragrance',       sx:0.82,sy:0.94},
+    {id:"deodorant",name:"Deodorant",   sub:"Antiperspirant · Body",sx:1.00,sy:1.00},
+    {id:"hairspray",name:"Hair Spray",  sub:"Styling · Hold",       sx:1.00,sy:1.20},
+    {id:"bodymist", name:"Body Mist",   sub:"Fragrance · Mist",     sx:0.92,sy:1.06},
+    {id:"perfume",  name:"Perfume",     sub:"Fine Fragrance",       sx:0.82,sy:0.94},
   ],
   airfresh:[
-    {id:'roomspray',name:'Room Spray',  sub:'Air Care · Home',  sx:1.02,sy:1.08},
-    {id:'carfresh', name:'Car Fresh',   sub:'Auto · Cabin',     sx:0.88,sy:0.90},
-    {id:'fabric',   name:'Fabric Mist', sub:'Textile · Refresh',sx:1.00,sy:1.14},
+    {id:"roomspray",name:"Room Spray",  sub:"Air Care · Home",      sx:1.02,sy:1.08},
+    {id:"carfresh", name:"Car Fresh",   sub:"Auto · Cabin",         sx:0.88,sy:0.90},
+    {id:"fabric",   name:"Fabric Mist", sub:"Textile · Refresh",    sx:1.00,sy:1.14},
   ],
 };
 const SIZES=[
-  {ml:'75 ml',scale:0.82},{ml:'100 ml',scale:0.90},{ml:'150 ml',scale:1.00},
-  {ml:'200 ml',scale:1.08},{ml:'300 ml',scale:1.18},{ml:'400 ml',scale:1.28},
-];
-const CAP_TYPES=[
-  {id:'std',    name:'AW50',  sub:'Round',  cs:{r:1.0,h:0.95}},
-  {id:'cone',   name:'AW52',  sub:'Cone',   cs:{r:0.95,h:1.22}},
-  {id:'wide',   name:'AW53',  sub:'Wide',   cs:{r:1.12,h:0.72}},
-  {id:'trigger',name:'AW55',  sub:'Trigger',cs:{r:1.05,h:0.86}},
-  {id:'flat',   name:'AW56',  sub:'Flat',   cs:{r:1.02,h:0.52}},
+  {ml:"75 ml",scale:0.82},{ml:"100 ml",scale:0.90},{ml:"150 ml",scale:1.00},
+  {ml:"200 ml",scale:1.08},{ml:"300 ml",scale:1.18},{ml:"400 ml",scale:1.28},
 ];
 const FINISHES=[
-  {id:'matte',   name:'Matte',    r:0.92,m:0.00,ball:'linear-gradient(135deg,#8a8a8a,#6a6a6a)'},
-  {id:'satin',   name:'Satin',    r:0.48,m:0.16,ball:'linear-gradient(135deg,#c8c8c8,#a0a0a0)'},
-  {id:'gloss',   name:'Gloss',    r:0.12,m:0.10,ball:'radial-gradient(circle at 35% 35%,#eee 0%,#aaa 100%)'},
-  {id:'metallic',name:'Metallic', r:0.28,m:0.84,ball:'linear-gradient(145deg,#a8a8a8,#efefef,#a0a0a0)'},
-  {id:'chrome',  name:'Chrome',   r:0.06,m:0.98,ball:'radial-gradient(circle at 28% 28%,#fff 0%,#ccc 45%,#777 100%)'},
+  {id:"matte",   name:"Matte",    r:0.92,m:0.00,ball:"linear-gradient(135deg,#8a8a8a,#6a6a6a)"},
+  {id:"satin",   name:"Satin",    r:0.48,m:0.16,ball:"linear-gradient(135deg,#c8c8c8,#a0a0a0)"},
+  {id:"gloss",   name:"Gloss",    r:0.12,m:0.10,ball:"radial-gradient(circle at 35% 35%,#eee,#aaa)"},
+  {id:"metallic",name:"Metallic", r:0.28,m:0.84,ball:"linear-gradient(145deg,#a8a8a8,#efefef,#a0a0a0)"},
+  {id:"chrome",  name:"Chrome",   r:0.06,m:0.98,ball:"radial-gradient(circle at 28% 28%,#fff,#ccc,#777)"},
 ];
 
-/* ── STATE ──────────────────────────────────────── */
+/* ════════════════════════════════════════════
+   STATE
+════════════════════════════════════════════ */
 let S={
-  step:1, category:'beauty', prod:PRODUCTS.beauty[0], size:SIZES[2],
-  bodyColor:PANTONE.find(p=>p.code==='877 C'),
-  capMatchBody:false, capColor:PANTONE.find(p=>p.code==='Black C'),
-  capType:CAP_TYPES[0], finish:FINISHES[1],
+  step:1, category:"beauty", prod:PRODUCTS.beauty[0], size:SIZES[2],
+  bodyColor:PANTONE.find(p=>p.code==="877 C"),
+  capMatchBody:false, capColor:PANTONE.find(p=>p.code==="Black C"),
+  finish:FINISHES[1],
   designImg:null, labelPosY:0.48, labelScale:0.82, bareMode:false,
-  pfam:'All', psearch:'',
+  pfam:"All", psearch:"",
 };
 
-/* ── THREE.JS CONSTANTS ─────────────────────────── */
-const REF_BR=0.52,REF_BH=1.72,REF_DOME_SY=0.148;
-const REF_SH=0.48,REF_NR=0.35,REF_NH=0.09,REF_CAP_FLARE=1.15;
-const REF_BY=REF_BR*REF_DOME_SY;
-const REF_SY=REF_BY+REF_BH,REF_NY=REF_SY+REF_SH;
-const REF_CAP_BASE=REF_NY+REF_NH,REF_CAP_H=REF_BH*0.28;
-const REF_TOTAL=REF_CAP_BASE+REF_CAP_H;
 
-/* ── THREE.JS SETUP ─────────────────────────────── */
-const canvas3=document.getElementById('three-canvas');
-const renderer=new THREE.WebGLRenderer({canvas:canvas3,antialias:true});
-renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-renderer.toneMapping=THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure=1.2;
-renderer.outputEncoding=THREE.sRGBEncoding;
 
-const scene=new THREE.Scene();
-scene.background=new THREE.Color(0xedf1f7);
-scene.fog=new THREE.Fog(0xedf1f7,20,36);
-const camera=new THREE.PerspectiveCamera(32,1,0.1,60);
-
-scene.add(new THREE.AmbientLight(0xffffff,0.95));
-const keyL=new THREE.DirectionalLight(0xfff8f0,1.6); keyL.position.set(3,6,4); scene.add(keyL);
-const fillL=new THREE.DirectionalLight(0xd0e8ff,0.7); fillL.position.set(-4,2,3); scene.add(fillL);
-const rimL=new THREE.DirectionalLight(0xffffff,0.6); rimL.position.set(0,4,-5); scene.add(rimL);
-const topL=new THREE.DirectionalLight(0xffffff,0.35); topL.position.set(0,8,0); scene.add(topL);
-
-(()=>{
-  const gc=document.createElement('canvas'); gc.width=256; gc.height=256;
-  const ctx=gc.getContext('2d');
-  const g=ctx.createRadialGradient(128,128,0,128,128,128);
-  g.addColorStop(0,'rgba(21,87,176,0.16)'); g.addColorStop(0.5,'rgba(21,87,176,0.04)'); g.addColorStop(1,'rgba(0,0,0,0)');
-  ctx.fillStyle=g; ctx.fillRect(0,0,256,256);
-  const pl=new THREE.Mesh(new THREE.PlaneGeometry(5,5),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(gc),transparent:true,depthWrite:false}));
-  pl.rotation.x=-Math.PI/2; pl.position.y=0.001; scene.add(pl);
-})();
-
-let bodyMat=new THREE.MeshStandardMaterial({color:new THREE.Color(S.bodyColor.hex),roughness:S.finish.r,metalness:S.finish.m});
-let labelMat=new THREE.MeshStandardMaterial({roughness:S.finish.r,metalness:S.finish.m,transparent:true});
-let capMat=new THREE.MeshStandardMaterial({color:new THREE.Color(S.capColor.hex),roughness:0.45,metalness:0.18});
-let actMat=new THREE.MeshStandardMaterial({color:0x2a2a30,roughness:0.72,metalness:0.15});
-let tBodyCol=new THREE.Color(S.bodyColor.hex);
-let tCapCol=new THREE.Color(S.capColor.hex);
-let tR=S.finish.r,tM=S.finish.m;
-let labelTex=null;
-const canGroup=new THREE.Group(); scene.add(canGroup);
-
-function getMasterScale(){return S.size.scale*((S.prod.sx+S.prod.sy)/2);}
-
-function buildCan(){
-  while(canGroup.children.length){const c=canGroup.children[0];if(c.geometry)c.geometry.dispose();canGroup.remove(c);}
-  const cs=S.capType.cs, CR=REF_NR*REF_CAP_FLARE*cs.r, CBH=REF_CAP_H*cs.h, by=REF_CAP_BASE;
-  const dome=new THREE.Mesh(new THREE.SphereGeometry(REF_BR,48,24,0,Math.PI*2,0,Math.PI*0.48),bodyMat);
-  dome.scale.y=REF_DOME_SY; dome.position.y=0.008; canGroup.add(dome);
-  const body=new THREE.Mesh(new THREE.CylinderGeometry(REF_BR,REF_BR,REF_BH,64,1),bodyMat);
-  body.position.y=REF_BY+REF_BH/2; canGroup.add(body);
-  if(!S.bareMode){
-    const lc=new THREE.Mesh(new THREE.CylinderGeometry(REF_BR+0.003,REF_BR+0.003,REF_BH,72,1,true),labelMat);
-    lc.position.y=REF_BY+REF_BH/2; canGroup.add(lc);
-  }
-  const pts=[]; for(let i=0;i<=28;i++){const t=i/28;pts.push(new THREE.Vector2(REF_BR*(1-t)+REF_NR*t-(t*t*0.03),t*REF_SH));}
-  const sh=new THREE.Mesh(new THREE.LatheGeometry(pts,56),bodyMat); sh.position.y=REF_SY; canGroup.add(sh);
-  const neck=new THREE.Mesh(new THREE.CylinderGeometry(REF_NR,REF_NR,REF_NH,32),bodyMat); neck.position.y=REF_NY+REF_NH/2; canGroup.add(neck);
-  switch(S.capType.id){
-    case'std':{const cb=new THREE.Mesh(new THREE.CylinderGeometry(CR,CR*0.94,CBH,48),capMat); cb.position.y=by+CBH/2; canGroup.add(cb); const dc=new THREE.Mesh(new THREE.SphereGeometry(CR,32,16,0,Math.PI*2,0,Math.PI*0.52),capMat); dc.position.y=by+CBH; canGroup.add(dc); const act=new THREE.Mesh(new THREE.BoxGeometry(0.12,0.05,0.10),actMat); act.position.set(0,by+CBH*0.58,CR+0.035); canGroup.add(act); const nz=new THREE.Mesh(new THREE.CylinderGeometry(0.012,0.012,0.09,8),actMat); nz.rotation.x=Math.PI/2; nz.position.set(0,by+CBH*0.58+0.012,CR+0.085); canGroup.add(nz); break;}
-    case'cone':{const ring=new THREE.Mesh(new THREE.CylinderGeometry(CR,CR*0.92,CBH*0.22,48),capMat); ring.position.y=by+CBH*0.11; canGroup.add(ring); const cone=new THREE.Mesh(new THREE.CylinderGeometry(CR*0.28,CR*0.86,CBH*0.78,36),capMat); cone.position.y=by+CBH*0.22+CBH*0.39; canGroup.add(cone); const tip=new THREE.Mesh(new THREE.SphereGeometry(0.028,14),capMat); tip.position.y=by+CBH; canGroup.add(tip); break;}
-    case'wide':{const wc=new THREE.Mesh(new THREE.CylinderGeometry(CR,CR*0.96,CBH,48),capMat); wc.position.y=by+CBH/2; canGroup.add(wc); const td=new THREE.Mesh(new THREE.CylinderGeometry(CR*0.98,CR*0.98,0.034,48),capMat); td.position.y=by+CBH; canGroup.add(td); break;}
-    case'trigger':{const bt=new THREE.Mesh(new THREE.CylinderGeometry(CR*0.94,CR*0.88,CBH,48),capMat); bt.position.y=by+CBH/2; canGroup.add(bt); const bar=new THREE.Mesh(new THREE.BoxGeometry(0.08,0.055,CR*1.9),actMat); bar.position.set(0,by+CBH*0.6,0); canGroup.add(bar); const lev=new THREE.Mesh(new THREE.BoxGeometry(0.06,0.13,0.08),actMat); lev.position.set(0,by+CBH*0.28,CR*0.48); canGroup.add(lev); const nz2=new THREE.Mesh(new THREE.CylinderGeometry(0.012,0.012,0.1,8),actMat); nz2.rotation.x=Math.PI/2; nz2.position.set(0,by+CBH*0.6+0.01,CR+0.07); canGroup.add(nz2); break;}
-    case'flat':{const fb=new THREE.Mesh(new THREE.CylinderGeometry(CR,CR*0.94,CBH,48),capMat); fb.position.y=by+CBH/2; canGroup.add(fb); const fd=new THREE.Mesh(new THREE.CylinderGeometry(CR*0.98,CR*0.98,0.03,48),capMat); fd.position.y=by+CBH; canGroup.add(fd); const btn=new THREE.Mesh(new THREE.CylinderGeometry(CR*0.35,CR*0.35,0.045,24),actMat); btn.position.y=by+CBH+0.028; canGroup.add(btn); break;}
-  }
-  const m=getMasterScale(); canGroup.scale.set(m,m,m); updateCamera();
-}
-
-function updateCamera(){
-  const th=REF_TOTAL*getMasterScale();
-  /* Root cause of the zoom bug: Math.max(4.8, th×1.12) always returned 4.8
-     because th×1.12 < 4.8 for ALL our can sizes — camera never moved.
-     Fix: dist = th × 2.3, so camera always steps back in proportion.
-     With FOV=32° this keeps the can at ~76% of viewport height at every size. */
-  const dist=th*2.3;
-  const lookY=canGroup.position.y+th*0.47;
-  camera.position.set(0,lookY+th*0.04,dist);
-  camera.lookAt(0,lookY,0);
-}
-
-/* ── UV GEOMETRY NOTE ─────────────────────────────────
-   Three.js CylinderGeometry UV mapping:
-     U=0 / U=1 → +Z axis = FRONT FACE (towards camera)
-     U=0.25    → -X axis (left side)
-     U=0.5     → -Z axis (back face)
-     U=0.75    → +X axis (right side)
-
-   Correct canvas aspect ratio for our geometry:
-     Circumference  = 2π × REF_BR = 2π × 0.52 ≈ 3.267 units
-     Body height    = REF_BH = 1.72 units
-     Ratio          = 3.267 / 1.72 ≈ 1.899 : 1
-     → Canvas = 1024 × 539 px (we use 1024 × 540)
-
-   To centre artwork on the front face we set texture.offset.x = 0.5
-   so the middle of the canvas image (x=512) maps to the front face.
-   wrapS = RepeatWrapping ensures seamless tiling at the seam.
-─────────────────────────────────────────────────────── */
-const CANVAS_W=1024, CANVAS_H=540; // matches 3D geometry ratio ≈ 1.9:1
-
-function generateLabel(){
-  if(S.bareMode){labelMat.map=null;labelMat.needsUpdate=true;return;}
-  const W=CANVAS_W, H=CANVAS_H;
-  const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
-  const ctx=cv.getContext('2d');
-
-  // Base coat = body colour
-  ctx.fillStyle=S.bodyColor.hex; ctx.fillRect(0,0,W,H);
-
-  // Metallic/chrome horizontal shimmer
-  if(S.finish.id==='metallic'||S.finish.id==='chrome'){
-    const g=ctx.createLinearGradient(0,0,W,0);
-    g.addColorStop(0,'rgba(0,0,0,.18)'); g.addColorStop(.22,'rgba(255,255,255,.10)');
-    g.addColorStop(.50,'rgba(255,255,255,.22)'); g.addColorStop(.78,'rgba(255,255,255,.08)');
-    g.addColorStop(1,'rgba(0,0,0,.15)'); ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
-  }
-
-  // Uploaded artwork:
-  // We centre horizontally at x = W/2 so it maps to the front face
-  // (texture.offset.x=0.5 below shifts U so W/2 = U=0 = front)
-  if(S.designImg){
-    const img=S.designImg;
-    const drawW=W*S.labelScale;
-    const drawH=(drawW/img.width)*img.height;
-    const dx=W/2-drawW/2;           // centred horizontally → front face
-    const dy=H*S.labelPosY-drawH/2; // vertical position slider
-    ctx.drawImage(img,dx,dy,drawW,drawH);
-  }
-
-  if(labelTex) labelTex.dispose();
-  labelTex=new THREE.CanvasTexture(cv);
-  labelTex.encoding=THREE.sRGBEncoding;
-  labelTex.wrapS=THREE.RepeatWrapping; // seamless horizontal wrap
-  labelTex.offset.x=0.5;              // shift so canvas centre = front face
-  labelMat.map=labelTex;
-  labelMat.color.set(0xffffff);
-  labelMat.roughness=S.finish.r;
-  labelMat.metalness=S.finish.m;
-  labelMat.needsUpdate=true;
-}
-
-/* ── TEMPLATE DOWNLOAD ────────────────────────────────
-   Generates a 2048×1080 PNG showing:
-   - Full 360° wrap canvas with axis labels
-   - Front-face safe zone (centre 50% = 180° front arc)
-   - Recommended label panel (centre 70% ≈ 252° wrap)
-   - Bleed line and dimension annotations
-─────────────────────────────────────────────────────── */
-function downloadTemplate(){
-  const W=2048, H=1080;
-  const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
-  const ctx=cv.getContext('2d');
-
-  // Background: body colour
-  ctx.fillStyle=S.bodyColor.hex||'#A7A9AC'; ctx.fillRect(0,0,W,H);
-
-  // Subtle grid
-  ctx.strokeStyle='rgba(255,255,255,0.10)'; ctx.lineWidth=1;
-  for(let x=0;x<=W;x+=W/8){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
-  for(let y=0;y<=H;y+=H/6){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
-
-  // Recommended label panel (70% width, centred = front + sides)
-  const lpW=Math.round(W*0.7), lpX=Math.round((W-lpW)/2);
-  ctx.fillStyle='rgba(255,255,255,0.08)';
-  ctx.fillRect(lpX,0,lpW,H);
-  ctx.strokeStyle='rgba(255,255,255,0.40)'; ctx.lineWidth=2; ctx.setLineDash([8,6]);
-  ctx.strokeRect(lpX,0,lpW,H); ctx.setLineDash([]);
-
-  // Front-face safe zone (50% = centre 180°)
-  const sfW=Math.round(W*0.5), sfX=Math.round((W-sfW)/2);
-  const sfPad=40;
-  ctx.strokeStyle='rgba(255,255,255,0.65)'; ctx.lineWidth=2; ctx.setLineDash([]);
-  ctx.strokeRect(sfX+sfPad,sfPad,sfW-sfPad*2,H-sfPad*2);
-
-  // Centre line
-  ctx.strokeStyle='rgba(255,255,255,0.25)'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
-  ctx.beginPath(); ctx.moveTo(W/2,0); ctx.lineTo(W/2,H); ctx.stroke();
-  ctx.setLineDash([]);
-
-  // Face labels
-  ctx.font='700 28px Lato,sans-serif'; ctx.textAlign='center'; ctx.fillStyle='rgba(255,255,255,0.5)';
-  ctx.fillText('FRONT FACE',W/2,H/2);
-  ctx.font='500 22px Lato,sans-serif'; ctx.fillStyle='rgba(255,255,255,0.3)';
-  ctx.fillText('LEFT SIDE',lpX+60,H/2);
-  ctx.fillText('RIGHT SIDE',lpX+lpW-60,H/2);
-  ctx.fillText('BACK',80,H/2);
-  ctx.fillText('BACK',W-80,H/2);
-
-  // Dimension annotations
-  ctx.font='700 18px monospace'; ctx.fillStyle='rgba(255,255,255,0.7)'; ctx.textAlign='left';
-  const ann=[
-    {x:12,y:28,t:'FULL WRAP CANVAS — 2048 × 1080 px (1:1 physical scale)'},
-    {x:12,y:54,t:'Front face safe zone: x '+sfX+'–'+(sfX+sfW)+' px (50% of width)'},
-    {x:12,y:80,t:'Recommended label panel: x '+lpX+'–'+(lpX+lpW)+' px (70% of width)'},
-    {x:12,y:H-40,t:'Artwork centred here will appear on the FRONT of the can'},
-  ];
-  ann.forEach(a=>{ctx.fillText(a.t,a.x,a.y);});
-
-  // Corner marks
-  [[0,0],[W,0],[0,H],[W,H]].forEach(([cx,cy])=>{
-    const ox=cx===0?1:-1, oy=cy===0?1:-1;
-    ctx.strokeStyle='rgba(255,255,255,0.6)'; ctx.lineWidth=2;
-    ctx.beginPath();ctx.moveTo(cx+ox*20,cy);ctx.lineTo(cx,cy);ctx.lineTo(cx,cy+oy*20);ctx.stroke();
-  });
-
-  // Download
-  const link=document.createElement('a');
-  link.download='aerostar-label-template-2048x1080.png';
-  link.href=cv.toDataURL('image/png');
-  link.click();
-}
-
-let rotY=0,autoSpin=0,isDrag=false,lastX=0;
-canvas3.addEventListener('mousedown',e=>{isDrag=true;lastX=e.clientX;rotY=canGroup.rotation.y;autoSpin=0;});
-window.addEventListener('mousemove',e=>{if(isDrag){rotY+=(e.clientX-lastX)*0.012;lastX=e.clientX;}});
-window.addEventListener('mouseup',()=>{isDrag=false;});
-canvas3.addEventListener('touchstart',e=>{isDrag=true;lastX=e.touches[0].clientX;rotY=canGroup.rotation.y;autoSpin=0;e.preventDefault();},{passive:false});
-canvas3.addEventListener('touchmove',e=>{if(isDrag){rotY+=(e.touches[0].clientX-lastX)*0.012;lastX=e.touches[0].clientX;}e.preventDefault();},{passive:false});
-canvas3.addEventListener('touchend',()=>{isDrag=false;});
-
-function animate(){
-  requestAnimationFrame(animate);
-  if(!isDrag) autoSpin+=0.005;
-  canGroup.rotation.y=rotY+autoSpin;
-  bodyMat.color.lerp(tBodyCol,0.09);
-  bodyMat.roughness+=(tR-bodyMat.roughness)*0.09;
-  bodyMat.metalness+=(tM-bodyMat.metalness)*0.09;
-  capMat.color.lerp(S.capMatchBody?tBodyCol:tCapCol,0.09);
-  renderer.render(scene,camera);
-}
-
-function resize(){
-  const r=document.querySelector('.right');
-  renderer.setSize(r.clientWidth,r.clientHeight);
-  camera.aspect=r.clientWidth/r.clientHeight;
-  camera.updateProjectionMatrix();
-}
-window.addEventListener('resize',resize);
-
-function updateBadge(){
-  document.getElementById('bdg-name').textContent=S.prod.name.toUpperCase()+' · '+S.size.ml;
-  document.getElementById('bdg-sub').textContent='PMS '+S.bodyColor.code+' · '+S.finish.name+' Finish';
-}
-
-/* ══════════════════════════════════════════════
-   STEP PROGRESS NAV
-══════════════════════════════════════════════ */
+/* ════════════════════════════════════════════
+   STEPS
+════════════════════════════════════════════ */
 const NAV_STEPS=[
-  {n:'01',label:'Can Selection'},
-  {n:'02',label:'Body Colour'},
-  {n:'03',label:'Cap & Finish'},
-  {n:'04',label:'Design & Artwork'},
+  {n:"01",label:"Can Selection"},
+  {n:"02",label:"Body Colour"},
+  {n:"03",label:"Cap Colour & Finish"},
+  {n:"04",label:"Design & Artwork"},
 ];
 function renderNav(){
-  document.getElementById('snav').innerHTML=`<div class="step-progress">`+
+  document.getElementById("snav").innerHTML=`<div class="step-progress">`+
     NAV_STEPS.map((st,i)=>{
-      const s=i+1, isActive=s===S.step, isDone=s<S.step;
-      const cl=isActive?'sp-item active':isDone?'sp-item done':'sp-item';
-      const numContent=isDone?IC.check:st.n;
-      return`${i>0?`<div class="sp-connector${isDone?' past':''}"></div>`:''}
+      const s=i+1,isActive=s===S.step,isDone=s<S.step;
+      const cl=isActive?"sp-item active":isDone?"sp-item done":"sp-item";
+      return`${i>0?`<div class="sp-connector${isDone?" past":""}"></div>`:""}
         <div class="${cl}" onclick="if(${s}<=${S.step})goStep(${s})">
-          <div class="sp-num">${numContent}</div>
-          <div class="sp-meta">
-            <div class="sp-step">Step ${st.n}</div>
-            <div class="sp-label">${st.label}</div>
-          </div>
+          <div class="sp-num">${isDone?IC.check:st.n}</div>
+          <div class="sp-meta"><div class="sp-step">Step ${st.n}</div><div class="sp-label">${st.label}</div></div>
         </div>`;
-    }).join('')+`</div>`;
+    }).join("")+`</div>`;
 }
 
-/* ══════════════════════════════════════════════
-   PANTONE PICKER COMPONENT
-══════════════════════════════════════════════ */
-function renderPicker(prop){
-  const cur=S[prop];
-  const fams=['All','R','O','Y','G','B','P','K','N','M'];
-  const q=S.psearch.toLowerCase();
-  let list=S.pfam==='All'?PANTONE:PANTONE.filter(c=>c.f===S.pfam);
-  if(q) list=PANTONE.filter(c=>c.code.toLowerCase().includes(q)||c.name.toLowerCase().includes(q));
 
-  const famH=fams.map(f=>{
-    const dot=f!=='All'?`<span class="pfam-dot" style="background:${FAM_COL[f]}"></span>`:'';
-    return`<div class="pfam-btn${S.pfam===f?' on':''}" onclick="S.pfam='${f}';S.psearch='';rebox()">${dot}${FAM_NAME[f]}</div>`;
-  }).join('');
+/* ════════════════════════════════════════════════════════════════
+   THREE.JS — 400 ml HOUSEHOLD AIR FRESHENER AEROSOL
+   Technical spec (all in metres, 1mm = 0.001m):
 
-  const swH=list.map(c=>{
-    const sh=c.met?'box-shadow:inset 0 0 0 1px rgba(255,255,255,.3),0 1px 4px rgba(0,0,0,.25)':'box-shadow:0 1px 4px rgba(0,0,0,.18)';
-    return`<div class="psw${cur&&cur.code===c.code?' on':''}" style="background:${c.hex};${sh}"
-      onclick="pickColor('${prop}','${c.code}')">
-      <span class="psw-tip">PMS ${c.code} — ${c.name}</span></div>`;
-  }).join('');
+   BODY:    R=0.0325m  H=0.195m  (straight wall)
+   SHOULDER: H=0.022m  from R=0.0325 → R=0.0135
+   NECK:    R=0.0135m  (valve cup: R=0.0137m, H=0.004m)
+   CAP:     outerR=0.0335m  H=0.052m  topDome=0.004m
+   TOTAL:   0.247m with cap
 
-  const selH=cur?`<div class="p-selected">
-    <div class="p-sel-swatch" style="background:${cur.hex}"></div>
-    <div class="p-sel-info">
-      <div class="p-sel-code">PMS ${cur.code}</div>
-      <div class="p-sel-name">${cur.name}</div>
-    </div>
-  </div>`:`<div class="p-selected" style="opacity:.4;font-size:11px;color:var(--muted)">No colour selected</div>`;
+   Label area: 204.2mm wide (full circumference) × 160mm tall
+   Label canvas: 2048 × 1607px (maintains physical ratio)
+════════════════════════════════════════════════════════════════ */
+const mm = 0.001; // 1mm in Three.js metres
 
-  return`<div class="p-search-wrap">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-    <input class="psearch" placeholder="Search PMS code or colour name…" value="${S.psearch}" oninput="S.psearch=this.value;rebox()">
+/* Spec values (metres) */
+const S3 = {
+  bodyR:        31.5 * mm,
+  bodyH:        195  * mm,
+  shoulderH:    22   * mm,
+  neckR:        13.5 * mm,
+  valveR:       13.7 * mm,
+  valveH:       4    * mm,
+  capOuterR:    32.0 * mm,
+  capH:         58   * mm,
+  capDomeH:     4    * mm,
+  actW:         14   * mm,
+  actD:         10   * mm,
+  actH:         12   * mm,
+  totalH:       247  * mm,
+};
+
+/* Y positions (bottom of can = 0) */
+const Y_body_bot  = 0;
+const Y_body_top  = S3.bodyH;
+const Y_shld_top  = S3.bodyH + S3.shoulderH;
+const Y_valve_top = S3.bodyH + S3.shoulderH + S3.valveH;
+/* Cap sits higher on the can so more of the shoulder is visible.
+   Bottom now sits 2mm below shoulder start instead of 8mm.
+   This gives a lighter, less bulky look while still covering the valve area. */
+const Y_cap_bot   = Y_body_top + 0.012;
+
+/* ── RENDERER ── */
+const canvas3 = document.getElementById("c3");
+const renderer = new THREE.WebGLRenderer({ canvas: canvas3, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.15;
+renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xecf0f7);
+
+const camera = new THREE.PerspectiveCamera(28, 1, 0.001, 10);
+
+/* ── STUDIO LIGHTING ── */
+scene.add(new THREE.AmbientLight(0xffffff, 0.65));
+const keyL = new THREE.DirectionalLight(0xfff9f0, 1.85);
+keyL.position.set(-0.3, 0.8, 0.6);
+keyL.castShadow = true;
+keyL.shadow.mapSize.set(2048, 2048);
+keyL.shadow.camera.left = -0.2; keyL.shadow.camera.right = 0.2;
+keyL.shadow.camera.top  =  0.4; keyL.shadow.camera.bottom = -0.1;
+keyL.shadow.radius = 8; keyL.shadow.bias = -0.0005;
+scene.add(keyL);
+const fillL = new THREE.DirectionalLight(0xeef4ff, 0.75); fillL.position.set(0.5, 0.2, 0.4);   scene.add(fillL);
+const rimL  = new THREE.DirectionalLight(0xffffff, 0.30); rimL.position.set(0,   0.6, -0.7);   scene.add(rimL);
+const botL  = new THREE.DirectionalLight(0xf0f5ff, 0.18); botL.position.set(0,  -0.5,  0.3);   scene.add(botL);
+
+/* ── MATERIALS ── */
+let bodyMat  = new THREE.MeshStandardMaterial({ color: new THREE.Color(S.bodyColor.hex), roughness: S.finish.r, metalness: S.finish.m });
+let labelMat = new THREE.MeshStandardMaterial({ roughness: S.finish.r, metalness: S.finish.m, transparent: true, color: 0xffffff });
+let capMat   = new THREE.MeshStandardMaterial({ color: new THREE.Color(S.capMatchBody ? S.bodyColor.hex : S.capColor.hex), roughness: 0.42, metalness: 0.02 });
+let ringMat  = new THREE.MeshStandardMaterial({ color: 0x888888, roughness: 0.40, metalness: 0.60 });
+let tBodyCol = new THREE.Color(S.bodyColor.hex);
+let tCapCol  = new THREE.Color(S.capMatchBody ? S.bodyColor.hex : S.capColor.hex);
+let tR = S.finish.r, tM = S.finish.m;
+
+const canGroup = new THREE.Group();
+scene.add(canGroup);
+
+/* ── BODY ── straight-wall cylinder, 80% label area */
+const bodyMesh = new THREE.Mesh(new THREE.CylinderGeometry(S3.bodyR, S3.bodyR, S3.bodyH, 80, 1), bodyMat);
+bodyMesh.position.y = S3.bodyH / 2;
+bodyMesh.castShadow = true;
+canGroup.add(bodyMesh);
+
+/* ── LABEL ── open-ended cylinder, sits 1mm above body bottom, covers 80% height */
+const labelH = S3.bodyH * 0.82;
+const labelMesh = new THREE.Mesh(new THREE.CylinderGeometry(S3.bodyR + 0.0002, S3.bodyR + 0.0002, labelH, 80, 1, true), labelMat);
+labelMesh.position.y = S3.bodyH * 0.50;
+canGroup.add(labelMesh);
+
+/* ── BOTTOM RIM ── metallic seam ring */
+const bRim = new THREE.Mesh(new THREE.TorusGeometry(S3.bodyR * 1.005, 1.4 * mm, 8, 72), ringMat);
+bRim.rotation.x = Math.PI / 2; bRim.position.y = 3 * mm;
+canGroup.add(bRim);
+
+/* ── BOTTOM DOME ── very shallow concave base (standard aerosol) */
+const domePts = [];
+for (let i = 0; i <= 28; i++) {
+  const t = i / 28, a = t * Math.PI * 0.5;
+  domePts.push(new THREE.Vector2(S3.bodyR * Math.sin(a), -5 * mm * (1 - Math.cos(a))));
+}
+const domeMesh = new THREE.Mesh(new THREE.LatheGeometry(domePts, 72), bodyMat);
+canGroup.add(domeMesh);
+
+/* ── SHOULDER ── smooth S-curve LatheGeometry from body-R to neck-R */
+const shPts = [];
+for (let i = 0; i <= 48; i++) {
+  const t = i / 48;
+  /* ease-in-out cubic for smooth tangent join at both ends */
+  const e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const r = S3.bodyR + (S3.neckR - S3.bodyR) * e;
+  const y = t * S3.shoulderH;
+  shPts.push(new THREE.Vector2(r, y));
+}
+const shMesh = new THREE.Mesh(new THREE.LatheGeometry(shPts, 72), bodyMat);
+shMesh.position.y = Y_body_top;
+shMesh.castShadow = true;
+canGroup.add(shMesh);
+
+/* ── VALVE CUP ── small metallic cylinder at top of shoulder */
+const valveMesh = new THREE.Mesh(new THREE.CylinderGeometry(S3.valveR, S3.valveR, S3.valveH, 48), ringMat);
+valveMesh.position.y = Y_shld_top + S3.valveH / 2;
+canGroup.add(valveMesh);
+
+/* ── CAP ────────────────────────────────────────────────────────
+   Standard fixed overcap with an angled top profile.
+   This is not a lathed shape. It is built from a cylinder and then
+   deformed so the top stays high at the back and falls smoothly toward
+   the front, matching the reference cap style the user shared.
+──────────────────────────────────────────────────────────────── */
+const capGroup = new THREE.Group();
+capGroup.position.y = Y_cap_bot;
+canGroup.add(capGroup);
+
+function makeAngledCapGeometry(outerRadius, height, radialSegments = 96, heightSegments = 30) {
+  const g = new THREE.CylinderGeometry(outerRadius, outerRadius * 1.01, height, radialSegments, heightSegments, false);
+  const pos = g.attributes.position;
+  const halfH = height / 2;
+  const backStartZ = -outerRadius * 0.58;   // back section stays flatter for longer
+  const frontEndZ  =  outerRadius * 0.92;   // front edge reaches the lowest top point
+  const maxDrop    =  height * 0.14;        // gentler front drop so the top stays covered
+  const softenBand =  11 * mm;               // softer moulded rounding at the top edge
+
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i);
+    let y = pos.getY(i);
+    const z = pos.getZ(i);
+
+    const t = THREE.MathUtils.clamp((z - backStartZ) / (frontEndZ - backStartZ), 0, 1);
+    const slope = Math.pow(t, 1.75);
+    const topLimit = halfH - maxDrop * slope;
+
+    if (y > topLimit) {
+      const above = y - topLimit;
+      const compression = Math.max(0, 1 - above / softenBand);
+      y = topLimit + above * compression * 0.18;
+    }
+
+    // Gentle side softening so the silhouette feels more injection-moulded
+    const sideFactor = Math.abs(x) / outerRadius;
+    if (y > halfH - 14 * mm) {
+      y -= sideFactor * sideFactor * 0.5 * mm;
+    }
+
+    pos.setY(i, y);
+  }
+
+  g.computeVertexNormals();
+  return g;
+}
+
+const capOuterGeom = makeAngledCapGeometry(S3.capOuterR, S3.capH);
+const capShellM = new THREE.Mesh(capOuterGeom, capMat);
+capShellM.castShadow = true;
+capGroup.add(capShellM);
+
+const capInnerGeom = makeAngledCapGeometry(S3.capOuterR - 1.0 * mm, S3.capH - 2.5 * mm, 96, 28);
+const capInnerM = new THREE.Mesh(capInnerGeom, capMat);
+capInnerM.scale.set(0.992, 0.96, 0.992);
+capInnerM.position.y = 1.2 * mm;
+capGroup.add(capInnerM);
+
+const capLipM = new THREE.Mesh(new THREE.TorusGeometry(S3.capOuterR * 1.002, 0.7 * mm, 8, 96), ringMat);
+capLipM.rotation.x = Math.PI / 2;
+capLipM.position.y = 1.8 * mm;
+capGroup.add(capLipM);
+
+/* D. Actuator button (14×10×12mm box, sits on valve, centred) */
+const actMat2 = new THREE.MeshStandardMaterial({ color: 0x777777, roughness: 0.55, metalness: 0.05 });
+const actMesh = new THREE.Mesh(
+  new THREE.BoxGeometry(S3.actW, S3.actH, S3.actD),
+  actMat2
+);
+actMesh.position.y = Y_shld_top + S3.valveH + S3.actH / 2 - 2 * mm;
+actMesh.rotation.y = 0; /* faces front */
+canGroup.add(actMesh);
+
+/* ── POSITION WHOLE CAN ── origin at base, centred in view */
+canGroup.position.y = -(S3.totalH / 2);
+
+/* ── CAMERA ── proportioned for 247mm tall model */
+function updateCamera() {
+  const s = S.size.scale * ((S.prod.sx + S.prod.sy) / 2);
+  const h = S3.totalH * s;
+  const fovRad = (28 * Math.PI) / 180;
+  const dist = (h / 2) / Math.tan(fovRad / 2) * 1.35;
+  camera.position.set(0, 0, dist);
+  camera.lookAt(0, h * 0.03, 0);
+  camera.updateProjectionMatrix();
+}
+
+/* ── LABEL TEXTURE ──────────────────────────────────────────────
+   Physical label spec: 204.2mm wide × 160mm tall (safe zone)
+   Canvas represents full 360° wrap:
+     Circumference = π × 65mm = 204.2mm
+     Label height (safe) = 160mm
+
+   Canvas size: 2048 × 1607px  (ratio = 204.2:160 = 1.276:1)
+   texture.offset.x = 0.5  → canvas centre = front face (U=0)
+   texture.wrapS = RepeatWrapping → seamless at seam
+──────────────────────────────────────────────────────────────── */
+const LABEL_W = 2048, LABEL_H = 1607; /* matches 204.2 × 160mm ratio */
+let labelTex = null;
+
+function generateLabel() {
+  const W = LABEL_W, H = LABEL_H;
+  const cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+  const ctx = cv.getContext("2d");
+
+  /* Base coat */
+  ctx.fillStyle = S.bodyColor.hex; ctx.fillRect(0, 0, W, H);
+
+  /* Metallic shimmer for metallic/chrome finishes */
+  if (S.finish.id === "metallic" || S.finish.id === "chrome") {
+    const g = ctx.createLinearGradient(0, 0, W, 0);
+    g.addColorStop(0,    "rgba(0,0,0,0.22)");
+    g.addColorStop(0.15, "rgba(255,255,255,0.10)");
+    g.addColorStop(0.40, "rgba(255,255,255,0.26)");
+    g.addColorStop(0.60, "rgba(255,255,255,0.12)");
+    g.addColorStop(0.85, "rgba(0,0,0,0.06)");
+    g.addColorStop(1,    "rgba(0,0,0,0.22)");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  }
+
+  /* User artwork centred on canvas → front face */
+  if (S.designImg && !S.bareMode) {
+    const img = S.designImg;
+    const dw = W * S.labelScale;
+    const dh = (dw / img.width) * img.height;
+    ctx.drawImage(img, W/2 - dw/2, H * S.labelPosY - dh/2, dw, dh);
+  }
+
+  if (labelTex) labelTex.dispose();
+  labelTex = new THREE.CanvasTexture(cv);
+  labelTex.encoding   = THREE.sRGBEncoding;
+  labelTex.wrapS      = THREE.RepeatWrapping;
+  labelTex.offset.x   = 0.5; /* front-face centre */
+
+  labelMat.map      = labelTex;
+  labelMat.color.set(0xffffff);
+  labelMat.roughness  = S.finish.r;
+  labelMat.metalness  = S.finish.m;
+  labelMat.needsUpdate = true;
+}
+
+/* ── COLOUR + FINISH UPDATE ── */
+function applyColors() {
+  tBodyCol.set(S.bodyColor.hex);
+  tCapCol.set(S.capMatchBody ? S.bodyColor.hex : S.capColor.hex);
+  tR = S.finish.r; tM = S.finish.m;
+  generateLabel();
+  updateBadge();
+}
+
+function updateBadge() {
+  document.getElementById("bdg-name").textContent =
+    S.prod.name.toUpperCase() + "  ·  400 ml";
+  document.getElementById("bdg-sub").textContent =
+    "PMS " + S.bodyColor.code + "  ·  " + S.finish.name;
+}
+
+/* ── ROTATION ──────────────────────────────────────────────────
+   autoSpin   = accumulated Y rotation (degrees equiv, in radians)
+   When drag starts: freeze autoSpin at current canGroup.rotation.y
+   While dragging:   directly set canGroup.rotation.y = autoSpin + delta
+   When drag ends:   persist new rotation back into autoSpin
+─────────────────────────────────────────────────────────────── */
+let autoSpin = 0, isDrag = false, lastX = 0;
+
+function startDrag(x) {
+  isDrag  = true;
+  lastX   = x;
+  autoSpin = canGroup.rotation.y; /* freeze at current position */
+}
+function moveDrag(x) {
+  if (!isDrag) return;
+  autoSpin += (x - lastX) * 0.012;
+  lastX = x;
+  canGroup.rotation.y = autoSpin;
+}
+function endDrag() {
+  isDrag = false;
+}
+
+canvas3.addEventListener("mousedown",  e => { startDrag(e.clientX); e.preventDefault(); });
+window.addEventListener("mousemove",   e => { moveDrag(e.clientX); });
+window.addEventListener("mouseup",     ()=> { endDrag(); });
+canvas3.addEventListener("touchstart", e => { startDrag(e.touches[0].clientX); e.preventDefault(); }, {passive:false});
+canvas3.addEventListener("touchmove",  e => { moveDrag(e.touches[0].clientX);  e.preventDefault(); }, {passive:false});
+canvas3.addEventListener("touchend",   ()=> { endDrag(); });
+
+/* ── ANIMATE ── */
+function animate() {
+  requestAnimationFrame(animate);
+  if (!isDrag) {
+    autoSpin += 0.004;
+    canGroup.rotation.y = autoSpin;
+  }
+  bodyMat.color.lerp(tBodyCol, 0.08);
+  bodyMat.roughness += (tR - bodyMat.roughness) * 0.08;
+  bodyMat.metalness += (tM - bodyMat.metalness) * 0.08;
+  capMat.color.lerp(tCapCol, 0.08);
+  labelMat.roughness += (tR - labelMat.roughness) * 0.08;
+  labelMat.metalness += (tM - labelMat.metalness) * 0.08;
+  renderer.render(scene, camera);
+}
+
+/* ── RESIZE ── */
+function resize() {
+  const r = document.querySelector(".right");
+  const W = r.clientWidth, H = r.clientHeight;
+  renderer.setSize(W, H);
+  camera.aspect = W / H;
+  camera.updateProjectionMatrix();
+  updateCamera();
+}
+window.addEventListener("resize", resize);
+
+/* ── TEMPLATE DOWNLOAD ── */
+function downloadTemplate() {
+  const link = document.createElement("a");
+  link.href = "./Air Freshener.png"; // exact filename
+  link.download = "Air Freshener.png";
+  link.target = "_blank";
+  link.rel = "noopener";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function updateCanScale() {} /* stub — camera handles sizing */
+function renderPicker(prop) {
+  const cur = S[prop];
+  const fams = ["All","R","O","Y","G","B","P","K","N","M"];
+  const q = S.psearch.toLowerCase();
+  let list = S.pfam === "All" ? PANTONE : PANTONE.filter(c => c.f === S.pfam);
+  if (q) list = PANTONE.filter(c => c.code.toLowerCase().includes(q) || c.name.toLowerCase().includes(q));
+  const famH = fams.map(f => {
+    const dot = f !== "All" ? `<span class="pfam-dot" style="background:${FAM_COL[f]}"></span>` : "";
+    return `<div class="pfam-btn${S.pfam===f?" on":""}" onclick="S.pfam='${f}';S.psearch='';rebox()">${dot}${FAM_NAME[f]}</div>`;
+  }).join("");
+  const swH = list.map(c => {
+    const sh = c.met ? "box-shadow:inset 0 0 0 1px rgba(255,255,255,.3),0 1px 4px rgba(0,0,0,.25)" : "box-shadow:0 1px 4px rgba(0,0,0,.18)";
+    return `<button type="button" class="psw${cur&&cur.code===c.code?" on":""}" title="PMS ${c.code} — ${c.name}" aria-label="PMS ${c.code} — ${c.name}" style="background:${c.hex};${sh}" onclick="pickColor('${prop}','${c.code}')"></button>`;
+  }).join("");
+  const selH = cur
+    ? `<div class="p-selected"><div class="p-sel-swatch" style="background:${cur.hex}"></div><div><div class="p-sel-code">PMS ${cur.code}</div><div class="p-sel-name">${cur.name}</div></div></div>`
+    : `<div class="p-selected" style="opacity:.4;font-size:11px;color:var(--muted)">No colour selected</div>`;
+  return `<div class="p-search-wrap">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input class="psearch" placeholder="Search PMS code or name…" value="${S.psearch}" oninput="S.psearch=this.value;rebox()">
   </div>
-  <div class="pfam-row">${famH}</div>
-  <div class="pgrid-color">${swH||'<span style="font-size:11px;color:var(--muted);padding:4px">No results</span>'}</div>
+  <div class="ptabs">${famH}</div>
+  <div class="pgrid-color">${swH||"<span style='font-size:11px;color:var(--muted)'>No results</span>"}</div>
   ${selH}
   <div class="custom-row">
     <span class="custom-lbl">Custom</span>
-    <input type="color" value="${cur?cur.hex:'#1557b0'}" onchange="pickHex('${prop}',this.value)">
-    <input class="hex-input" type="text" placeholder="#RRGGBB" value="${cur?cur.hex:''}"
-      oninput="if(this.value.match(/^#[0-9a-fA-F]{6}$/)) pickHex('${prop}',this.value)">
+    <input type="color" value="${cur?cur.hex:"#1557b0"}" onchange="pickHex('${prop}',this.value)">
+    <input class="hex-input" type="text" placeholder="#RRGGBB" value="${cur?cur.hex:""}" oninput="if(this.value.match(/^#[0-9a-fA-F]{6}$/)) pickHex('${prop}',this.value)">
   </div>`;
 }
 
-/* ══════════════════════════════════════════════
-   STEP RENDERERS
-══════════════════════════════════════════════ */
+
 function rStep1(){
-  const cats={beauty:'Beauty & Personal Care',airfresh:'Air Freshener & Home'};
+  const cats={beauty:"Beauty & Personal Care",airfresh:"Air Freshener & Home"};
   const catIco={beauty:IC.can,airfresh:IC.spray};
   const prods=PRODUCTS[S.category];
   return`<h2 class="sec-title">Can Selection</h2>
     <span class="field-label">Product Category</span>
     <div class="cat-tabs">
-      ${Object.entries(cats).map(([k,v])=>`<div class="ct${S.category===k?' on':''}"
+      ${Object.entries(cats).map(([k,v])=>`<div class="ct${S.category===k?" on":""}"
         onclick="S.category='${k}';S.prod=PRODUCTS['${k}'][0];rebox()">
-        <span style="display:flex;align-items:center">${catIco[k]}</span>${v}
-      </div>`).join('')}
+        <span style="display:flex;align-items:center">${catIco[k]}</span>${v}</div>`).join("")}
     </div>
     <span class="field-label">Product Type</span>
     <div class="prod-grid">
-      ${prods.map(p=>`<div class="pcard${S.prod.id===p.id?' on':''}"
-        onclick="S.prod=PRODUCTS[S.category].find(x=>x.id==='${p.id}');buildCan();updateBadge();rebox()">
+      ${prods.map(p=>`<div class="pcard${S.prod.id===p.id?" on":""}"
+        onclick="S.prod=PRODUCTS[S.category].find(x=>x.id==='${p.id}');updateCamera();updateBadge();rebox()">
         <div class="pcard-icon">${IC.can}</div>
-        <div class="pcard-text">
-          <div class="pcard-name">${p.name}</div>
-          <div class="pcard-sub">${p.sub}</div>
-        </div>
-      </div>`).join('')}
+        <div><div class="pcard-name">${p.name}</div><div class="pcard-sub">${p.sub}</div></div>
+      </div>`).join("")}
     </div>
     <span class="field-label">Fill Volume</span>
     <div class="size-row">
-      ${SIZES.map(sz=>`<div class="sz${S.size.ml===sz.ml?' on':''}"
-        onclick="S.size=SIZES.find(x=>x.ml==='${sz.ml}');buildCan();updateBadge();rebox()">${sz.ml}</div>`).join('')}
+      ${SIZES.map(sz=>`<div class="sz${S.size.ml===sz.ml?" on":""}"
+        onclick="S.size=SIZES.find(x=>x.ml==='${sz.ml}');updateCamera();updateBadge();rebox()">${sz.ml}</div>`).join("")}
     </div>
-    <div class="navrow"><div></div>
-      <button class="btn-next" onclick="ns()">Body Colour ${IC.chevron}</button></div>`;
+    <div class="navrow"><div></div><button class="btn-next" onclick="ns()">Body Colour ${IC.chevron}</button></div>`;
 }
 
 function rStep2(){
   return`<h2 class="sec-title">Body Colour</h2>
     <span class="field-label">Pantone Colour Selection</span>
-    ${renderPicker('bodyColor')}
+    ${renderPicker("bodyColor")}
     <div class="navrow">
       <button class="btn-back" onclick="ps()">Back</button>
       <button class="btn-next" onclick="ns()">Cap & Finish ${IC.chevron}</button>
@@ -756,109 +799,89 @@ function rStep2(){
 }
 
 function rStep3(){
-  return`<h2 class="sec-title">Cap & Finish</h2>
-    <span class="field-label">Cap Profile</span>
-    <div class="cap-grid">
-      ${CAP_TYPES.map(ct=>`<div class="cg${S.capType.id===ct.id?' on':''}"
-        onclick="S.capType=CAP_TYPES.find(x=>x.id==='${ct.id}');buildCan();rebox()">
-        <div class="cg-icon">${CAP_SVG[ct.id]}</div>
-        <div class="cg-name">${ct.name}</div>
-        <div style="font-size:8.5px;color:var(--muted);margin-top:2px;letter-spacing:.2px">${ct.sub}</div>
-      </div>`).join('')}
+  return`<h2 class="sec-title">Cap Colour &amp; Finish</h2>
+    <div class="spec-box">
+      <div class="spec-head">Standard Cap</div>
+      <div style="font-size:11px;color:var(--sub);line-height:1.6">One fixed overcap profile is used across the configurator for a cleaner and more realistic setup. Customers can customise the <strong>finish</strong> and <strong>colour</strong>, while the cap shape stays consistent.</div>
     </div>
     <span class="field-label">Surface Finish</span>
     <div class="fin-grid">
-      ${FINISHES.map(f=>`<div class="fg${S.finish.id===f.id?' on':''}"
+      ${FINISHES.map(f=>`<div class="fg${S.finish.id===f.id?" on":""}"
         onclick="S.finish=FINISHES.find(x=>x.id==='${f.id}');tR=S.finish.r;tM=S.finish.m;generateLabel();updateBadge();rebox()">
         <div class="fg-ball" style="background:${f.ball}"></div>
         <div class="fg-name">${f.name}</div>
-      </div>`).join('')}
+      </div>`).join("")}
     </div>
     <span class="field-label">Cap Colour</span>
-    <div class="match-toggle${S.capMatchBody?' on':''}" onclick="S.capMatchBody=!S.capMatchBody;rebox()">
+    <div class="match-toggle${S.capMatchBody?" on":""}" onclick="S.capMatchBody=!S.capMatchBody;rebox()">
       ${IC.match}
-      <span class="match-text">${S.capMatchBody?'Matched to body colour — click to change':'Match body colour'}</span>
-      <div class="match-check">${S.capMatchBody?IC.check:''}</div>
+      <span class="match-text">${S.capMatchBody?"Matched to body colour — click to choose a separate cap colour":"Use same colour as can body"}</span>
+      <div class="match-check">${S.capMatchBody?IC.check:""}</div>
     </div>
-    ${!S.capMatchBody?renderPicker('capColor'):''}
+    ${S.capMatchBody?"":renderPicker("capColor")}
     <div class="navrow">
       <button class="btn-back" onclick="ps()">Back</button>
-      <button class="btn-next" onclick="ns()">Design & Artwork ${IC.chevron}</button>
+      <button class="btn-next" onclick="ns()">Design &amp; Artwork ${IC.chevron}</button>
     </div>`;
 }
 
 function rStep4(){
   const hasImg=!!S.designImg;
-  return`<h2 class="sec-title">Design & Artwork</h2>
+  return`<h2 class="sec-title">Design &amp; Artwork</h2>
     <div class="bare-row">
-      <div>
-        <div class="bare-lbl">Bare Can Mode</div>
-        <div class="bare-sub">Apply uniform colour only — no label wrap</div>
-      </div>
-      <label class="toggle"><input type="checkbox" ${S.bareMode?'checked':''}
-        onchange="S.bareMode=this.checked;buildCan();generateLabel();rebox()"><span class="tgl"></span></label>
+      <div><div class="bare-lbl">Bare Can Mode</div><div class="bare-sub">Uniform colour only — no label artwork</div></div>
+      <label class="toggle"><input type="checkbox" ${S.bareMode?"checked":""}
+        onchange="S.bareMode=this.checked;generateLabel();rebox()"><span class="tgl"></span></label>
     </div>
-    ${!S.bareMode?`<span class="field-label">Artwork File</span>
+    ${!S.bareMode?`
+    <span class="field-label">Artwork File</span>
     <div style="background:var(--blue-bg);border:1px solid rgba(21,87,176,.14);border-radius:7px;padding:13px 15px;margin-bottom:12px">
       <div style="font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.9px;margin-bottom:9px">Artwork Canvas Specification</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11.5px;margin-bottom:10px">
-        <div><span style="color:var(--muted)">Canvas size</span><br><strong style="color:var(--text)">2048 × 1080 px</strong></div>
-        <div><span style="color:var(--muted)">Ratio</span><br><strong style="color:var(--text)">1.9 : 1 (wider than tall)</strong></div>
-        <div><span style="color:var(--muted)">Front-face zone</span><br><strong style="color:var(--text)">Centre 50% of width</strong></div>
-        <div><span style="color:var(--muted)">Label panel</span><br><strong style="color:var(--text)">Centre 70% recommended</strong></div>
+        <div><span style="color:var(--muted)">Canvas size</span><br><strong>2048 × 1080 px</strong></div>
+        <div><span style="color:var(--muted)">Aspect ratio</span><br><strong>1.9 : 1 (wider than tall)</strong></div>
+        <div><span style="color:var(--muted)">Front-face zone</span><br><strong>Centre 50% of width</strong></div>
+        <div><span style="color:var(--muted)">Safe label panel</span><br><strong>Centre 70% recommended</strong></div>
       </div>
-      <div style="font-size:10.5px;color:var(--muted);margin-bottom:10px;line-height:1.5">
-        Place your label artwork <strong style="color:var(--sub)">centred horizontally</strong> — the centre of the canvas maps to the front face of the can.
-      </div>
-      <button onclick="downloadTemplate()" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--blue);border-radius:5px;background:white;color:var(--blue);font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.3px;font-family:inherit">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Download Template PNG
+      <div style="font-size:10.5px;color:var(--muted);margin-bottom:10px;line-height:1.5">Centre your artwork horizontally — the canvas centre maps to the front face of the can.</div>
+      <button onclick="downloadTemplate()" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--blue);border-radius:5px;background:white;color:var(--blue);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">
+        ${IC.dl} Download Template PNG
       </button>
     </div>
-    <div class="upload-zone${hasImg?' has':''}" onclick="document.getElementById('fup').click()">
+    <div class="upload-zone${hasImg?" has":""}" onclick="document.getElementById('fup').click()">
       <input type="file" id="fup" accept="image/*" style="display:none" onchange="onUpload(event)">
-      ${!hasImg?`<div class="up-icon-wrap">${IC.upload}</div>
-        <div class="up-txt">Upload Artwork File</div>
-        <div class="up-hint">PNG · JPG · Ideal size 2048 × 1080 px</div>`:''}
-      <img id="uprev" class="up-preview${hasImg?' on':''}" src="${hasImg?S.designImg.src:''}">
+      ${!hasImg?`<div class="up-icon-wrap">${IC.upload}</div><div class="up-txt">Upload Artwork File</div><div class="up-hint">PNG · JPG · Ideal size 2048 × 1080 px</div>`:""}
+      <img id="uprev" class="up-preview${hasImg?" on":""}" src="${hasImg?S.designImg.src:""}">
       <button class="up-clear" onclick="clearDesign(event)">Remove</button>
     </div>
     ${hasImg?`<div class="lsliders on">
-      <div class="sl-row">
-        <label>Position</label>
+      <div class="sl-row"><label>Position</label>
         <input type="range" min="15" max="85" value="${Math.round(S.labelPosY*100)}"
           oninput="S.labelPosY=this.value/100;document.getElementById('lpyv').textContent=this.value+'%';generateLabel()">
-        <span class="sl-val" id="lpyv">${Math.round(S.labelPosY*100)}%</span>
-      </div>
-      <div class="sl-row">
-        <label>Scale</label>
+        <span class="sl-val" id="lpyv">${Math.round(S.labelPosY*100)}%</span></div>
+      <div class="sl-row"><label>Scale</label>
         <input type="range" min="30" max="110" value="${Math.round(S.labelScale*100)}"
           oninput="S.labelScale=this.value/100;document.getElementById('lscv').textContent=this.value+'%';generateLabel()">
-        <span class="sl-val" id="lscv">${Math.round(S.labelScale*100)}%</span>
-      </div>
-    </div>`:''}`:
-    `<div style="padding:16px 0;font-size:12px;color:var(--muted);text-align:center;letter-spacing:.3px">
-      Bare can — colour coat applied without label artwork
-    </div>`}
+        <span class="sl-val" id="lscv">${Math.round(S.labelScale*100)}%</span></div>
+    </div>`:""}`:
+    `<div style="padding:16px 0;font-size:12px;color:var(--muted);text-align:center">Bare can — uniform colour coat, no label artwork</div>`}
     <div class="navrow">
       <button class="btn-back" onclick="ps()">Back</button>
-      <button class="btn-next" onclick="ns()">Review & Submit ${IC.chevron}</button>
+      <button class="btn-next" onclick="ns()">Review &amp; Submit ${IC.chevron}</button>
     </div>`;
 }
 
 function rStep5(){
-  const capStr=S.capMatchBody
-    ?'Match Body — '+S.bodyColor.name
-    :'PMS '+S.capColor.code+' — '+S.capColor.name;
-  return`<h2 class="sec-title">Review & Submit</h2>
+  const capStr=S.capMatchBody?"Match Body — "+S.bodyColor.name:"PMS "+S.capColor.code+" — "+S.capColor.name;
+  return`<h2 class="sec-title">Review &amp; Submit</h2>
     <div class="summary">
       <div class="sum-head">Configuration Summary</div>
       <div class="sum-row"><span class="sk">Product</span><span class="sv">${S.prod.name} · ${S.size.ml}</span></div>
       <div class="sum-row"><span class="sk">Body Colour</span><span class="sv">PMS ${S.bodyColor.code} — ${S.bodyColor.name}</span></div>
       <div class="sum-row"><span class="sk">Surface Finish</span><span class="sv">${S.finish.name}</span></div>
-      <div class="sum-row"><span class="sk">Cap Profile</span><span class="sv">${S.capType.name} ${S.capType.sub}</span></div>
+      <div class="sum-row"><span class="sk">Cap Style</span><span class="sv">Standard angled overcap</span></div>
       <div class="sum-row"><span class="sk">Cap Colour</span><span class="sv">${capStr}</span></div>
-      <div class="sum-row"><span class="sk">Artwork</span><span class="sv">${S.bareMode?'Bare can':S.designImg?'Custom artwork uploaded':'No artwork'}</span></div>
+      <div class="sum-row"><span class="sk">Artwork</span><span class="sv">${S.bareMode?"Bare can":S.designImg?"Custom artwork uploaded":"No artwork"}</span></div>
     </div>
     <span class="field-label">Contact Details</span>
     <div class="form-grid">
@@ -871,25 +894,24 @@ function rStep5(){
     </div>
     <div class="form-grid">
       <div class="fc"><div class="flb">Required Quantity</div>
-        <select class="fi"><option>1 000 – 5 000 units</option><option>5 000 – 10 000 units</option><option>10 000 – 50 000 units</option><option>50 000+ units</option></select>
-      </div>
+        <select class="fi"><option>1 000 – 5 000 units</option><option>5 000 – 10 000 units</option><option>10 000 – 50 000 units</option><option>50 000+ units</option></select></div>
       <div class="fc"><div class="flb">Lead Time Required</div>
-        <select class="fi"><option>Standard — 8 to 12 weeks</option><option>Express — 4 to 6 weeks</option><option>No fixed deadline</option></select>
-      </div>
+        <select class="fi"><option>Standard — 8 to 12 weeks</option><option>Express — 4 to 6 weeks</option><option>No fixed deadline</option></select></div>
     </div>
     <div class="form-grid"><div class="fc full"><div class="flb">Additional Notes</div>
-      <textarea class="fta" placeholder="Special requirements, certifications, or questions…"></textarea>
-    </div></div>
+      <textarea class="fta" placeholder="Special requirements, certifications, or questions…"></textarea></div></div>
     <div class="navrow">
       <button class="btn-back" onclick="ps()">Back</button>
       <button class="btn-next" onclick="submitForm()">Submit Request ${IC.chevron}</button>
     </div>`;
 }
 
-/* ── ACTIONS ────────────────────────────────────── */
+/* ════════════════════════════════════════════
+   ACTIONS
+════════════════════════════════════════════ */
 function rebox(){
   renderNav();
-  const b=document.getElementById('sbox');
+  const b=document.getElementById("sbox");
   if(S.step===1) b.innerHTML=rStep1();
   else if(S.step===2) b.innerHTML=rStep2();
   else if(S.step===3) b.innerHTML=rStep3();
@@ -899,18 +921,19 @@ function rebox(){
 function ns(){if(S.step<5){S.step++;rebox();}}
 function ps(){if(S.step>1){S.step--;rebox();}}
 function goStep(n){S.step=n;rebox();}
+
 function pickColor(prop,code){
   const c=PANTONE.find(x=>x.code===code); if(!c)return;
   S[prop]=c;
-  if(prop==='bodyColor'){tBodyCol=new THREE.Color(c.hex);generateLabel();updateBadge();}
-  if(prop==='capColor'){tCapCol=new THREE.Color(c.hex);}
+  if(prop==="bodyColor"){tBodyCol.set(c.hex);generateLabel();updateBadge();}
+  if(prop==="capColor"){tCapCol.set(c.hex);}
   rebox();
 }
 function pickHex(prop,hex){
   if(!/^#[0-9a-fA-F]{6}$/.test(hex))return;
-  S[prop]={code:'Custom',name:'Custom colour',hex,f:'N'};
-  if(prop==='bodyColor'){tBodyCol=new THREE.Color(hex);generateLabel();updateBadge();}
-  if(prop==='capColor'){tCapCol=new THREE.Color(hex);}
+  S[prop]={code:"Custom",name:"Custom colour",hex,f:"N"};
+  if(prop==="bodyColor"){tBodyCol.set(hex);generateLabel();updateBadge();}
+  if(prop==="capColor"){tCapCol.set(hex);}
   rebox();
 }
 function onUpload(e){
@@ -921,34 +944,38 @@ function onUpload(e){
 }
 function clearDesign(e){
   e.stopPropagation(); S.designImg=null;
-  const fup=document.getElementById('fup'); if(fup)fup.value='';
+  const fup=document.getElementById("fup"); if(fup)fup.value="";
   generateLabel(); rebox();
 }
 function submitForm(){
-  document.getElementById('sbox').innerHTML=`<div class="success-wrap">
-    <div class="ok-mark">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-    </div>
-    <div style="font-size:21px;font-weight:300;color:var(--blue-dark);margin-bottom:10px;letter-spacing:-.2px">Request Submitted</div>
-    <div style="font-size:13px;color:var(--muted);line-height:1.7;max-width:320px;margin:0 auto">
-      Your packaging specification has been received.<br>A member of the Aerostar team will respond within one business day.
-    </div>
+  document.getElementById("sbox").innerHTML=`<div class="success-wrap">
+    <div class="ok-mark"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <div style="font-size:21px;font-weight:300;color:var(--blue-dark);margin-bottom:10px">Request Submitted</div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.7;max-width:320px;margin:0 auto">Your packaging specification has been received.<br>A member of the Aerostar team will respond within one business day.</div>
     <button class="btn-next" style="margin:24px auto 0;display:inline-flex" onclick="resetAll()">New Configuration ${IC.chevron}</button>
   </div>`;
 }
 function resetAll(){
-  S={step:1,category:'beauty',prod:PRODUCTS.beauty[0],size:SIZES[2],
-    bodyColor:PANTONE.find(p=>p.code==='877 C'),capMatchBody:false,
-    capColor:PANTONE.find(p=>p.code==='Black C'),capType:CAP_TYPES[0],
+  S={step:1,category:"beauty",prod:PRODUCTS.beauty[0],size:SIZES[2],
+    bodyColor:PANTONE.find(p=>p.code==="877 C"),capMatchBody:false,
+    capColor:PANTONE.find(p=>p.code==="Black C"),
     finish:FINISHES[1],designImg:null,labelPosY:0.48,labelScale:0.82,bareMode:false,
-    pfam:'All',psearch:''};
-  tBodyCol=new THREE.Color(S.bodyColor.hex); tCapCol=new THREE.Color(S.capColor.hex);
+    pfam:"All",psearch:""};
+  tBodyCol.set(S.bodyColor.hex); tCapCol.set(S.capColor.hex);
   tR=S.finish.r; tM=S.finish.m;
-  buildCan(); generateLabel(); updateBadge(); rebox();
+  updateCamera(); generateLabel(); updateBadge(); rebox();
 }
 
-/* ── INIT ───────────────────────────────────────── */
-resize(); buildCan(); generateLabel(); updateBadge(); rebox(); animate();
+
+
+
+/* ── INIT ── */
+resize();
+updateCamera();
+generateLabel();
+applyColors();
+animate();
+rebox();
 </script>
 </body>
 </html>

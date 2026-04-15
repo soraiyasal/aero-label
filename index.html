@@ -720,8 +720,8 @@ function generateLabel() {
 
   labelMat.map      = labelTex;
   labelMat.color.set(0xffffff);
-  labelMat.roughness  = S.finish.r;
-  labelMat.metalness  = S.finish.m;
+  labelMat.roughness  = 0.88;  /* paper-like — never shiny */
+  labelMat.metalness  = 0.00;  /* always non-metallic */
   labelMat.needsUpdate = true;
 }
 
@@ -784,8 +784,7 @@ function animate() {
   bodyMat.roughness += (tR - bodyMat.roughness) * 0.08;
   bodyMat.metalness += (tM - bodyMat.metalness) * 0.08;
   capMat.color.lerp(tCapCol, 0.08);
-  labelMat.roughness += (tR - labelMat.roughness) * 0.08;
-  labelMat.metalness += (tM - labelMat.metalness) * 0.08;
+  /* label stays paper-finish — not lerped with can finish */
   renderer.render(scene, camera);
 }
 
@@ -820,12 +819,25 @@ window.addEventListener("resize", ()=>{
 
 /* ── TEMPLATE DOWNLOAD ── */
 function downloadTemplate() {
-  const link = document.createElement("a");
-  link.href = "./Air Freshener.png";
-  link.download = "Air Freshener.png";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  const url = "./Air Freshener.png";
+  /* Try fetch → blob → forced download (works on servers and localhost) */
+  fetch(url)
+    .then(r => {
+      if (!r.ok) throw new Error("not found");
+      return r.blob();
+    })
+    .then(blob => {
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "Air Freshener.png";
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { URL.revokeObjectURL(a.href); document.body.removeChild(a); }, 1000);
+    })
+    .catch(() => {
+      /* Fallback: open in new tab — user can save manually */
+      window.open(url, "_blank");
+    });
 }
 
 /* ── EXAMPLE TEMPLATES ── */

@@ -495,8 +495,8 @@ const Y_cap_bot   = Y_body_top + 0.012;
 const canvas3 = document.getElementById("c3");
 const renderer = new THREE.WebGLRenderer({ canvas: canvas3, antialias: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.toneMapping = THREE.ReinhardToneMapping;
-renderer.toneMappingExposure = 0.88;
+renderer.toneMapping = THREE.NoToneMapping;
+renderer.toneMappingExposure = 1.0;
 renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -507,8 +507,8 @@ scene.background = new THREE.Color(0xecf0f7);
 const camera = new THREE.PerspectiveCamera(28, 1, 0.001, 10);
 
 /* ── STUDIO LIGHTING ── */
-scene.add(new THREE.AmbientLight(0xffffff, 0.55));
-const keyL = new THREE.DirectionalLight(0xfff9f0, 1.20);
+scene.add(new THREE.AmbientLight(0xffffff, 0.25));
+const keyL = new THREE.DirectionalLight(0xffffff, 0.85);
 keyL.position.set(-0.3, 0.8, 0.6);
 keyL.castShadow = true;
 keyL.shadow.mapSize.set(2048, 2048);
@@ -516,17 +516,19 @@ keyL.shadow.camera.left = -0.2; keyL.shadow.camera.right = 0.2;
 keyL.shadow.camera.top  =  0.4; keyL.shadow.camera.bottom = -0.1;
 keyL.shadow.radius = 8; keyL.shadow.bias = -0.0005;
 scene.add(keyL);
-const fillL = new THREE.DirectionalLight(0xeef4ff, 0.55); fillL.position.set(0.5, 0.2, 0.4);   scene.add(fillL);
-const rimL  = new THREE.DirectionalLight(0xffffff, 0.30); rimL.position.set(0,   0.6, -0.7);   scene.add(rimL);
-const botL  = new THREE.DirectionalLight(0xf0f5ff, 0.18); botL.position.set(0,  -0.5,  0.3);   scene.add(botL);
+const fillL = new THREE.DirectionalLight(0xffffff, 0.35); fillL.position.set(0.5, 0.2, 0.4);   scene.add(fillL);
+const rimL  = new THREE.DirectionalLight(0xffffff, 0.20); rimL.position.set(0,   0.6, -0.7);   scene.add(rimL);
+const botL  = new THREE.DirectionalLight(0xffffff, 0.08); botL.position.set(0,  -0.5,  0.3);   scene.add(botL);
 
 /* ── MATERIALS ── */
-let bodyMat  = new THREE.MeshStandardMaterial({ color: new THREE.Color(S.bodyColor.hex), roughness: S.finish.r, metalness: S.finish.m });
-let labelMat = new THREE.MeshStandardMaterial({ roughness: S.finish.r, metalness: S.finish.m, transparent: false, color: 0xffffff });
-let capMat   = new THREE.MeshStandardMaterial({ color: new THREE.Color(S.capMatchBody ? S.bodyColor.hex : S.capColor.hex), roughness: 0.42, metalness: 0.02 });
+let bodyMat  = new THREE.MeshStandardMaterial({ color: toLinear(S.bodyColor.hex), roughness: S.finish.r, metalness: S.finish.m });
+let labelMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: false });
+let capMat   = new THREE.MeshStandardMaterial({ color: toLinear(S.capMatchBody ? S.bodyColor.hex : S.capColor.hex), roughness: 0.42, metalness: 0.02 });
 let ringMat  = new THREE.MeshStandardMaterial({ color: 0x888888, roughness: 0.40, metalness: 0.60 });
-let tBodyCol = new THREE.Color(S.bodyColor.hex);
-let tCapCol  = new THREE.Color(S.capMatchBody ? S.bodyColor.hex : S.capColor.hex);
+function toLinear(hex) { return new THREE.Color().setStyle(hex).convertSRGBToLinear(); }
+function setLinear(col, hex) { col.setStyle(hex).convertSRGBToLinear(); return col; }
+let tBodyCol = toLinear(S.bodyColor.hex);
+let tCapCol  = toLinear(S.capMatchBody ? S.bodyColor.hex : S.capColor.hex);
 let tR = S.finish.r, tM = S.finish.m;
 
 const canGroup = new THREE.Group();
@@ -714,21 +716,19 @@ function generateLabel() {
 
   if (labelTex) labelTex.dispose();
   labelTex = new THREE.CanvasTexture(cv);
-  labelTex.encoding   = THREE.sRGBEncoding;
-  labelTex.wrapS      = THREE.RepeatWrapping;
-  labelTex.offset.x   = 0.5; /* front-face centre */
+  labelTex.encoding      = THREE.sRGBEncoding;  /* decode canvas sRGB→linear; sRGB output re-encodes = pixel-perfect */
+  labelTex.wrapS         = THREE.RepeatWrapping;
+  labelTex.offset.x      = 0.5; /* front-face centre */
 
-  labelMat.map      = labelTex;
+  labelMat.map         = labelTex;
   labelMat.color.set(0xffffff);
-  labelMat.roughness  = 0.88;  /* paper-like — never shiny */
-  labelMat.metalness  = 0.00;  /* always non-metallic */
   labelMat.needsUpdate = true;
 }
 
 /* ── COLOUR + FINISH UPDATE ── */
 function applyColors() {
-  tBodyCol.set(S.bodyColor.hex);
-  tCapCol.set(S.capMatchBody ? S.bodyColor.hex : S.capColor.hex);
+  setLinear(tBodyCol, S.bodyColor.hex);
+  setLinear(tCapCol, S.capMatchBody ? S.bodyColor.hex : S.capColor.hex);
   tR = S.finish.r; tM = S.finish.m;
   generateLabel();
   updateBadge();
@@ -784,7 +784,7 @@ function animate() {
   bodyMat.roughness += (tR - bodyMat.roughness) * 0.08;
   bodyMat.metalness += (tM - bodyMat.metalness) * 0.08;
   capMat.color.lerp(tCapCol, 0.08);
-  /* label stays paper-finish — not lerped with can finish */
+
   renderer.render(scene, camera);
 }
 
@@ -1106,15 +1106,15 @@ function goStep(n){S.step=n;rebox();}
 function pickColor(prop,code){
   const c=PANTONE.find(x=>x.code===code); if(!c)return;
   S[prop]=c;
-  if(prop==="bodyColor"){tBodyCol.set(c.hex);generateLabel();updateBadge();}
-  if(prop==="capColor"){tCapCol.set(c.hex);}
+  if(prop==="bodyColor"){setLinear(tBodyCol,c.hex);generateLabel();updateBadge();}
+  if(prop==="capColor"){setLinear(tCapCol,c.hex);}
   rebox();
 }
 function pickHex(prop,hex){
   if(!/^#[0-9a-fA-F]{6}$/.test(hex))return;
   S[prop]={code:"Custom",name:"Custom colour",hex,f:"N"};
-  if(prop==="bodyColor"){tBodyCol.set(hex);generateLabel();updateBadge();}
-  if(prop==="capColor"){tCapCol.set(hex);}
+  if(prop==="bodyColor"){setLinear(tBodyCol,hex);generateLabel();updateBadge();}
+  if(prop==="capColor"){setLinear(tCapCol,hex);}
   rebox();
 }
 function onUpload(e){
@@ -1142,7 +1142,7 @@ function resetAll(){
     capColor:PANTONE.find(p=>p.code==="Black C"),
     finish:FINISHES[1],designImg:null,labelPosY:0.48,labelScale:0.82,bareMode:false,
     pfam:"All",psearch:"",selectedTemplate:null};
-  tBodyCol.set(S.bodyColor.hex); tCapCol.set(S.capColor.hex);
+  setLinear(tBodyCol,S.bodyColor.hex); setLinear(tCapCol,S.capColor.hex);
   tR=S.finish.r; tM=S.finish.m;
   updateCamera(); generateLabel(); updateBadge(); rebox();
 }

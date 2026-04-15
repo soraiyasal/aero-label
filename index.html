@@ -13,11 +13,11 @@
   --text:#0f172a;--sub:#334155;--muted:#64748b;--white:#fff;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden}
-body{font-family:"Lato",sans-serif;background:var(--bg);color:var(--text);font-size:13px}
+html,body{height:100%}
+body{font-family:"Lato",sans-serif;background:var(--bg);color:var(--text);font-size:13px;overflow-x:hidden}
 
 /* ── HEADER ── */
-.top-bar{background:var(--white);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 32px;justify-content:space-between;flex-shrink:0}
+.top-bar{background:var(--white);border-bottom:1px solid var(--border);height:52px;display:flex;align-items:center;padding:0 16px;justify-content:space-between;flex-shrink:0;position:sticky;top:0;z-index:100}
 .logo-wrap{display:flex;flex-direction:column;user-select:none;line-height:1;flex-shrink:0}
 .logo-ltr{display:flex;align-items:center}
 .logo-lt{font-size:24px;font-weight:300;color:#5c6b7a;letter-spacing:-.5px}
@@ -28,14 +28,14 @@ body{font-family:"Lato",sans-serif;background:var(--bg);color:var(--text);font-s
 .hdr-btn{font-size:10px;font-weight:700;color:var(--blue);text-decoration:none;border:1.5px solid var(--blue);border-radius:20px;padding:3px 12px;white-space:nowrap;transition:all .15s}
 .hdr-btn:hover{background:var(--blue);color:#fff}
 
-.nav-bar{background:var(--blue-nav);height:34px;display:flex;align-items:center;padding:0 32px;flex-shrink:0;overflow:hidden}
-.nav-bar a{color:rgba(255,255,255,.65);text-decoration:none;font-size:9.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:0 12px;height:34px;display:flex;align-items:center;transition:color .15s;white-space:nowrap;flex-shrink:0}
+.nav-bar{background:var(--blue-nav);height:34px;display:flex;align-items:center;padding:0 16px;flex-shrink:0;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;position:sticky;top:52px;z-index:99}.nav-bar::-webkit-scrollbar{display:none}
+.nav-bar a{color:rgba(255,255,255,.65);text-decoration:none;font-size:9.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:0 10px;height:34px;display:flex;align-items:center;transition:color .15s;white-space:nowrap;flex-shrink:0}
 .nav-bar a:hover{color:#fff}
 .nav-bar .spacer{flex:1}
 .nb-div{width:1px;height:14px;background:rgba(255,255,255,.15);margin:0 2px;flex-shrink:0}
 
 /* ── MAIN LAYOUT ── */
-.layout{display:grid;grid-template-columns:minmax(0,1fr) 430px;height:calc(100vh - 94px);overflow:hidden}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 400px;height:calc(100vh - 86px);overflow:hidden}
 
 /* ── LEFT PANEL ── */
 .left{
@@ -127,7 +127,7 @@ body{font-family:"Lato",sans-serif;background:var(--bg);color:var(--text);font-s
 .match-toggle.on .match-check{background:var(--blue);border-color:var(--blue)}
 
 /* ── FINISH GRID ── */
-.fin-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:16px}
+.fin-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:14px}
 .fg{border:1px solid var(--border);border-radius:7px;padding:8px 4px 6px;text-align:center;cursor:pointer;background:var(--white);transition:all .14s;overflow:hidden}
 .fg:hover{border-color:var(--blue2)}.fg.on{border-color:var(--blue);background:var(--blue-bg)}
 .fg-ball{width:26px;height:26px;border-radius:50%;margin:0 auto 5px;border:1px solid rgba(0,0,0,.1);box-shadow:0 1px 4px rgba(0,0,0,.1)}
@@ -187,6 +187,63 @@ input:checked+.tgl:before{transform:translateX(18px)}
 .btn-next:hover{background:var(--blue-dark)}
 .success-wrap{text-align:center;padding:32px 16px}
 .ok-mark{width:56px;height:56px;border-radius:50%;background:var(--blue-bg);border:2px solid var(--blue);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--blue)}
+
+/* ── FORM ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.fc{display:flex;flex-direction:column;gap:4px;min-width:0}.fc.full{grid-column:1/-1}
+
+/* ── EXAMPLE TEMPLATES ── */
+.tpl-section{margin-bottom:10px}
+.tpl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:4px}
+.tpl-card{border:2px solid var(--border);border-radius:7px;overflow:hidden;cursor:pointer;position:relative;transition:all .14s;background:var(--white)}
+.tpl-card:hover{border-color:var(--blue2);box-shadow:0 2px 8px rgba(21,87,176,.1)}
+.tpl-card.on{border-color:var(--blue)}
+.tpl-canvas{width:100%;display:block;aspect-ratio:1.9/1}
+.tpl-label{font-size:9px;font-weight:700;color:var(--muted);text-align:center;padding:4px 4px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tpl-card.on .tpl-label{color:var(--blue)}
+.tpl-check{position:absolute;top:4px;right:4px;width:16px;height:16px;border-radius:50%;background:var(--blue);display:none;align-items:center;justify-content:center}
+.tpl-card.on .tpl-check{display:flex}
+
+/* ── MOBILE RESPONSIVE ── */
+.viewer-bar,.viewer-strip{display:none}
+@media(max-width:768px){
+  .viewer-bar{display:flex}
+  html,body{height:auto}
+  .top-bar{padding:0 14px;height:48px}
+  .logo-lt{font-size:19px}
+  .logo-contract{font-size:10px;padding-left:43px}
+  .hdr-tag{display:none}
+  .hdr-sep{display:none}
+  .layout{display:block;height:auto;overflow:visible}
+  .right{display:none}
+  .left{padding:12px 12px 80px;overflow:visible}
+  .viewer-strip{display:flex;flex-direction:column;background:radial-gradient(ellipse at 50% 40%,#f8f9fc 0%,#e6eaf2 100%);height:260px;position:relative;border-bottom:1px solid var(--border);cursor:grab}
+  .viewer-strip.collapsed{height:0;overflow:hidden}
+  .viewer-strip canvas{width:100%!important;height:100%!important}
+  .viewer-bar{background:var(--white);border-bottom:1px solid var(--border);padding:9px 14px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:82px;z-index:97;cursor:pointer}
+  .viewer-bar-label{font-size:10px;font-weight:700;color:var(--blue);letter-spacing:.5px;text-transform:uppercase;display:flex;align-items:center;gap:6px}
+  .viewer-bar-chev{transition:transform .25s;color:var(--blue)}
+  .viewer-bar-chev.open{transform:rotate(90deg)}
+  .step-progress{padding:8px 10px}
+  .sp-label{display:none}
+  .sp-step{font-size:7px}
+  .sp-connector{margin:0 4px;min-width:3px}
+  .box{padding:14px 12px}
+  .sec-title{font-size:15px;margin-bottom:12px}
+  .prod-grid{grid-template-columns:1fr 1fr}
+  .fin-grid{grid-template-columns:repeat(5,1fr)}
+  .form-grid{grid-template-columns:1fr}
+  .tpl-grid{grid-template-columns:repeat(2,1fr)}
+  .navrow{margin-top:16px;padding-top:12px}
+  .spec-grid{grid-template-columns:1fr 1fr}
+  .pgrid-color{max-height:120px}
+}
+@media(max-width:480px){
+  .cat-tabs{gap:5px}
+  .ct{font-size:9.5px;padding:7px 4px}
+  .tpl-grid{grid-template-columns:repeat(2,1fr)}
+  .fin-grid{grid-template-columns:repeat(5,1fr)}
+}
 </style>
 </head>
 <body>
@@ -217,6 +274,25 @@ input:checked+.tgl:before{transform:translateX(18px)}
   <a href="#">Online Catalog</a><a href="#">Website</a>
 </div>
 
+
+<div class="viewer-bar" onclick="toggleMobileViewer()" id="vbar">
+  <div class="viewer-bar-label">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    Preview 3D Can
+  </div>
+  <svg class="viewer-bar-chev" id="vchev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+</div>
+<div class="viewer-strip collapsed" id="vstrip">
+  <canvas id="c3m" style="touch-action:none;cursor:grab"></canvas>
+  <div class="can-badge" id="mbdg" style="max-width:160px">
+    <div class="badge-prod" id="bdg-name-m">400 ml Air Freshener</div>
+    <div class="badge-spec" id="bdg-sub-m">Label: 204 × 160 mm</div>
+  </div>
+  <div class="drag-hint">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M5 12L9 8M5 12L9 16"/><path d="M5 12h14m0 0l-4-4m4 4l-4 4"/></svg>
+    Drag to rotate
+  </div>
+</div>
 <div class="layout">
   <div class="left">
     <div id="snav"></div>
@@ -345,7 +421,7 @@ let S={
   capMatchBody:false, capColor:PANTONE.find(p=>p.code==="Black C"),
   finish:FINISHES[1],
   designImg:null, labelPosY:0.48, labelScale:0.82, bareMode:false,
-  pfam:"All", psearch:"",
+  pfam:"All", psearch:"", selectedTemplate:null,
 };
 
 
@@ -653,10 +729,12 @@ function applyColors() {
 }
 
 function updateBadge() {
-  document.getElementById("bdg-name").textContent =
-    S.prod.name.toUpperCase() + "  ·  400 ml";
-  document.getElementById("bdg-sub").textContent =
-    "PMS " + S.bodyColor.code + "  ·  " + S.finish.name;
+  const n = S.prod.name.toUpperCase() + "  ·  " + S.size.ml;
+  const sp = "PMS " + S.bodyColor.code + "  ·  " + S.finish.name;
+  const bn = document.getElementById("bdg-name"); if(bn) bn.textContent=n;
+  const bs = document.getElementById("bdg-sub");  if(bs) bs.textContent=sp;
+  const bm = document.getElementById("bdg-name-m"); if(bm) bm.textContent=n;
+  const bsm= document.getElementById("bdg-sub-m");  if(bsm) bsm.textContent=sp;
 }
 
 /* ── ROTATION ──────────────────────────────────────────────────
@@ -706,26 +784,110 @@ function animate() {
 }
 
 /* ── RESIZE ── */
-function resize() {
-  const r = document.querySelector(".right");
-  const W = r.clientWidth, H = r.clientHeight;
+function isMobile() { return window.innerWidth <= 768; }
+
+function resizeMobile() {
+  const strip = document.getElementById("vstrip");
+  if (!strip || strip.classList.contains("collapsed")) return;
+  const W = strip.clientWidth || window.innerWidth;
+  const H = strip.clientHeight || 260;
+  if (W < 1 || H < 1) return;
   renderer.setSize(W, H);
   camera.aspect = W / H;
   camera.updateProjectionMatrix();
   updateCamera();
 }
-window.addEventListener("resize", resize);
+
+function resize() {
+  if (isMobile()) { resizeMobile(); return; }
+  const r = document.querySelector(".right");
+  const W = r.clientWidth, H = r.clientHeight;
+  if (W < 1 || H < 1) return;
+  renderer.setSize(W, H);
+  camera.aspect = W / H;
+  camera.updateProjectionMatrix();
+  updateCamera();
+}
+window.addEventListener("resize", ()=>{
+  if (isMobile()) { resizeMobile(); } else { resize(); }
+});
 
 /* ── TEMPLATE DOWNLOAD ── */
 function downloadTemplate() {
   const link = document.createElement("a");
-  link.href = "./Air Freshener.png"; // exact filename
+  link.href = "./Air Freshener.png";
   link.download = "Air Freshener.png";
-  link.target = "_blank";
-  link.rel = "noopener";
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+}
+
+/* ── EXAMPLE TEMPLATES ── */
+const EXAMPLE_TEMPLATES = [
+  {id:"minimal", label:"Minimal",    draw(ctx,W,H,col){ ctx.fillStyle="#fff";ctx.fillRect(0,0,W,H);ctx.fillStyle=col;ctx.fillRect(0,0,W,H*.12);ctx.fillRect(0,H*.88,W,H*.12);ctx.fillStyle="#fff";ctx.font=`bold ${H*.18}px Lato,sans-serif`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("YOUR",W*.5,H*.38);ctx.fillText("BRAND",W*.5,H*.58); }},
+  {id:"bold",    label:"Bold",       draw(ctx,W,H,col){ ctx.fillStyle=col;ctx.fillRect(0,0,W,H);const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,"rgba(0,0,0,.55)");g.addColorStop(1,"rgba(0,0,0,.05)");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.fillStyle="#fff";ctx.font=`900 ${H*.26}px Lato,sans-serif`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("BOLD",W*.5,H*.4);ctx.font=`${H*.12}px Lato,sans-serif`;ctx.fillText("COLLECTION",W*.5,H*.62); }},
+  {id:"stripe",  label:"Stripe",     draw(ctx,W,H,col){ ctx.fillStyle="#fff";ctx.fillRect(0,0,W,H);for(let i=0;i<8;i++){ctx.fillStyle=i%2===0?col:"rgba(255,255,255,.0)";ctx.fillRect(0,i*H/8,W,H/8);}ctx.globalAlpha=.9;ctx.fillStyle=i=>i%2?"#fff":col;ctx.fillStyle="#fff";ctx.globalAlpha=1;ctx.fillStyle=col;ctx.fillRect(0,H*.25,W,H*.5);ctx.fillStyle="#fff";ctx.font=`bold ${H*.22}px Lato,sans-serif`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("FRESH",W*.5,H*.5); }},
+  {id:"gradient",label:"Gradient",   draw(ctx,W,H,col){ const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,col);g.addColorStop(.5,"rgba(255,255,255,.9)");g.addColorStop(1,col);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.fillStyle="rgba(0,0,0,.55)";ctx.font=`bold ${H*.17}px Lato,sans-serif`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("PREMIUM",W*.5,H*.4);ctx.font=`${H*.1}px Lato,sans-serif`;ctx.fillText("COLLECTION",W*.5,H*.6); }},
+];
+
+function buildTemplateCanvas(tpl, w, h) {
+  const cv = document.createElement("canvas"); cv.width=w; cv.height=h;
+  const ctx = cv.getContext("2d");
+  tpl.draw(ctx, w, h, S.bodyColor.hex);
+  return cv;
+}
+
+function applyTemplate(id) {
+  const tpl = EXAMPLE_TEMPLATES.find(t=>t.id===id);
+  if (!tpl) return;
+  S.selectedTemplate = id;
+  const cv = buildTemplateCanvas(tpl, 2048, 1080);
+  const img = new Image();
+  img.onload = () => { S.designImg = img; generateLabel(); rebox(); };
+  img.src = cv.toDataURL();
+}
+
+function renderTemplateGrid() {
+  return EXAMPLE_TEMPLATES.map(tpl => {
+    const isOn = S.selectedTemplate === tpl.id;
+    const cv = buildTemplateCanvas(tpl, 380, 200);
+    return `<div class="tpl-card${isOn?" on":""}" onclick="applyTemplate('${tpl.id}')">
+      <img class="tpl-canvas" src="${cv.toDataURL()}" alt="${tpl.label}">
+      <div class="tpl-label">${tpl.label}</div>
+      <div class="tpl-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+    </div>`;
+  }).join("");
+}
+
+/* ── MOBILE VIEWER TOGGLE ── */
+function toggleMobileViewer() {
+  const strip = document.getElementById("vstrip");
+  const chev  = document.getElementById("vchev");
+  const isOpen = !strip.classList.contains("collapsed");
+  if (isOpen) {
+    strip.classList.add("collapsed");
+    chev.classList.remove("open");
+  } else {
+    strip.classList.remove("collapsed");
+    chev.classList.add("open");
+    setTimeout(()=>{ resizeMobile(); }, 50);
+  }
+}
+
+function initMobile() {
+  if (!isMobile()) return;
+  // Replace the placeholder <canvas id="c3m"> with the real renderer canvas
+  const fakeC = document.getElementById("c3m");
+  if (fakeC && fakeC !== canvas3) {
+    // Create a wrapper div to hold the real canvas
+    const ph = document.createElement("div");
+    ph.id = "c3m-ph";
+    ph.style.cssText = "position:absolute;inset:0";
+    fakeC.replaceWith(ph);
+    ph.appendChild(canvas3);
+  }
+  canvas3.style.width  = "100%";
+  canvas3.style.height = "100%";
 }
 
 function updateCanScale() {} /* stub — camera handles sizing */
@@ -844,9 +1006,10 @@ function rStep4(){
         <div><span style="color:var(--muted)">Safe label panel</span><br><strong>Centre 70% recommended</strong></div>
       </div>
       <div style="font-size:10.5px;color:var(--muted);margin-bottom:10px;line-height:1.5">Centre your artwork horizontally — the canvas centre maps to the front face of the can.</div>
-      <button onclick="downloadTemplate()" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--blue);border-radius:5px;background:white;color:var(--blue);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">
-        ${IC.dl} Download Template PNG
-      </button>
+      <span class="field-label" style="margin-top:6px;display:block">Example Templates — click to apply</span>
+      <div class="tpl-grid">\${renderTemplateGrid()}</div>
+      <div style="font-size:9.5px;color:var(--muted);margin-top:2px;margin-bottom:10px">Or upload your own artwork below ↓</div>
+      <button onclick="downloadTemplate()" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--blue);border-radius:5px;background:white;color:var(--blue);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">${IC.dl} Download Template PNG</button>
     </div>
     <div class="upload-zone${hasImg?" has":""}" onclick="document.getElementById('fup').click()">
       <input type="file" id="fup" accept="image/*" style="display:none" onchange="onUpload(event)">
@@ -943,7 +1106,7 @@ function onUpload(e){
   reader.readAsDataURL(f);
 }
 function clearDesign(e){
-  e.stopPropagation(); S.designImg=null;
+  e.stopPropagation(); S.designImg=null; S.selectedTemplate=null;
   const fup=document.getElementById("fup"); if(fup)fup.value="";
   generateLabel(); rebox();
 }
@@ -960,7 +1123,7 @@ function resetAll(){
     bodyColor:PANTONE.find(p=>p.code==="877 C"),capMatchBody:false,
     capColor:PANTONE.find(p=>p.code==="Black C"),
     finish:FINISHES[1],designImg:null,labelPosY:0.48,labelScale:0.82,bareMode:false,
-    pfam:"All",psearch:""};
+    pfam:"All",psearch:"",selectedTemplate:null};
   tBodyCol.set(S.bodyColor.hex); tCapCol.set(S.capColor.hex);
   tR=S.finish.r; tM=S.finish.m;
   updateCamera(); generateLabel(); updateBadge(); rebox();
@@ -970,6 +1133,7 @@ function resetAll(){
 
 
 /* ── INIT ── */
+initMobile();
 resize();
 updateCamera();
 generateLabel();

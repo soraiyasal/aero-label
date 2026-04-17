@@ -7,7 +7,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Montserrat:wght@400;700;900&family=Playfair+Display:wght@400;700&family=Oswald:wght@400;700&family=Bebas+Neue&family=Raleway:wght@300;700&family=Abril+Fatface&display=swap" rel="stylesheet">
 <style>
 :root{
   --blue:#1557b0;--blue2:#1e6fd9;--blue-dark:#0a3578;--blue-nav:#0d3a7a;
@@ -225,7 +226,44 @@ input:checked+.tgl:before{transform:translateX(18px)}
 .action-card-title{font-size:12.5px;font-weight:700;color:var(--blue-dark)}
 .action-card-sub{font-size:9.5px;color:var(--muted);line-height:1.4;max-width:120px}
 
-/* ── MOBILE RESPONSIVE ── */
+/* ── LABEL STUDIO ── */
+.art-tabs{display:flex;border:1px solid var(--border);border-radius:7px;overflow:hidden;margin-bottom:14px}
+.art-tab{flex:1;padding:9px 8px;text-align:center;font-size:10.5px;font-weight:700;cursor:pointer;background:var(--white);color:var(--muted);transition:all .14s;display:flex;align-items:center;justify-content:center;gap:5px}
+.art-tab+.art-tab{border-left:1px solid var(--border)}
+.art-tab:hover{color:var(--blue)}
+.art-tab.on{background:var(--blue);color:#fff}
+
+.studio-wrap{border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--white)}
+.studio-toolbar{display:flex;align-items:center;gap:5px;padding:8px 10px;background:var(--blue-bg);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.studio-tbtn{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border:1px solid var(--border);border-radius:5px;background:var(--white);color:var(--sub);font-size:10.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .12s;white-space:nowrap;line-height:1}
+.studio-tbtn:hover{border-color:var(--blue);color:var(--blue)}
+.studio-tbtn.del:hover{border-color:#ef4444;color:#ef4444}
+.studio-sep{width:1px;height:22px;background:var(--border);margin:0 2px;flex-shrink:0}
+.studio-canvas-wrap{line-height:0;background:#c8cdd6;position:relative}
+.studio-canvas-wrap canvas{display:block!important}
+.studio-props{padding:8px 12px;background:#fafbff;border-top:1px solid var(--border);min-height:38px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.spr-group{display:flex;align-items:center;gap:5px;flex-shrink:0}
+.spr-lbl{font-size:8.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;white-space:nowrap}
+.spr-select{padding:4px 6px;border:1px solid var(--border);border-radius:4px;font-size:11px;font-family:inherit;color:var(--text);outline:none;background:var(--white);max-width:130px}
+.spr-select:focus{border-color:var(--blue)}
+.spr-num{width:48px;padding:4px 6px;border:1px solid var(--border);border-radius:4px;font-size:11px;font-family:inherit;color:var(--text);outline:none;text-align:center}
+.spr-num:focus{border-color:var(--blue)}
+.spr-color{width:26px;height:26px;border-radius:4px;border:1px solid var(--border);cursor:pointer;padding:2px;background:none;flex-shrink:0}
+.spr-toggle{padding:4px 8px;border:1px solid var(--border);border-radius:4px;background:var(--white);font-size:10.5px;font-weight:700;cursor:pointer;font-family:inherit;color:var(--muted);transition:all .12s;line-height:1}
+.spr-toggle.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.studio-footer{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-top:1px solid var(--border)}
+.studio-hint{font-size:9.5px;color:var(--muted);line-height:1.4}
+.studio-emoji-panel{display:none;padding:10px;background:var(--white);border-top:1px solid var(--border);position:relative}
+.studio-emoji-panel.open{display:block}
+.emoji-cats{display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap}
+.emoji-cat-btn{padding:3px 9px;border:1px solid var(--border);border-radius:4px;font-size:10px;font-weight:700;cursor:pointer;background:var(--white);color:var(--muted);transition:all .12s}
+.emoji-cat-btn:hover{border-color:var(--blue)}.emoji-cat-btn.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.emoji-grid{display:flex;flex-wrap:wrap;gap:3px;max-height:108px;overflow-y:auto;scrollbar-width:thin}
+.emoji-btn{width:30px;height:30px;border:1px solid transparent;border-radius:5px;background:none;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;transition:all .1s;line-height:1;padding:0}
+.emoji-btn:hover{background:var(--blue-bg);border-color:var(--border)}
+.studio-img-overlay{position:absolute;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;z-index:5;cursor:pointer;opacity:0;transition:opacity .15s}
+.studio-canvas-wrap:hover .studio-img-overlay{opacity:1}
+
 .viewer-bar,.viewer-strip{display:none}
 @media(max-width:768px){
   .viewer-bar{display:flex}
@@ -401,6 +439,18 @@ const T = {
     removeLbl:'Remove',
     posLbl:'Position', scaleLbl:'Scale',
     bareModeText:'Bare can — uniform colour coat, no label artwork',
+    /* Studio */
+    artTabUpload:'Templates & Upload', artTabStudio:'Label Studio',
+    studioText:'Text', studioRect:'Rectangle', studioCircle:'Circle',
+    studioBg:'Background', studioDelete:'Delete', studioApply:'Apply to Can',
+    studioHint:'Double-click text to edit · Drag to move · Handles to resize',
+    studioFont:'Font', studioSize:'Size', studioColor:'Color',
+    studioFill:'Fill', studioOpacity:'Opacity', studioStroke:'Stroke',
+    studioAlign:'Align', studioApplied:'Studio label applied to can',
+    studioSelectHint:'Click an object to edit its properties',
+    studioEmoji:'Emoji', studioImage:'Add Logo / PNG',
+    emojiCatAll:'All', emojiCatFace:'😊 Faces', emojiCatNature:'🌿 Nature',
+    emojiCatFood:'🍋 Food', emojiCatSymbol:'✨ Symbols', emojiCatObjects:'💎 Objects',
     /* Step 5 */
     s5title:'Review & Submit', configSummary:'Configuration Summary',
     sumProduct:'Product', sumBodyCol:'Body Colour', sumFinish:'Surface Finish',
@@ -478,6 +528,18 @@ const T = {
     removeLbl:'Удалить',
     posLbl:'Позиция', scaleLbl:'Масштаб',
     bareModeText:'Голый флакон — однотонное покрытие, без этикетки',
+    /* Studio */
+    artTabUpload:'Шаблоны и загрузка', artTabStudio:'Дизайн-студия',
+    studioText:'Текст', studioRect:'Прямоугольник', studioCircle:'Круг',
+    studioBg:'Фон', studioDelete:'Удалить', studioApply:'Применить к флакону',
+    studioHint:'Двойной щелчок: редактировать · Перетащить: переместить',
+    studioFont:'Шрифт', studioSize:'Размер', studioColor:'Цвет',
+    studioFill:'Заливка', studioOpacity:'Прозрачность', studioStroke:'Обводка',
+    studioAlign:'Выравнивание', studioApplied:'Дизайн из студии применён к флакону',
+    studioSelectHint:'Нажмите на объект для редактирования',
+    studioEmoji:'Эмодзи', studioImage:'Логотип / PNG',
+    emojiCatAll:'Все', emojiCatFace:'😊 Лица', emojiCatNature:'🌿 Природа',
+    emojiCatFood:'🍋 Еда', emojiCatSymbol:'✨ Символы', emojiCatObjects:'💎 Объекты',
     /* Step 5 */
     s5title:'Обзор и отправка', configSummary:'Сводка конфигурации',
     sumProduct:'Продукт', sumBodyCol:'Цвет корпуса', sumFinish:'Поверхность',
@@ -649,6 +711,7 @@ let S={
   finish:FINISHES[1],
   designImg:null, labelPosY:0.48, labelScale:0.82, bareMode:false,
   pfam:"All", psearch:"", selectedTemplate:null,
+  artTab:'upload',
 };
 
 
@@ -1135,6 +1198,403 @@ function renderTemplateGrid(tplLabels) {
   }).join("");
 }
 
+/* ════════════════════════════════════════════
+   LABEL DESIGN STUDIO (Fabric.js)
+════════════════════════════════════════════ */
+let fabricCanvas  = null;
+let studioJSON    = null;
+let studioApplied = false;
+let emojiCat      = 'All';
+
+const STUDIO_FONTS = [
+  'Lato','Montserrat','Playfair Display','Oswald','Bebas Neue','Raleway','Abril Fatface'
+];
+
+const EMOJIS = {
+  Face:   ['😊','😍','🥰','😎','🤩','😄','🥳','😇','🤗','😏','🌝','👑','💋','🫦','🤭'],
+  Nature: ['🌿','🌸','🌺','🍃','🌱','🌊','☀️','🌙','❄️','🌈','🌻','🦋','🌾','🍀','🌴'],
+  Food:   ['🍋','🍊','🌶️','🫐','🍓','🍯','🥥','🍵','🧃','🍷','🫧','🧊','🍫','🧁','🍑'],
+  Symbol: ['✨','💫','⭐','🔥','⚡','💥','❤️','💙','💚','💛','🖤','🤍','♻️','✅','🏆'],
+  Objects:['💎','💄','🧴','🌹','🎁','💐','🧿','🪄','🎨','🪞','👜','💍','🪷','🎀','🧲'],
+};
+const EMOJI_ALL = Object.values(EMOJIS).flat();
+
+function switchArtTab(tab){
+  S.artTab = tab;
+  if (fabricCanvas){ studioJSON = fabricCanvas.toJSON(); }
+  rebox();
+  if (tab === 'studio') setTimeout(initStudio, 30);
+}
+
+function initStudio(){
+  const el  = document.getElementById('studio-canvas');
+  if (!el) return;
+  const wrap = document.getElementById('studio-canvas-wrap');
+  const W = wrap ? Math.max(300, wrap.clientWidth) : 520;
+  const H = Math.round(W * (1080 / 2048));
+
+  if (fabricCanvas){ fabricCanvas.dispose(); fabricCanvas = null; }
+
+  fabricCanvas = new fabric.Canvas('studio-canvas', {
+    width: W, height: H,
+    backgroundColor: '#ffffff',
+    preserveObjectStacking: true,
+  });
+
+  fabric.Object.prototype.set({
+    borderColor:'#1557b0', cornerColor:'#1557b0',
+    cornerSize:8, cornerStyle:'circle',
+    transparentCorners:false, padding:4,
+  });
+
+  if (studioJSON){
+    fabricCanvas.loadFromJSON(studioJSON, ()=>{ fabricCanvas.renderAll(); studioUpdateProps(); });
+  } else {
+    // Default starter: body colour background
+    fabricCanvas.setBackgroundColor(S.bodyColor.hex, ()=>fabricCanvas.renderAll());
+    studioUpdateProps();
+  }
+
+  fabricCanvas.on('selection:created', studioUpdateProps);
+  fabricCanvas.on('selection:updated', studioUpdateProps);
+  fabricCanvas.on('selection:cleared',  studioUpdateProps);
+  fabricCanvas.on('object:modified',    studioSave);
+  fabricCanvas.on('object:added',       studioSave);
+}
+
+function studioSave(){
+  if (fabricCanvas) studioJSON = fabricCanvas.toJSON();
+}
+
+function studioAddText(){
+  if (!fabricCanvas) return;
+  const fs = Math.round(fabricCanvas.height * 0.13);
+  const txt = new fabric.IText(LANG==='ru'?'Ваш текст':'Your Text', {
+    left: fabricCanvas.width  * 0.5,
+    top:  fabricCanvas.height * 0.5,
+    originX:'center', originY:'center',
+    fontFamily:'Montserrat', fontSize:fs,
+    fill:'#0f172a', fontWeight:'bold', textAlign:'center',
+  });
+  fabricCanvas.add(txt);
+  fabricCanvas.setActiveObject(txt);
+  fabricCanvas.renderAll();
+  studioSave();
+  studioUpdateProps();
+  txt.enterEditing();
+  txt.selectAll();
+}
+
+function studioAddRect(){
+  if (!fabricCanvas) return;
+  const rect = new fabric.Rect({
+    left: fabricCanvas.width  * 0.15,
+    top:  fabricCanvas.height * 0.2,
+    width:  fabricCanvas.width  * 0.7,
+    height: fabricCanvas.height * 0.6,
+    fill: '#1557b0', opacity:0.85, rx:6, ry:6,
+  });
+  fabricCanvas.add(rect);
+  fabricCanvas.setActiveObject(rect);
+  fabricCanvas.renderAll();
+  studioSave(); studioUpdateProps();
+}
+
+function studioAddCircle(){
+  if (!fabricCanvas) return;
+  const r = Math.round(fabricCanvas.height * 0.22);
+  const c = new fabric.Circle({
+    left: fabricCanvas.width  * 0.5 - r,
+    top:  fabricCanvas.height * 0.5 - r,
+    radius: r, fill:'#1557b0', opacity:0.85,
+  });
+  fabricCanvas.add(c);
+  fabricCanvas.setActiveObject(c);
+  fabricCanvas.renderAll();
+  studioSave(); studioUpdateProps();
+}
+
+function studioSetBg(hex){
+  if (!fabricCanvas) return;
+  fabricCanvas.setBackgroundColor(hex, ()=>fabricCanvas.renderAll());
+  studioSave();
+}
+
+function studioDelete(){
+  if (!fabricCanvas) return;
+  const obj = fabricCanvas.getActiveObject();
+  if (!obj) return;
+  if (obj.type==='activeSelection'){
+    obj.forEachObject(o=>fabricCanvas.remove(o));
+    fabricCanvas.discardActiveObject();
+  } else { fabricCanvas.remove(obj); }
+  fabricCanvas.renderAll();
+  studioSave(); studioUpdateProps();
+}
+
+function studioClear(){
+  if (!fabricCanvas) return;
+  fabricCanvas.clear();
+  fabricCanvas.setBackgroundColor(S.bodyColor.hex, ()=>fabricCanvas.renderAll());
+  studioSave(); studioUpdateProps();
+}
+
+/* ── EMOJI PICKER ── */
+function toggleEmojiPicker(){
+  const panel = document.getElementById('emoji-panel');
+  if (!panel) return;
+  panel.classList.toggle('open');
+}
+
+function setEmojiCat(cat){
+  emojiCat = cat;
+  const list = cat==='All' ? EMOJI_ALL : (EMOJIS[cat]||[]);
+  const grid = document.getElementById('emoji-grid');
+  if (!grid) return;
+  grid.innerHTML = list.map(e =>
+    `<button class="emoji-btn" data-e="${encodeURIComponent(e)}" onclick="studioAddEmoji(decodeURIComponent(this.dataset.e))" title="${e}">${e}</button>`
+  ).join('');
+  // Update cat button states
+  document.querySelectorAll('.emoji-cat-btn').forEach(b => {
+    b.classList.toggle('on', b.dataset.cat === cat);
+  });
+}
+
+function studioAddEmoji(emoji){
+  if (!fabricCanvas) return;
+  const fs = Math.round(fabricCanvas.height * 0.22);
+  const txt = new fabric.IText(emoji, {
+    left: fabricCanvas.width  * 0.5,
+    top:  fabricCanvas.height * 0.5,
+    originX:'center', originY:'center',
+    fontSize: fs,
+    fontFamily: 'Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, Arial, sans-serif',
+    textAlign: 'center',
+  });
+  fabricCanvas.add(txt);
+  fabricCanvas.setActiveObject(txt);
+  fabricCanvas.renderAll();
+  studioSave();
+  studioUpdateProps();
+  // Close emoji panel after adding
+  const panel = document.getElementById('emoji-panel');
+  if (panel) panel.classList.remove('open');
+}
+
+/* ── IMAGE / LOGO UPLOAD ── */
+function studioTriggerImageUpload(){
+  const inp = document.getElementById('studio-img-input');
+  if (inp) inp.click();
+}
+
+function studioUploadImage(e){
+  const file = e.target.files[0];
+  if (!file || !fabricCanvas) return;
+
+  // Use createObjectURL — cleaner than base64 and avoids some taint edge cases.
+  // We re-encode as a data URL through an Image + offscreen canvas so the
+  // pixel data is always same-origin by the time Fabric uses it.
+  const objectURL = URL.createObjectURL(file);
+  const tempImg   = new Image();
+  tempImg.crossOrigin = 'anonymous';
+  tempImg.onload = () => {
+    // Re-draw into an offscreen canvas → get a clean same-origin data URL
+    const oc  = document.createElement('canvas');
+    oc.width  = tempImg.naturalWidth;
+    oc.height = tempImg.naturalHeight;
+    oc.getContext('2d').drawImage(tempImg, 0, 0);
+    URL.revokeObjectURL(objectURL);
+
+    let cleanURL;
+    try { cleanURL = oc.toDataURL('image/png'); }
+    catch(_){ cleanURL = objectURL; } // fallback — unlikely
+
+    fabric.Image.fromURL(cleanURL, img => {
+      const maxW  = fabricCanvas.width  * 0.6;
+      const maxH  = fabricCanvas.height * 0.7;
+      const scale = Math.min(maxW / img.width, maxH / img.height, 1);
+      img.set({
+        left:    fabricCanvas.width  * 0.5,
+        top:     fabricCanvas.height * 0.5,
+        originX: 'center',
+        originY: 'center',
+        scaleX:  scale,
+        scaleY:  scale,
+        crossOrigin: 'anonymous',
+      });
+      fabricCanvas.add(img);
+      fabricCanvas.setActiveObject(img);
+      fabricCanvas.renderAll();
+      studioSave();
+      studioUpdateProps();
+    }, { crossOrigin: 'anonymous' });
+  };
+  tempImg.onerror = () => {
+    URL.revokeObjectURL(objectURL);
+    alert(LANG==='ru'?'Не удалось загрузить изображение.':'Could not load image.');
+  };
+  tempImg.src = objectURL;
+  e.target.value = ''; // reset input
+}
+
+function studioSetTextProp(prop, val){
+  if (!fabricCanvas) return;
+  const obj = fabricCanvas.getActiveObject();
+  if (!obj) return;
+  if (prop==='fontSize') val = parseInt(val)||12;
+  obj.set(prop, val);
+  fabricCanvas.renderAll();
+  studioSave();
+}
+
+function studioSetShapeProp(prop, val){
+  if (!fabricCanvas) return;
+  const obj = fabricCanvas.getActiveObject();
+  if (!obj) return;
+  if (prop==='opacity') val = parseFloat(val);
+  if (prop==='strokeWidth') val = parseInt(val)||0;
+  obj.set(prop, val);
+  fabricCanvas.renderAll();
+  studioSave();
+}
+
+function studioUpdateProps(){
+  const el = document.getElementById('studio-props');
+  if (!el || !fabricCanvas) return;
+  const obj = fabricCanvas.getActiveObject();
+
+  if (!obj){
+    el.innerHTML = `<span class="studio-hint">${t('studioSelectHint')}</span>`;
+    return;
+  }
+
+  const isText  = obj.type==='i-text' || obj.type==='text';
+  const isShape = obj.type==='rect' || obj.type==='circle' || obj.type==='ellipse' || obj.type==='triangle';
+  const isImage = obj.type==='image';
+
+  if (isText){
+    const fontOpts = STUDIO_FONTS.map(f=>
+      `<option value="${f}" ${obj.fontFamily===f?'selected':''}
+       style="font-family:${f}">${f}</option>`).join('');
+    el.innerHTML = `
+      <div class="spr-group">
+        <span class="spr-lbl">${t('studioFont')}</span>
+        <select class="spr-select" onchange="studioSetTextProp('fontFamily',this.value)">${fontOpts}</select>
+      </div>
+      <div class="spr-group">
+        <span class="spr-lbl">${t('studioSize')}</span>
+        <input class="spr-num" type="number" min="6" max="400" value="${Math.round(obj.fontSize||40)}"
+          oninput="studioSetTextProp('fontSize',this.value)">
+      </div>
+      <div class="spr-group">
+        <span class="spr-lbl">${t('studioColor')}</span>
+        <input type="color" class="spr-color" value="${obj.fill||'#000000'}"
+          oninput="studioSetTextProp('fill',this.value)">
+      </div>
+      <div class="spr-group" style="gap:3px">
+        <button class="spr-toggle${obj.fontWeight==='bold'?' on':''}"
+          onclick="studioSetTextProp('fontWeight',fabricCanvas.getActiveObject().fontWeight==='bold'?'normal':'bold');studioUpdateProps()"><b>B</b></button>
+        <button class="spr-toggle${obj.fontStyle==='italic'?' on':''}"
+          onclick="studioSetTextProp('fontStyle',fabricCanvas.getActiveObject().fontStyle==='italic'?'normal':'italic');studioUpdateProps()"><i>I</i></button>
+      </div>
+      <div class="spr-group" style="gap:3px">
+        <span class="spr-lbl">${t('studioAlign')}</span>
+        <button class="spr-toggle${obj.textAlign==='left'?' on':''}"
+          onclick="studioSetTextProp('textAlign','left');studioUpdateProps()">&#9776;L</button>
+        <button class="spr-toggle${(!obj.textAlign||obj.textAlign==='center')?' on':''}"
+          onclick="studioSetTextProp('textAlign','center');studioUpdateProps()">&#9776;C</button>
+        <button class="spr-toggle${obj.textAlign==='right'?' on':''}"
+          onclick="studioSetTextProp('textAlign','right');studioUpdateProps()">&#9776;R</button>
+      </div>`;
+  } else if (isShape){
+    const fillVal = (typeof obj.fill==='string') ? obj.fill : '#1557b0';
+    const strokeVal = obj.stroke || '#000000';
+    el.innerHTML = `
+      <div class="spr-group">
+        <span class="spr-lbl">${t('studioFill')}</span>
+        <input type="color" class="spr-color" value="${fillVal}"
+          oninput="studioSetShapeProp('fill',this.value)">
+      </div>
+      <div class="spr-group">
+        <span class="spr-lbl">${t('studioOpacity')}</span>
+        <input type="range" min="0.05" max="1" step="0.05" value="${obj.opacity||1}"
+          style="width:72px;cursor:pointer" oninput="studioSetShapeProp('opacity',this.value)">
+        <span style="font-size:10px;color:var(--muted);width:28px">${Math.round((obj.opacity||1)*100)}%</span>
+      </div>
+      <div class="spr-group">
+        <span class="spr-lbl">${t('studioStroke')}</span>
+        <input type="color" class="spr-color" value="${strokeVal}"
+          oninput="studioSetShapeProp('stroke',this.value)">
+        <input class="spr-num" type="number" min="0" max="20" value="${obj.strokeWidth||0}" style="width:40px"
+          oninput="studioSetShapeProp('strokeWidth',this.value)">
+      </div>`;
+  } else if (isImage){
+    const pct = Math.round((obj.scaleX||1) * obj.width / fabricCanvas.width * 100);
+    el.innerHTML = `
+      <div class="spr-group">
+        <span class="spr-lbl">${LANG==='ru'?'Масштаб':'Scale'}</span>
+        <input type="range" min="5" max="200" value="${pct}"
+          style="width:90px;cursor:pointer"
+          oninput="(function(v){const o=fabricCanvas.getActiveObject();if(!o)return;const s=v/100*(fabricCanvas.width/o.width);o.set({scaleX:s,scaleY:s});fabricCanvas.renderAll();studioSave();})(this.value)">
+        <span style="font-size:10px;color:var(--muted);width:32px">${pct}%</span>
+      </div>
+      <div class="spr-group">
+        <span class="spr-lbl">${LANG==='ru'?'Прозрачность':'Opacity'}</span>
+        <input type="range" min="0.05" max="1" step="0.05" value="${obj.opacity||1}"
+          style="width:72px;cursor:pointer" oninput="studioSetShapeProp('opacity',this.value)">
+        <span style="font-size:10px;color:var(--muted);width:28px">${Math.round((obj.opacity||1)*100)}%</span>
+      </div>
+      <div class="spr-group" style="margin-left:auto">
+        <span style="font-size:9.5px;color:var(--muted)">${LANG==='ru'?'PNG/JPG · Перетащить для позиции':'PNG/JPG · Drag to reposition'}</span>
+      </div>`;
+  } else {
+    el.innerHTML = `<span class="studio-hint" style="text-transform:capitalize">${obj.type}</span>`;
+  }
+}
+
+function applyStudio(){
+  if (!fabricCanvas) return;
+  studioSave();
+  fabricCanvas.discardActiveObject();
+  fabricCanvas.renderAll();
+
+  function doApply(dataURL){
+    const img = new Image();
+    img.onload = () => {
+      S.designImg = img;
+      S.bareMode  = false;
+      S.selectedTemplate = null;
+      studioApplied = true;
+      generateLabel();
+      rebox();
+      setTimeout(initStudio, 30);
+    };
+    img.onerror = () => {
+      alert(LANG==='ru'?'Ошибка загрузки изображения. Попробуйте снова.':'Image load failed. Please try again.');
+    };
+    img.src = dataURL;
+  }
+
+  // Try high-res export first, fall back to 1× if canvas is tainted by an image
+  try {
+    const scale   = 2048 / fabricCanvas.width;
+    const dataURL = fabricCanvas.toDataURL({ format:'png', multiplier: scale, enableRetinaScaling: false });
+    doApply(dataURL);
+  } catch(e1) {
+    console.warn('High-res studio export failed, trying 1×:', e1.message||e1);
+    try {
+      const dataURL = fabricCanvas.toDataURL({ format:'png', enableRetinaScaling: false });
+      doApply(dataURL);
+    } catch(e2) {
+      console.error('Studio export failed entirely:', e2);
+      alert(LANG==='ru'
+        ? 'Экспорт не удался. Если вы добавили изображение — попробуйте его убрать и повторить.'
+        : 'Export failed. If you added a logo/image, try removing it and applying again, or use a PNG with no embedded colour profile.');
+    }
+  }
+}
+
+
 /* ── MOBILE VIEWER TOGGLE ── */
 function toggleMobileViewer() {
   const strip = document.getElementById("vstrip");
@@ -1280,16 +1740,79 @@ function rStep3(){
 }
 
 function rStep4(){
-  const hasImg=!!S.designImg;
-  const tplLabels={minimal:'tplMinimal',bold:'tplBold',stripe:'tplStripe',gradient:'tplGradient'};
-  return`<h2 class="sec-title">${t('s4title')}</h2>
-    <div class="bare-row">
-      <div><div class="bare-lbl">${t('bareCanLbl')}</div><div class="bare-sub">${t('bareCanSub')}</div></div>
-      <label class="toggle"><input type="checkbox" ${S.bareMode?"checked":""}
-        onchange="S.bareMode=this.checked;generateLabel();rebox()"><span class="tgl"></span></label>
+  const hasImg = !!S.designImg;
+  const isStudio = S.artTab === 'studio';
+  const bgForStudio = (fabricCanvas ? fabricCanvas.backgroundColor : S.bodyColor.hex) || S.bodyColor.hex;
+
+  /* ── studio tab HTML ── */
+  const emojiList = (emojiCat==='All' ? EMOJI_ALL : (EMOJIS[emojiCat]||[]));
+  const emojiCatKeys = [{k:'All',lk:'emojiCatAll'},{k:'Face',lk:'emojiCatFace'},{k:'Nature',lk:'emojiCatNature'},{k:'Food',lk:'emojiCatFood'},{k:'Symbol',lk:'emojiCatSymbol'},{k:'Objects',lk:'emojiCatObjects'}];
+
+  const studioHTML = `
+    <div class="studio-wrap">
+      <!-- hidden image file input -->
+      <input type="file" id="studio-img-input" accept="image/*" style="display:none" onchange="studioUploadImage(event)">
+      <div class="studio-toolbar">
+        <button class="studio-tbtn" onclick="studioAddText()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+          ${t('studioText')}
+        </button>
+        <button class="studio-tbtn" onclick="studioAddRect()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="6" width="18" height="12" rx="2"/></svg>
+          ${t('studioRect')}
+        </button>
+        <button class="studio-tbtn" onclick="studioAddCircle()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9"/></svg>
+          ${t('studioCircle')}
+        </button>
+        <button class="studio-tbtn" onclick="toggleEmojiPicker()" style="font-size:14px;gap:3px">
+          😊 ${t('studioEmoji')}
+        </button>
+        <button class="studio-tbtn" onclick="studioTriggerImageUpload()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          ${t('studioImage')}
+        </button>
+        <div class="studio-sep"></div>
+        <div class="spr-group" style="margin:0">
+          <span class="spr-lbl">${t('studioBg')}</span>
+          <input type="color" class="spr-color" value="${bgForStudio}" oninput="studioSetBg(this.value)">
+        </div>
+        <div style="flex:1"></div>
+        <button class="studio-tbtn del" onclick="studioDelete()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg>
+          ${t('studioDelete')}
+        </button>
+      </div>
+      <!-- Emoji picker panel (toggled) -->
+      <div class="studio-emoji-panel" id="emoji-panel">
+        <div class="emoji-cats">
+          ${emojiCatKeys.map(({k,lk})=>`<button class="emoji-cat-btn${emojiCat===k?' on':''}" data-cat="${k}" onclick="setEmojiCat('${k}')">${t(lk)}</button>`).join('')}
+        </div>
+        <div class="emoji-grid" id="emoji-grid">
+          ${emojiList.map(e=>`<button class="emoji-btn" data-e="${encodeURIComponent(e)}" onclick="studioAddEmoji(decodeURIComponent(this.dataset.e))" title="${e}">${e}</button>`).join('')}
+        </div>
+      </div>
+      <div class="studio-canvas-wrap" id="studio-canvas-wrap">
+        <canvas id="studio-canvas"></canvas>
+      </div>
+      <div class="studio-props" id="studio-props">
+        <span class="studio-hint">${t('studioSelectHint')}</span>
+      </div>
+      <div class="studio-footer">
+        <span class="studio-hint">${t('studioHint')}</span>
+        <button class="btn-next" onclick="applyStudio()" style="font-size:11px;padding:7px 16px">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          ${t('studioApply')}
+        </button>
+      </div>
     </div>
-    ${!S.bareMode?`
-    <span class="field-label">${t('artworkFile')}</span>
+    ${studioApplied && hasImg ? `<div class="studio-applied" style="margin-top:10px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      ${t('studioApplied')}
+    </div>` : ''}`;
+
+  /* ── upload tab HTML ── */
+  const uploadHTML = `
     <div style="background:var(--blue-bg);border:1px solid rgba(21,87,176,.14);border-radius:7px;padding:13px 15px;margin-bottom:12px">
       <div style="font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.9px;margin-bottom:9px">${t('artSpecHead')}</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11.5px;margin-bottom:10px">
@@ -1300,7 +1823,7 @@ function rStep4(){
       </div>
       <div style="font-size:10.5px;color:var(--muted);margin-bottom:10px;line-height:1.5">${t('artCentreHint')}</div>
       <span class="field-label" style="margin-top:6px;display:block">${t('tplLabel')}</span>
-      <div class="tpl-grid">${renderTemplateGrid(tplLabels)}</div>
+      <div class="tpl-grid">${renderTemplateGrid()}</div>
       <div style="font-size:9.5px;color:var(--muted);margin-top:2px;margin-bottom:10px">${t('uploadHint')}</div>
       <button onclick="downloadTemplate()" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--blue);border-radius:5px;background:white;color:var(--blue);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">${IC.dl} ${t('dlTemplate')}</button>
     </div>
@@ -1319,8 +1842,28 @@ function rStep4(){
         <input type="range" min="30" max="110" value="${Math.round(S.labelScale*100)}"
           oninput="S.labelScale=this.value/100;document.getElementById('lscv').textContent=this.value+'%';generateLabel()">
         <span class="sl-val" id="lscv">${Math.round(S.labelScale*100)}%</span></div>
-    </div>`:""}`:
-    `<div style="padding:16px 0;font-size:12px;color:var(--muted);text-align:center">${t('bareModeText')}</div>`}
+    </div>`:""}`;
+
+  return `<h2 class="sec-title">${t('s4title')}</h2>
+    <div class="bare-row">
+      <div><div class="bare-lbl">${t('bareCanLbl')}</div><div class="bare-sub">${t('bareCanSub')}</div></div>
+      <label class="toggle"><input type="checkbox" ${S.bareMode?"checked":""}
+        onchange="S.bareMode=this.checked;generateLabel();rebox()"><span class="tgl"></span></label>
+    </div>
+    ${!S.bareMode ? `
+    <!-- Artwork source tabs -->
+    <div class="art-tabs">
+      <div class="art-tab${!isStudio?' on':''}" onclick="switchArtTab('upload')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>
+        ${t('artTabUpload')}
+      </div>
+      <div class="art-tab${isStudio?' on':''}" onclick="switchArtTab('studio')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="0.5" fill="currentColor"/><circle cx="17.5" cy="10.5" r="0.5" fill="currentColor"/><circle cx="8.5" cy="7.5" r="0.5" fill="currentColor"/><circle cx="6.5" cy="12.5" r="0.5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 011.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+        ${t('artTabStudio')}
+      </div>
+    </div>
+    ${isStudio ? studioHTML : uploadHTML}
+    ` : `<div style="padding:16px 0;font-size:12px;color:var(--muted);text-align:center">${t('bareModeText')}</div>`}
     <div class="navrow">
       <button class="btn-back" onclick="ps()">${t('btnBack')}</button>
       <button class="btn-next" onclick="ns()">${t('btnReview')} ${IC.chevron}</button>
@@ -1368,6 +1911,7 @@ function rebox(){
   else if(S.step===3) b.innerHTML=rStep3();
   else if(S.step===4) b.innerHTML=rStep4();
   else if(S.step===5) b.innerHTML=rStep5();
+  if(S.step===4 && S.artTab==='studio') setTimeout(initStudio, 30);
 }
 function ns(){if(S.step<5){S.step++;rebox();}}
 function ps(){if(S.step>1){S.step--;rebox();}}
@@ -1573,7 +2117,10 @@ function resetAll(){
     bodyColor:PANTONE.find(p=>p.code==="877 C"),capMatchBody:false,
     capColor:PANTONE.find(p=>p.code==="Black C"),
     finish:FINISHES[1],designImg:null,labelPosY:0.48,labelScale:0.82,bareMode:false,
-    pfam:"All",psearch:"",selectedTemplate:null};
+    pfam:"All",psearch:"",selectedTemplate:null,artTab:'upload'};
+  // Reset studio state
+  if(fabricCanvas){ fabricCanvas.dispose(); fabricCanvas=null; }
+  studioJSON=null; studioApplied=false; emojiCat='All';
   setLinear(tBodyCol,S.bodyColor.hex); setLinear(tCapCol,S.capColor.hex);
   tR=S.finish.r; tM=S.finish.m;
   updateCamera(); generateLabel(); updateBadge(); rebox();

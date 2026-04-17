@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aerostar Contract — Packaging Configurator</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -204,6 +205,25 @@ input:checked+.tgl:before{transform:translateX(18px)}
 .tpl-check{position:absolute;top:4px;right:4px;width:16px;height:16px;border-radius:50%;background:var(--blue);display:none;align-items:center;justify-content:center}
 .tpl-card.on .tpl-check{display:flex}
 
+/* ── LANGUAGE TOGGLE ── */
+.lang-toggle{display:flex;align-items:center;background:var(--blue-bg);border:1.5px solid var(--border);border-radius:20px;overflow:hidden;flex-shrink:0}
+.lang-opt{padding:3px 11px;font-size:9.5px;font-weight:700;letter-spacing:.6px;cursor:pointer;transition:all .15s;color:var(--muted);white-space:nowrap;user-select:none}
+.lang-opt.active{background:var(--blue);color:#fff;border-radius:18px}
+
+/* ── ZOOM CONTROLS ── */
+.zoom-wrap{position:absolute;bottom:44px;right:12px;display:flex;flex-direction:column;gap:4px;z-index:10}
+.zoom-btn{width:30px;height:30px;border-radius:6px;border:1px solid rgba(255,255,255,.6);background:rgba(255,255,255,.88);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;font-weight:300;color:var(--blue-dark);transition:all .14s;line-height:1;box-shadow:0 1px 6px rgba(0,0,0,.1);padding:0}
+.zoom-btn:hover{background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.14)}
+.zoom-reset{font-size:8px;font-weight:700;letter-spacing:.3px}
+
+/* ── REVIEW & SUBMIT ── */
+.action-row{display:flex;gap:10px;margin:20px 0 4px}
+.action-card{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;padding:22px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--white);cursor:pointer;transition:all .16s;text-align:center;min-width:0}
+.action-card:hover{border-color:var(--blue);background:var(--blue-bg);box-shadow:0 4px 16px rgba(21,87,176,.1)}
+.action-card svg{color:var(--blue);flex-shrink:0}
+.action-card-title{font-size:12.5px;font-weight:700;color:var(--blue-dark)}
+.action-card-sub{font-size:9.5px;color:var(--muted);line-height:1.4;max-width:120px}
+
 /* ── MOBILE RESPONSIVE ── */
 .viewer-bar,.viewer-strip{display:none}
 @media(max-width:768px){
@@ -262,23 +282,28 @@ input:checked+.tgl:before{transform:translateX(18px)}
     <div class="logo-contract">Contract</div>
   </div>
   <div class="hdr-right">
-    <span class="hdr-tag">Packaging Configurator</span>
+    <span class="hdr-tag" id="hdr-tag-text">Packaging Configurator</span>
     <div class="hdr-sep"></div>
-    <a href="#" class="hdr-btn">Feedback</a>
+    <div class="lang-toggle">
+      <div class="lang-opt active" id="lo-en" onclick="setLang('en')">EN</div>
+      <div class="lang-opt" id="lo-ru" onclick="setLang('ru')">RU</div>
+    </div>
+    <div class="hdr-sep"></div>
+    <a href="#" class="hdr-btn" id="hdr-feedback">Feedback</a>
   </div>
 </div>
 <div class="nav-bar">
-  <a href="#">About Us</a><a href="#">Our Services</a><a href="#">Products</a>
-  <div class="nb-div"></div><a href="#">Contacts</a>
+  <a href="#" id="nav-about">About Us</a><a href="#" id="nav-services">Our Services</a><a href="#" id="nav-products">Products</a>
+  <div class="nb-div"></div><a href="#" id="nav-contacts">Contacts</a>
   <div class="spacer"></div>
-  <a href="#">Online Catalog</a><a href="#">Website</a>
+  <a href="#" id="nav-catalog">Online Catalog</a><a href="#" id="nav-website">Website</a>
 </div>
 
 
 <div class="viewer-bar" onclick="toggleMobileViewer()" id="vbar">
   <div class="viewer-bar-label">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-    Preview 3D Can
+    <span id="vbar-label">Preview 3D Can</span>
   </div>
   <svg class="viewer-bar-chev" id="vchev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
 </div>
@@ -304,14 +329,215 @@ input:checked+.tgl:before{transform:translateX(18px)}
       <div class="badge-prod" id="bdg-name">400 ml Air Freshener</div>
       <div class="badge-spec" id="bdg-sub">Label: 204 × 160 mm</div>
     </div>
-    <div class="drag-hint">
+    <div class="zoom-wrap">
+      <button class="zoom-btn" onclick="zoomIn()" title="Zoom in">+</button>
+      <button class="zoom-btn zoom-reset" onclick="zoomReset()" title="Reset zoom" id="zoom-reset-btn">1:1</button>
+      <button class="zoom-btn" onclick="zoomOut()" title="Zoom out">−</button>
+    </div>
+    <div class="drag-hint" id="drag-hint-desktop">
       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M5 12L9 8M5 12L9 16"/><path d="M5 12h14m0 0l-4-4m4 4l-4 4"/></svg>
-      Drag to rotate
+      <span id="drag-hint-text">Drag to rotate · Scroll to zoom</span>
     </div>
   </div>
 </div>
 
 <script>
+/* ════════════════════════════════════════════
+   LANGUAGE SYSTEM
+════════════════════════════════════════════ */
+let LANG = 'en';
+const T = {
+  en: {
+    /* Header / Nav */
+    hdrTag:'Packaging Configurator', feedback:'Feedback',
+    navAbout:'About Us', navServices:'Our Services', navProducts:'Products',
+    navContacts:'Contacts', navCatalog:'Online Catalog', navWebsite:'Website',
+    /* 3D Viewer */
+    preview3d:'Preview 3D Can', dragHint:'Drag to rotate · Scroll to zoom',
+    /* Step nav */
+    step:'Step',
+    s1label:'Can Selection', s2label:'Body Colour',
+    s3label:'Cap & Finish', s4label:'Design & Artwork',
+    /* Step 1 */
+    s1title:'Can Selection',
+    prodCat:'Product Category',
+    catBeauty:'Beauty & Personal Care', catAir:'Air Freshener & Home',
+    prodType:'Product Type', fillVol:'Fill Volume',
+    /* Products */
+    pDeodorant:'Deodorant', pDeodorantSub:'Antiperspirant · Body',
+    pHairspray:'Hair Spray', pHairspraySub:'Styling · Hold',
+    pBodymist:'Body Mist', pBodymistSub:'Fragrance · Mist',
+    pPerfume:'Perfume', pPerfumeSub:'Fine Fragrance',
+    pRoomspray:'Room Spray', pRoomspraySub:'Air Care · Home',
+    pCarfresh:'Car Fresh', pCarfreshSub:'Auto · Cabin',
+    pFabric:'Fabric Mist', pFabricSub:'Textile · Refresh',
+    /* Step 2 */
+    s2title:'Body Colour', pantoneSel:'Pantone Colour Selection',
+    searchPlaceholder:'Search PMS code or name…',
+    noColour:'No colour selected', customLbl:'Custom',
+    /* Step 3 */
+    s3title:'Cap Colour & Finish',
+    stdCapHead:'Standard Cap',
+    stdCapDesc:'One fixed overcap profile is used across the configurator for a cleaner and more realistic setup. Customers can customise the <strong>finish</strong> and <strong>colour</strong>, while the cap shape stays consistent.',
+    surfaceFinish:'Surface Finish', capColour:'Cap Colour',
+    matchedBody:'Matched to body colour — click to choose a separate cap colour',
+    useBodyCol:'Use same colour as can body',
+    fMatte:'Matte', fSatin:'Satin', fGloss:'Gloss', fMetallic:'Metallic', fChrome:'Chrome',
+    /* Step 4 */
+    s4title:'Design & Artwork',
+    bareCanLbl:'Bare Can Mode', bareCanSub:'Uniform colour only — no label artwork',
+    artworkFile:'Artwork File',
+    artSpecHead:'Artwork Canvas Specification',
+    canvasSize:'Canvas size', aspectRatio:'Aspect ratio',
+    frontZone:'Front-face zone', safePanel:'Safe label panel',
+    artCentreHint:'Centre your artwork horizontally — the canvas centre maps to the front face of the can.',
+    tplLabel:'Example Templates — click to apply',
+    tplMinimal:'Minimal', tplBold:'Bold', tplStripe:'Stripe', tplGradient:'Gradient',
+    uploadHint:'Or upload your own artwork below ↓',
+    dlTemplate:'Download Template PNG',
+    uploadZoneTxt:'Upload Artwork File',
+    uploadHint2:'PNG · JPG · Ideal size 2048 × 1080 px',
+    removeLbl:'Remove',
+    posLbl:'Position', scaleLbl:'Scale',
+    bareModeText:'Bare can — uniform colour coat, no label artwork',
+    /* Step 5 */
+    s5title:'Review & Submit', configSummary:'Configuration Summary',
+    sumProduct:'Product', sumBodyCol:'Body Colour', sumFinish:'Surface Finish',
+    sumCapStyle:'Cap Style', sumCapStyleVal:'Standard angled overcap',
+    sumCapCol:'Cap Colour', sumArtwork:'Artwork',
+    sumBare:'Bare can', sumCustomArt:'Custom artwork uploaded', sumNoArt:'No artwork',
+    matchBodyStr:'Match Body',
+    dlPdfTitle:'Download PDF', dlPdfSub:'Config summary + 3D render',
+    emailTitle:'Send by Email', emailSub:'Open in your mail client',
+    emailSubject:'Aerostar — Packaging Configuration',
+    /* Buttons */
+    btnBack:'Back', btnNext:'Next', btnBodyCol:'Body Colour',
+    btnCapFinish:'Cap & Finish', btnDesign:'Design & Artwork',
+    btnReview:'Review & Submit', btnSubmit:'Submit Request',
+    btnNewConfig:'New Configuration',
+    /* Family names */
+    famAll:'All', famR:'Red', famO:'Orange', famY:'Yellow', famG:'Green',
+    famB:'Blue', famP:'Purple', famK:'Pink', famN:'Neutral', famM:'Metallic',
+    /* Success */
+    submitted:'Request Submitted',
+    submittedDesc:'Your packaging specification has been received.<br>A member of the Aerostar team will respond within one business day.',
+    /* Badge */
+    badgeLabel:'Label: 204 × 160 mm',
+  },
+  ru: {
+    /* Header / Nav */
+    hdrTag:'Конфигуратор упаковки', feedback:'Обратная связь',
+    navAbout:'О компании', navServices:'Наши услуги', navProducts:'Продукция',
+    navContacts:'Контакты', navCatalog:'Каталог', navWebsite:'Сайт',
+    /* 3D Viewer */
+    preview3d:'3D-просмотр', dragHint:'Перетащите для вращения · Прокрутка для зума',
+    /* Step nav */
+    step:'Шаг',
+    s1label:'Выбор флакона', s2label:'Цвет корпуса',
+    s3label:'Крышка и финиш', s4label:'Дизайн',
+    /* Step 1 */
+    s1title:'Выбор флакона',
+    prodCat:'Категория продукта',
+    catBeauty:'Красота и уход', catAir:'Освежитель воздуха',
+    prodType:'Тип продукта', fillVol:'Объём наполнения',
+    /* Products */
+    pDeodorant:'Дезодорант', pDeodorantSub:'Антиперспирант · Тело',
+    pHairspray:'Лак для волос', pHairspraySub:'Укладка · Фиксация',
+    pBodymist:'Мист для тела', pBodymistSub:'Аромат · Спрей',
+    pPerfume:'Духи', pPerfumeSub:'Парфюмерия',
+    pRoomspray:'Спрей для помещений', pRoomspraySub:'Уход за воздухом · Дом',
+    pCarfresh:'Ароматизатор авто', pCarfreshSub:'Авто · Салон',
+    pFabric:'Мист для ткани', pFabricSub:'Текстиль · Освежение',
+    /* Step 2 */
+    s2title:'Цвет корпуса', pantoneSel:'Выбор цвета Pantone',
+    searchPlaceholder:'Поиск по коду PMS или названию…',
+    noColour:'Цвет не выбран', customLbl:'Свой цвет',
+    /* Step 3 */
+    s3title:'Цвет крышки и финиш',
+    stdCapHead:'Стандартная крышка',
+    stdCapDesc:'В конфигураторе используется один профиль крышки. Покупатели могут настроить <strong>финиш</strong> и <strong>цвет</strong>, тогда как форма крышки остаётся неизменной.',
+    surfaceFinish:'Поверхность', capColour:'Цвет крышки',
+    matchedBody:'Совпадает с корпусом — нажмите для выбора отдельного цвета',
+    useBodyCol:'Использовать цвет корпуса',
+    fMatte:'Матовый', fSatin:'Сатин', fGloss:'Глянец', fMetallic:'Металлик', fChrome:'Хром',
+    /* Step 4 */
+    s4title:'Дизайн и изображение',
+    bareCanLbl:'Режим без этикетки', bareCanSub:'Только однотонное покрытие — без этикетки',
+    artworkFile:'Файл изображения',
+    artSpecHead:'Параметры холста',
+    canvasSize:'Размер холста', aspectRatio:'Соотношение сторон',
+    frontZone:'Лицевая зона', safePanel:'Безопасная зона',
+    artCentreHint:'Центрируйте изображение горизонтально — центр холста соответствует лицевой стороне флакона.',
+    tplLabel:'Шаблоны — нажмите для применения',
+    tplMinimal:'Минимальный', tplBold:'Жирный', tplStripe:'Полосы', tplGradient:'Градиент',
+    uploadHint:'Или загрузите своё изображение ↓',
+    dlTemplate:'Скачать шаблон PNG',
+    uploadZoneTxt:'Загрузить изображение',
+    uploadHint2:'PNG · JPG · Рекомендуемый размер 2048 × 1080 пкс',
+    removeLbl:'Удалить',
+    posLbl:'Позиция', scaleLbl:'Масштаб',
+    bareModeText:'Голый флакон — однотонное покрытие, без этикетки',
+    /* Step 5 */
+    s5title:'Обзор и отправка', configSummary:'Сводка конфигурации',
+    sumProduct:'Продукт', sumBodyCol:'Цвет корпуса', sumFinish:'Поверхность',
+    sumCapStyle:'Тип крышки', sumCapStyleVal:'Стандартная наклонная крышка',
+    sumCapCol:'Цвет крышки', sumArtwork:'Изображение',
+    sumBare:'Без этикетки', sumCustomArt:'Загружено изображение', sumNoArt:'Без изображения',
+    matchBodyStr:'Совпадает с корпусом',
+    dlPdfTitle:'Скачать PDF', dlPdfSub:'Сводка конфигурации + 3D-рендер',
+    emailTitle:'Отправить по email', emailSub:'Открыть в почтовом клиенте',
+    emailSubject:'Aerostar — Конфигурация упаковки',
+    /* Buttons */
+    btnBack:'Назад', btnNext:'Далее', btnBodyCol:'Цвет корпуса',
+    btnCapFinish:'Крышка и финиш', btnDesign:'Дизайн',
+    btnReview:'Обзор и отправка', btnSubmit:'Отправить запрос',
+    btnNewConfig:'Новая конфигурация',
+    /* Family names */
+    famAll:'Все', famR:'Красный', famO:'Оранжевый', famY:'Жёлтый', famG:'Зелёный',
+    famB:'Синий', famP:'Фиолетовый', famK:'Розовый', famN:'Нейтральный', famM:'Металлик',
+    /* Success */
+    submitted:'Запрос отправлен',
+    submittedDesc:'Ваша спецификация упаковки получена.<br>Специалист Aerostar свяжется с вами в течение одного рабочего дня.',
+    /* Badge */
+    badgeLabel:'Этикетка: 204 × 160 мм',
+  }
+};
+
+function t(key){ return (T[LANG] && T[LANG][key]) || T.en[key] || key; }
+
+function setLang(lang){
+  LANG = lang;
+  document.getElementById('lo-en').classList.toggle('active', lang==='en');
+  document.getElementById('lo-ru').classList.toggle('active', lang==='ru');
+  document.documentElement.lang = lang;
+  // Update static elements
+  const $ = id => { const el=document.getElementById(id); return el; };
+  const setText = (id, key) => { const el=$(id); if(el) el.textContent=t(key); };
+  setText('hdr-tag-text','hdrTag');
+  setText('hdr-feedback','feedback');
+  setText('nav-about','navAbout');
+  setText('nav-services','navServices');
+  setText('nav-products','navProducts');
+  setText('nav-contacts','navContacts');
+  setText('nav-catalog','navCatalog');
+  setText('nav-website','navWebsite');
+  setText('vbar-label','preview3d');
+  setText('drag-hint-text','dragHint');
+  rebox();
+  renderNav();
+  updateBadge();
+}
+
+/* ════════════════════════════════════════════
+   ZOOM SYSTEM
+════════════════════════════════════════════ */
+let zoomFactor = 1.0;
+const ZOOM_MIN = 0.45, ZOOM_MAX = 2.2, ZOOM_STEP = 0.12;
+
+function zoomIn(){  zoomFactor = Math.max(ZOOM_MIN, zoomFactor - ZOOM_STEP); updateCamera(); }
+function zoomOut(){ zoomFactor = Math.min(ZOOM_MAX, zoomFactor + ZOOM_STEP); updateCamera(); }
+function zoomReset(){ zoomFactor = 1.0; updateCamera(); }
+
 /* ════════════════════════════════════════════
    SVG ICONS
 ════════════════════════════════════════════ */
@@ -430,10 +656,10 @@ let S={
    STEPS
 ════════════════════════════════════════════ */
 const NAV_STEPS=[
-  {n:"01",label:"Can Selection"},
-  {n:"02",label:"Body Colour"},
-  {n:"03",label:"Cap Colour & Finish"},
-  {n:"04",label:"Design & Artwork"},
+  {n:"01",label:"s1label"},
+  {n:"02",label:"s2label"},
+  {n:"03",label:"s3label"},
+  {n:"04",label:"s4label"},
 ];
 function renderNav(){
   document.getElementById("snav").innerHTML=`<div class="step-progress">`+
@@ -443,7 +669,7 @@ function renderNav(){
       return`${i>0?`<div class="sp-connector${isDone?" past":""}"></div>`:""}
         <div class="${cl}" onclick="if(${s}<=${S.step})goStep(${s})">
           <div class="sp-num">${isDone?IC.check:st.n}</div>
-          <div class="sp-meta"><div class="sp-step">Step ${st.n}</div><div class="sp-label">${st.label}</div></div>
+          <div class="sp-meta"><div class="sp-step">${t('step')} ${st.n}</div><div class="sp-label">${t(st.label)}</div></div>
         </div>`;
     }).join("")+`</div>`;
 }
@@ -493,7 +719,7 @@ const Y_cap_bot   = Y_body_top + 0.012;
 
 /* ── RENDERER ── */
 const canvas3 = document.getElementById("c3");
-const renderer = new THREE.WebGLRenderer({ canvas: canvas3, antialias: true });
+const renderer = new THREE.WebGLRenderer({ canvas: canvas3, antialias: true, preserveDrawingBuffer: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.toneMapping = THREE.NoToneMapping;
 renderer.toneMappingExposure = 1.0;
@@ -661,7 +887,7 @@ function updateCamera() {
   const s = S.size.scale * ((S.prod.sx + S.prod.sy) / 2);
   const h = S3.totalH * s;
   const fovRad = (28 * Math.PI) / 180;
-  const dist = (h / 2) / Math.tan(fovRad / 2) * 1.35;
+  const dist = (h / 2) / Math.tan(fovRad / 2) * 1.35 * zoomFactor;
   camera.position.set(0, 0, dist);
   camera.lookAt(0, h * 0.03, 0);
   camera.updateProjectionMatrix();
@@ -773,6 +999,35 @@ canvas3.addEventListener("touchstart", e => { startDrag(e.touches[0].clientX); e
 canvas3.addEventListener("touchmove",  e => { moveDrag(e.touches[0].clientX);  e.preventDefault(); }, {passive:false});
 canvas3.addEventListener("touchend",   ()=> { endDrag(); });
 
+/* ── ZOOM: Scroll wheel ── */
+canvas3.addEventListener('wheel', e => {
+  e.preventDefault();
+  const delta = e.deltaY > 0 ? ZOOM_STEP : -ZOOM_STEP;
+  zoomFactor = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, zoomFactor + delta));
+  updateCamera();
+}, { passive: false });
+
+/* ── ZOOM: Pinch-to-zoom ── */
+let pinchDist0 = null, pinchZoom0 = 1.0;
+canvas3.addEventListener('touchstart', e => {
+  if (e.touches.length === 2) {
+    pinchDist0 = Math.hypot(e.touches[0].clientX - e.touches[1].clientX,
+                             e.touches[0].clientY - e.touches[1].clientY);
+    pinchZoom0 = zoomFactor;
+    e.preventDefault();
+  }
+}, { passive: false });
+canvas3.addEventListener('touchmove', e => {
+  if (e.touches.length === 2 && pinchDist0 !== null) {
+    const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX,
+                          e.touches[0].clientY - e.touches[1].clientY);
+    zoomFactor = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, pinchZoom0 * (pinchDist0 / d)));
+    updateCamera();
+    e.preventDefault();
+  }
+}, { passive: false });
+canvas3.addEventListener('touchend', () => { pinchDist0 = null; });
+
 /* ── ANIMATE ── */
 function animate() {
   requestAnimationFrame(animate);
@@ -865,13 +1120,15 @@ function applyTemplate(id) {
   img.src = cv.toDataURL();
 }
 
-function renderTemplateGrid() {
+function renderTemplateGrid(tplLabels) {
+  const labelKeys={minimal:'tplMinimal',bold:'tplBold',stripe:'tplStripe',gradient:'tplGradient'};
   return EXAMPLE_TEMPLATES.map(tpl => {
     const isOn = S.selectedTemplate === tpl.id;
     const cv = buildTemplateCanvas(tpl, 380, 200);
+    const label = t(labelKeys[tpl.id]) || tpl.label;
     return `<div class="tpl-card${isOn?" on":""}" onclick="applyTemplate('${tpl.id}')">
-      <img class="tpl-canvas" src="${cv.toDataURL()}" alt="${tpl.label}">
-      <div class="tpl-label">${tpl.label}</div>
+      <img class="tpl-canvas" src="${cv.toDataURL()}" alt="${label}">
+      <div class="tpl-label">${label}</div>
       <div class="tpl-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
     </div>`;
   }).join("");
@@ -912,12 +1169,13 @@ function updateCanScale() {} /* stub — camera handles sizing */
 function renderPicker(prop) {
   const cur = S[prop];
   const fams = ["All","R","O","Y","G","B","P","K","N","M"];
+  const famKeys={All:'famAll',R:'famR',O:'famO',Y:'famY',G:'famG',B:'famB',P:'famP',K:'famK',N:'famN',M:'famM'};
   const q = S.psearch.toLowerCase();
   let list = S.pfam === "All" ? PANTONE : PANTONE.filter(c => c.f === S.pfam);
   if (q) list = PANTONE.filter(c => c.code.toLowerCase().includes(q) || c.name.toLowerCase().includes(q));
   const famH = fams.map(f => {
     const dot = f !== "All" ? `<span class="pfam-dot" style="background:${FAM_COL[f]}"></span>` : "";
-    return `<div class="pfam-btn${S.pfam===f?" on":""}" onclick="S.pfam='${f}';S.psearch='';rebox()">${dot}${FAM_NAME[f]}</div>`;
+    return `<div class="pfam-btn${S.pfam===f?" on":""}" onclick="S.pfam='${f}';S.psearch='';rebox()">${dot}${t(famKeys[f])}</div>`;
   }).join("");
   const swH = list.map(c => {
     const sh = c.met ? "box-shadow:inset 0 0 0 1px rgba(255,255,255,.3),0 1px 4px rgba(0,0,0,.25)" : "box-shadow:0 1px 4px rgba(0,0,0,.18)";
@@ -925,16 +1183,16 @@ function renderPicker(prop) {
   }).join("");
   const selH = cur
     ? `<div class="p-selected"><div class="p-sel-swatch" style="background:${cur.hex}"></div><div><div class="p-sel-code">PMS ${cur.code}</div><div class="p-sel-name">${cur.name}</div></div></div>`
-    : `<div class="p-selected" style="opacity:.4;font-size:11px;color:var(--muted)">No colour selected</div>`;
+    : `<div class="p-selected" style="opacity:.4;font-size:11px;color:var(--muted)">${t('noColour')}</div>`;
   return `<div class="p-search-wrap">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-    <input class="psearch" placeholder="Search PMS code or name…" value="${S.psearch}" oninput="S.psearch=this.value;rebox()">
+    <input class="psearch" placeholder="${t('searchPlaceholder')}" value="${S.psearch}" oninput="S.psearch=this.value;rebox()">
   </div>
   <div class="ptabs">${famH}</div>
-  <div class="pgrid-color">${swH||"<span style='font-size:11px;color:var(--muted)'>No results</span>"}</div>
+  <div class="pgrid-color">${swH||`<span style='font-size:11px;color:var(--muted)'>${t('noColour')}</span>`}</div>
   ${selH}
   <div class="custom-row">
-    <span class="custom-lbl">Custom</span>
+    <span class="custom-lbl">${t('customLbl')}</span>
     <input type="color" value="${cur?cur.hex:"#1557b0"}" onchange="pickHex('${prop}',this.value)">
     <input class="hex-input" type="text" placeholder="#RRGGBB" value="${cur?cur.hex:""}" oninput="if(this.value.match(/^#[0-9a-fA-F]{6}$/)) pickHex('${prop}',this.value)">
   </div>`;
@@ -942,148 +1200,159 @@ function renderPicker(prop) {
 
 
 function rStep1(){
-  const cats={beauty:"Beauty & Personal Care",airfresh:"Air Freshener & Home"};
+  const cats={beauty:t('catBeauty'),airfresh:t('catAir')};
   const catIco={beauty:IC.can,airfresh:IC.spray};
   const prods=PRODUCTS[S.category];
-  return`<h2 class="sec-title">Can Selection</h2>
-    <span class="field-label">Product Category</span>
+  const prodKeys={
+    deodorant:{name:'pDeodorant',sub:'pDeodorantSub'},
+    hairspray:{name:'pHairspray',sub:'pHairspraySub'},
+    bodymist:{name:'pBodymist',sub:'pBodymistSub'},
+    perfume:{name:'pPerfume',sub:'pPerfumeSub'},
+    roomspray:{name:'pRoomspray',sub:'pRoomspraySub'},
+    carfresh:{name:'pCarfresh',sub:'pCarfreshSub'},
+    fabric:{name:'pFabric',sub:'pFabricSub'},
+  };
+  return`<h2 class="sec-title">${t('s1title')}</h2>
+    <span class="field-label">${t('prodCat')}</span>
     <div class="cat-tabs">
       ${Object.entries(cats).map(([k,v])=>`<div class="ct${S.category===k?" on":""}"
         onclick="S.category='${k}';S.prod=PRODUCTS['${k}'][0];rebox()">
         <span style="display:flex;align-items:center">${catIco[k]}</span>${v}</div>`).join("")}
     </div>
-    <span class="field-label">Product Type</span>
+    <span class="field-label">${t('prodType')}</span>
     <div class="prod-grid">
-      ${prods.map(p=>`<div class="pcard${S.prod.id===p.id?" on":""}"
-        onclick="S.prod=PRODUCTS[S.category].find(x=>x.id==='${p.id}');updateCamera();updateBadge();rebox()">
-        <div class="pcard-icon">${IC.can}</div>
-        <div><div class="pcard-name">${p.name}</div><div class="pcard-sub">${p.sub}</div></div>
-      </div>`).join("")}
+      ${prods.map(p=>{
+        const keys=prodKeys[p.id]||{name:'',sub:''};
+        const pName=keys.name?t(keys.name):p.name;
+        const pSub=keys.sub?t(keys.sub):p.sub;
+        return`<div class="pcard${S.prod.id===p.id?" on":""}"
+          onclick="S.prod=PRODUCTS[S.category].find(x=>x.id==='${p.id}');updateCamera();updateBadge();rebox()">
+          <div class="pcard-icon">${IC.can}</div>
+          <div><div class="pcard-name">${pName}</div><div class="pcard-sub">${pSub}</div></div>
+        </div>`;
+      }).join("")}
     </div>
-    <span class="field-label">Fill Volume</span>
+    <span class="field-label">${t('fillVol')}</span>
     <div class="size-row">
       ${SIZES.map(sz=>`<div class="sz${S.size.ml===sz.ml?" on":""}"
         onclick="S.size=SIZES.find(x=>x.ml==='${sz.ml}');updateCamera();updateBadge();rebox()">${sz.ml}</div>`).join("")}
     </div>
-    <div class="navrow"><div></div><button class="btn-next" onclick="ns()">Body Colour ${IC.chevron}</button></div>`;
+    <div class="navrow"><div></div><button class="btn-next" onclick="ns()">${t('btnBodyCol')} ${IC.chevron}</button></div>`;
 }
 
 function rStep2(){
-  return`<h2 class="sec-title">Body Colour</h2>
-    <span class="field-label">Pantone Colour Selection</span>
+  return`<h2 class="sec-title">${t('s2title')}</h2>
+    <span class="field-label">${t('pantoneSel')}</span>
     ${renderPicker("bodyColor")}
     <div class="navrow">
-      <button class="btn-back" onclick="ps()">Back</button>
-      <button class="btn-next" onclick="ns()">Cap & Finish ${IC.chevron}</button>
+      <button class="btn-back" onclick="ps()">${t('btnBack')}</button>
+      <button class="btn-next" onclick="ns()">${t('btnCapFinish')} ${IC.chevron}</button>
     </div>`;
 }
 
 function rStep3(){
-  return`<h2 class="sec-title">Cap Colour &amp; Finish</h2>
+  const finishKeys={matte:'fMatte',satin:'fSatin',gloss:'fGloss',metallic:'fMetallic',chrome:'fChrome'};
+  return`<h2 class="sec-title">${t('s3title')}</h2>
     <div class="spec-box">
-      <div class="spec-head">Standard Cap</div>
-      <div style="font-size:11px;color:var(--sub);line-height:1.6">One fixed overcap profile is used across the configurator for a cleaner and more realistic setup. Customers can customise the <strong>finish</strong> and <strong>colour</strong>, while the cap shape stays consistent.</div>
+      <div class="spec-head">${t('stdCapHead')}</div>
+      <div style="font-size:11px;color:var(--sub);line-height:1.6">${t('stdCapDesc')}</div>
     </div>
-    <span class="field-label">Surface Finish</span>
+    <span class="field-label">${t('surfaceFinish')}</span>
     <div class="fin-grid">
       ${FINISHES.map(f=>`<div class="fg${S.finish.id===f.id?" on":""}"
         onclick="S.finish=FINISHES.find(x=>x.id==='${f.id}');tR=S.finish.r;tM=S.finish.m;generateLabel();updateBadge();rebox()">
         <div class="fg-ball" style="background:${f.ball}"></div>
-        <div class="fg-name">${f.name}</div>
+        <div class="fg-name">${t(finishKeys[f.id]||f.id)}</div>
       </div>`).join("")}
     </div>
-    <span class="field-label">Cap Colour</span>
+    <span class="field-label">${t('capColour')}</span>
     <div class="match-toggle${S.capMatchBody?" on":""}" onclick="S.capMatchBody=!S.capMatchBody;rebox()">
       ${IC.match}
-      <span class="match-text">${S.capMatchBody?"Matched to body colour — click to choose a separate cap colour":"Use same colour as can body"}</span>
+      <span class="match-text">${S.capMatchBody?t('matchedBody'):t('useBodyCol')}</span>
       <div class="match-check">${S.capMatchBody?IC.check:""}</div>
     </div>
     ${S.capMatchBody?"":renderPicker("capColor")}
     <div class="navrow">
-      <button class="btn-back" onclick="ps()">Back</button>
-      <button class="btn-next" onclick="ns()">Design &amp; Artwork ${IC.chevron}</button>
+      <button class="btn-back" onclick="ps()">${t('btnBack')}</button>
+      <button class="btn-next" onclick="ns()">${t('btnDesign')} ${IC.chevron}</button>
     </div>`;
 }
 
 function rStep4(){
   const hasImg=!!S.designImg;
-  return`<h2 class="sec-title">Design &amp; Artwork</h2>
+  const tplLabels={minimal:'tplMinimal',bold:'tplBold',stripe:'tplStripe',gradient:'tplGradient'};
+  return`<h2 class="sec-title">${t('s4title')}</h2>
     <div class="bare-row">
-      <div><div class="bare-lbl">Bare Can Mode</div><div class="bare-sub">Uniform colour only — no label artwork</div></div>
+      <div><div class="bare-lbl">${t('bareCanLbl')}</div><div class="bare-sub">${t('bareCanSub')}</div></div>
       <label class="toggle"><input type="checkbox" ${S.bareMode?"checked":""}
         onchange="S.bareMode=this.checked;generateLabel();rebox()"><span class="tgl"></span></label>
     </div>
     ${!S.bareMode?`
-    <span class="field-label">Artwork File</span>
+    <span class="field-label">${t('artworkFile')}</span>
     <div style="background:var(--blue-bg);border:1px solid rgba(21,87,176,.14);border-radius:7px;padding:13px 15px;margin-bottom:12px">
-      <div style="font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.9px;margin-bottom:9px">Artwork Canvas Specification</div>
+      <div style="font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.9px;margin-bottom:9px">${t('artSpecHead')}</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11.5px;margin-bottom:10px">
-        <div><span style="color:var(--muted)">Canvas size</span><br><strong>2048 × 1080 px</strong></div>
-        <div><span style="color:var(--muted)">Aspect ratio</span><br><strong>1.9 : 1 (wider than tall)</strong></div>
-        <div><span style="color:var(--muted)">Front-face zone</span><br><strong>Centre 50% of width</strong></div>
-        <div><span style="color:var(--muted)">Safe label panel</span><br><strong>Centre 70% recommended</strong></div>
+        <div><span style="color:var(--muted)">${t('canvasSize')}</span><br><strong>2048 × 1080 px</strong></div>
+        <div><span style="color:var(--muted)">${t('aspectRatio')}</span><br><strong>1.9 : 1</strong></div>
+        <div><span style="color:var(--muted)">${t('frontZone')}</span><br><strong>Centre 50%</strong></div>
+        <div><span style="color:var(--muted)">${t('safePanel')}</span><br><strong>Centre 70%</strong></div>
       </div>
-      <div style="font-size:10.5px;color:var(--muted);margin-bottom:10px;line-height:1.5">Centre your artwork horizontally — the canvas centre maps to the front face of the can.</div>
-      <span class="field-label" style="margin-top:6px;display:block">Example Templates — click to apply</span>
-      <div class="tpl-grid">${renderTemplateGrid()}</div>
-      <div style="font-size:9.5px;color:var(--muted);margin-top:2px;margin-bottom:10px">Or upload your own artwork below ↓</div>
-      <button onclick="downloadTemplate()" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--blue);border-radius:5px;background:white;color:var(--blue);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">${IC.dl} Download Template PNG</button>
+      <div style="font-size:10.5px;color:var(--muted);margin-bottom:10px;line-height:1.5">${t('artCentreHint')}</div>
+      <span class="field-label" style="margin-top:6px;display:block">${t('tplLabel')}</span>
+      <div class="tpl-grid">${renderTemplateGrid(tplLabels)}</div>
+      <div style="font-size:9.5px;color:var(--muted);margin-top:2px;margin-bottom:10px">${t('uploadHint')}</div>
+      <button onclick="downloadTemplate()" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--blue);border-radius:5px;background:white;color:var(--blue);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">${IC.dl} ${t('dlTemplate')}</button>
     </div>
     <div class="upload-zone${hasImg?" has":""}" onclick="document.getElementById('fup').click()">
       <input type="file" id="fup" accept="image/*" style="display:none" onchange="onUpload(event)">
-      ${!hasImg?`<div class="up-icon-wrap">${IC.upload}</div><div class="up-txt">Upload Artwork File</div><div class="up-hint">PNG · JPG · Ideal size 2048 × 1080 px</div>`:""}
+      ${!hasImg?`<div class="up-icon-wrap">${IC.upload}</div><div class="up-txt">${t('uploadZoneTxt')}</div><div class="up-hint">${t('uploadHint2')}</div>`:""}
       <img id="uprev" class="up-preview${hasImg?" on":""}" src="${hasImg?S.designImg.src:""}">
-      <button class="up-clear" onclick="clearDesign(event)">Remove</button>
+      <button class="up-clear" onclick="clearDesign(event)">${t('removeLbl')}</button>
     </div>
     ${hasImg?`<div class="lsliders on">
-      <div class="sl-row"><label>Position</label>
+      <div class="sl-row"><label>${t('posLbl')}</label>
         <input type="range" min="15" max="85" value="${Math.round(S.labelPosY*100)}"
           oninput="S.labelPosY=this.value/100;document.getElementById('lpyv').textContent=this.value+'%';generateLabel()">
         <span class="sl-val" id="lpyv">${Math.round(S.labelPosY*100)}%</span></div>
-      <div class="sl-row"><label>Scale</label>
+      <div class="sl-row"><label>${t('scaleLbl')}</label>
         <input type="range" min="30" max="110" value="${Math.round(S.labelScale*100)}"
           oninput="S.labelScale=this.value/100;document.getElementById('lscv').textContent=this.value+'%';generateLabel()">
         <span class="sl-val" id="lscv">${Math.round(S.labelScale*100)}%</span></div>
     </div>`:""}`:
-    `<div style="padding:16px 0;font-size:12px;color:var(--muted);text-align:center">Bare can — uniform colour coat, no label artwork</div>`}
+    `<div style="padding:16px 0;font-size:12px;color:var(--muted);text-align:center">${t('bareModeText')}</div>`}
     <div class="navrow">
-      <button class="btn-back" onclick="ps()">Back</button>
-      <button class="btn-next" onclick="ns()">Review &amp; Submit ${IC.chevron}</button>
+      <button class="btn-back" onclick="ps()">${t('btnBack')}</button>
+      <button class="btn-next" onclick="ns()">${t('btnReview')} ${IC.chevron}</button>
     </div>`;
 }
 
 function rStep5(){
-  const capStr=S.capMatchBody?"Match Body — "+S.bodyColor.name:"PMS "+S.capColor.code+" — "+S.capColor.name;
-  return`<h2 class="sec-title">Review &amp; Submit</h2>
+  const capStr=S.capMatchBody?t('matchBodyStr')+' — '+S.bodyColor.name:'PMS '+S.capColor.code+' — '+S.capColor.name;
+  const artStr=S.bareMode?t('sumBare'):S.designImg?t('sumCustomArt'):t('sumNoArt');
+  return`<h2 class="sec-title">${t('s5title')}</h2>
     <div class="summary">
-      <div class="sum-head">Configuration Summary</div>
-      <div class="sum-row"><span class="sk">Product</span><span class="sv">${S.prod.name} · ${S.size.ml}</span></div>
-      <div class="sum-row"><span class="sk">Body Colour</span><span class="sv">PMS ${S.bodyColor.code} — ${S.bodyColor.name}</span></div>
-      <div class="sum-row"><span class="sk">Surface Finish</span><span class="sv">${S.finish.name}</span></div>
-      <div class="sum-row"><span class="sk">Cap Style</span><span class="sv">Standard angled overcap</span></div>
-      <div class="sum-row"><span class="sk">Cap Colour</span><span class="sv">${capStr}</span></div>
-      <div class="sum-row"><span class="sk">Artwork</span><span class="sv">${S.bareMode?"Bare can":S.designImg?"Custom artwork uploaded":"No artwork"}</span></div>
+      <div class="sum-head">${t('configSummary')}</div>
+      <div class="sum-row"><span class="sk">${t('sumProduct')}</span><span class="sv">${S.prod.name} · ${S.size.ml}</span></div>
+      <div class="sum-row"><span class="sk">${t('sumBodyCol')}</span><span class="sv">PMS ${S.bodyColor.code} — ${S.bodyColor.name}</span></div>
+      <div class="sum-row"><span class="sk">${t('sumFinish')}</span><span class="sv">${S.finish.name}</span></div>
+      <div class="sum-row"><span class="sk">${t('sumCapStyle')}</span><span class="sv">${t('sumCapStyleVal')}</span></div>
+      <div class="sum-row"><span class="sk">${t('sumCapCol')}</span><span class="sv">${capStr}</span></div>
+      <div class="sum-row"><span class="sk">${t('sumArtwork')}</span><span class="sv">${artStr}</span></div>
     </div>
-    <span class="field-label">Contact Details</span>
-    <div class="form-grid">
-      <div class="fc"><div class="flb">First Name</div><input class="fi" type="text" placeholder="First name"></div>
-      <div class="fc"><div class="flb">Company</div><input class="fi" type="text" placeholder="Organisation"></div>
+    <div class="action-row">
+      <div class="action-card" onclick="downloadPDF()">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+        <div class="action-card-title">${t('dlPdfTitle')}</div>
+        <div class="action-card-sub">${t('dlPdfSub')}</div>
+      </div>
+      <div class="action-card" onclick="sendEmail()">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <div class="action-card-title">${t('emailTitle')}</div>
+        <div class="action-card-sub">${t('emailSub')}</div>
+      </div>
     </div>
-    <div class="form-grid">
-      <div class="fc"><div class="flb">Email Address</div><input class="fi" type="email" placeholder="name@company.com"></div>
-      <div class="fc"><div class="flb">Telephone</div><input class="fi" type="tel" placeholder="+00 000 000 0000"></div>
-    </div>
-    <div class="form-grid">
-      <div class="fc"><div class="flb">Required Quantity</div>
-        <select class="fi"><option>1 000 – 5 000 units</option><option>5 000 – 10 000 units</option><option>10 000 – 50 000 units</option><option>50 000+ units</option></select></div>
-      <div class="fc"><div class="flb">Lead Time Required</div>
-        <select class="fi"><option>Standard — 8 to 12 weeks</option><option>Express — 4 to 6 weeks</option><option>No fixed deadline</option></select></div>
-    </div>
-    <div class="form-grid"><div class="fc full"><div class="flb">Additional Notes</div>
-      <textarea class="fta" placeholder="Special requirements, certifications, or questions…"></textarea></div></div>
     <div class="navrow">
-      <button class="btn-back" onclick="ps()">Back</button>
-      <button class="btn-next" onclick="submitForm()">Submit Request ${IC.chevron}</button>
+      <button class="btn-back" onclick="ps()">${t('btnBack')}</button>
     </div>`;
 }
 
@@ -1128,12 +1397,175 @@ function clearDesign(e){
   const fup=document.getElementById("fup"); if(fup)fup.value="";
   generateLabel(); rebox();
 }
+function downloadPDF(){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+  const PW = 210, PH = 297;
+  const margin = 16;
+
+  // ── Header band ──
+  doc.setFillColor(13, 58, 122);
+  doc.rect(0, 0, PW, 22, 'F');
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(14);
+  doc.setFont('helvetica','bold');
+  doc.text('AEROSTAR CONTRACT', margin, 10);
+  doc.setFontSize(8);
+  doc.setFont('helvetica','normal');
+  doc.setTextColor(180,200,240);
+  doc.text(LANG==='ru'?'Конфигуратор упаковки — Сводка конфигурации':'Packaging Configurator — Configuration Summary', margin, 16);
+
+  // Date top-right
+  const now = new Date();
+  const dateStr = now.toLocaleDateString(LANG==='ru'?'ru-RU':'en-GB', {day:'2-digit',month:'short',year:'numeric'});
+  doc.setTextColor(180,200,240);
+  doc.setFontSize(8);
+  doc.text(dateStr, PW - margin, 16, {align:'right'});
+
+  // ── 3D Render snapshot ──
+  try {
+    // Force one more render to ensure the buffer is populated
+    renderer.render(scene, camera);
+    const imgData = renderer.domElement.toDataURL('image/png');
+    const imgW = 82, imgH = 82;
+    const imgX = PW - margin - imgW;
+    const imgY = 28;
+    // subtle shadow box
+    doc.setFillColor(230,235,245);
+    doc.roundedRect(imgX-1, imgY-1, imgW+2, imgH+2, 3, 3, 'F');
+    doc.addImage(imgData, 'PNG', imgX, imgY, imgW, imgH);
+    // label under image
+    doc.setFontSize(7);
+    doc.setTextColor(100,116,139);
+    doc.setFont('helvetica','italic');
+    const renderLbl = LANG==='ru'?'3D-рендер (предварительный просмотр)':'3D Render (preview)';
+    doc.text(renderLbl, imgX + imgW/2, imgY + imgH + 4.5, {align:'center'});
+  } catch(e){ /* skip image if unavailable */ }
+
+  // ── Configuration Summary ──
+  const colX = margin;
+  let y = 32;
+
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(9);
+  doc.setTextColor(21,87,176);
+  doc.text((LANG==='ru'?'СВОДКА КОНФИГУРАЦИИ':'CONFIGURATION SUMMARY').toUpperCase(), colX, y);
+  y += 5;
+
+  doc.setDrawColor(200,215,240);
+  doc.setLineWidth(0.3);
+  doc.line(colX, y, PW - margin - 88, y);
+  y += 5;
+
+  const capStr = S.capMatchBody
+    ? (LANG==='ru'?'Совпадает с корпусом':'Match Body') + ' — ' + S.bodyColor.name
+    : 'PMS ' + S.capColor.code + ' — ' + S.capColor.name;
+  const artStr = S.bareMode
+    ? (LANG==='ru'?'Без этикетки':'Bare can')
+    : S.designImg
+      ? (LANG==='ru'?'Загружено изображение':'Custom artwork uploaded')
+      : (LANG==='ru'?'Без изображения':'No artwork');
+
+  const rows = [
+    [t('sumProduct'),          S.prod.name + ' · ' + S.size.ml],
+    [t('sumBodyCol'),          'PMS ' + S.bodyColor.code + ' — ' + S.bodyColor.name],
+    [t('sumFinish'),           S.finish.name],
+    [t('sumCapStyle'),         t('sumCapStyleVal')],
+    [t('sumCapCol'),           capStr],
+    [t('sumArtwork'),          artStr],
+  ];
+
+  const colW = PW - margin - 88 - colX;
+  rows.forEach(([key, val], i) => {
+    const rowY = y + i * 10;
+    if (i % 2 === 0) {
+      doc.setFillColor(245,248,254);
+      doc.rect(colX, rowY - 4, colW, 10, 'F');
+    }
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(8);
+    doc.setTextColor(100,116,139);
+    doc.text(key, colX + 3, rowY + 2);
+    doc.setFont('helvetica','normal');
+    doc.setTextColor(15,23,42);
+    doc.text(val, colX + 3 + colW * 0.42, rowY + 2);
+  });
+
+  // ── Colour swatch ──
+  y += rows.length * 10 + 10;
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(9);
+  doc.setTextColor(21,87,176);
+  doc.text(LANG==='ru'?'ЦВЕТА':'COLOURS', colX, y);
+  y += 5;
+  doc.setDrawColor(200,215,240);
+  doc.line(colX, y, PW - margin - 88, y);
+  y += 6;
+
+  // Body colour swatch
+  const hex2rgb = h => { const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16); return [r,g,b]; };
+  const [br,bg,bb] = hex2rgb(S.bodyColor.hex);
+  doc.setFillColor(br,bg,bb);
+  doc.roundedRect(colX, y, 16, 10, 2, 2, 'F');
+  doc.setFontSize(8);
+  doc.setTextColor(15,23,42);
+  doc.setFont('helvetica','bold');
+  doc.text(LANG==='ru'?'Корпус':'Body', colX + 19, y + 4);
+  doc.setFont('helvetica','normal');
+  doc.setTextColor(100,116,139);
+  doc.text('PMS ' + S.bodyColor.code, colX + 19, y + 9);
+
+  const capHex = S.capMatchBody ? S.bodyColor.hex : S.capColor.hex;
+  const capCode = S.capMatchBody ? S.bodyColor.code : S.capColor.code;
+  const [cr,cg,cb] = hex2rgb(capHex);
+  doc.setFillColor(cr,cg,cb);
+  doc.roundedRect(colX + 65, y, 16, 10, 2, 2, 'F');
+  doc.setFontSize(8);
+  doc.setTextColor(15,23,42);
+  doc.setFont('helvetica','bold');
+  doc.text(LANG==='ru'?'Крышка':'Cap', colX + 84, y + 4);
+  doc.setFont('helvetica','normal');
+  doc.setTextColor(100,116,139);
+  doc.text('PMS ' + capCode, colX + 84, y + 9);
+
+  // ── Footer ──
+  doc.setFillColor(245,248,254);
+  doc.rect(0, PH - 14, PW, 14, 'F');
+  doc.setFontSize(7);
+  doc.setTextColor(100,116,139);
+  doc.setFont('helvetica','normal');
+  doc.text('aerostar.com', margin, PH - 5);
+  doc.text(LANG==='ru'?'Конфиденциально — только для внутреннего использования':'Confidential — for internal use only', PW/2, PH - 5, {align:'center'});
+  doc.text(dateStr, PW - margin, PH - 5, {align:'right'});
+
+  doc.save('Aerostar-Configuration.pdf');
+}
+
+function sendEmail(){
+  const capStr = S.capMatchBody ? 'Match Body — ' + S.bodyColor.name : 'PMS ' + S.capColor.code + ' — ' + S.capColor.name;
+  const artStr = S.bareMode ? 'Bare can' : S.designImg ? 'Custom artwork uploaded' : 'No artwork';
+  const subject = encodeURIComponent(t('emailSubject'));
+  const body = encodeURIComponent(
+    (LANG==='ru'
+      ? 'Сводка конфигурации упаковки Aerostar\n\n'
+      : 'Aerostar Packaging Configuration Summary\n\n') +
+    t('sumProduct')   + ': ' + S.prod.name + ' · ' + S.size.ml + '\n' +
+    t('sumBodyCol')   + ': PMS ' + S.bodyColor.code + ' — ' + S.bodyColor.name + '\n' +
+    t('sumFinish')    + ': ' + S.finish.name + '\n' +
+    t('sumCapStyle')  + ': ' + t('sumCapStyleVal') + '\n' +
+    t('sumCapCol')    + ': ' + capStr + '\n' +
+    t('sumArtwork')   + ': ' + artStr + '\n\n' +
+    (LANG==='ru' ? 'Сгенерировано с помощью конфигуратора упаковки Aerostar.' : 'Generated using the Aerostar Packaging Configurator.')
+  );
+  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+}
+
 function submitForm(){
   document.getElementById("sbox").innerHTML=`<div class="success-wrap">
     <div class="ok-mark"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
-    <div style="font-size:21px;font-weight:300;color:var(--blue-dark);margin-bottom:10px">Request Submitted</div>
-    <div style="font-size:13px;color:var(--muted);line-height:1.7;max-width:320px;margin:0 auto">Your packaging specification has been received.<br>A member of the Aerostar team will respond within one business day.</div>
-    <button class="btn-next" style="margin:24px auto 0;display:inline-flex" onclick="resetAll()">New Configuration ${IC.chevron}</button>
+    <div style="font-size:21px;font-weight:300;color:var(--blue-dark);margin-bottom:10px">${t('submitted')}</div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.7;max-width:320px;margin:0 auto">${t('submittedDesc')}</div>
+    <button class="btn-next" style="margin:24px auto 0;display:inline-flex" onclick="resetAll()">${t('btnNewConfig')} ${IC.chevron}</button>
   </div>`;
 }
 function resetAll(){

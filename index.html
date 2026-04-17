@@ -1430,8 +1430,13 @@ function downloadPDF(){
       <td style="padding:7px 10px;font-size:12px;color:#0f172a;font-weight:700">${v}</td>
     </tr>`).join('');
 
+  // Capture the real canvas dimensions so the image is never distorted
+  const cW = renderer.domElement.width;
+  const cH = renderer.domElement.height;
+  const imgW = 190;
+  const imgH = Math.round(imgW * (cH / cW));   // preserve true aspect ratio
   const renderImgHTML = renderDataURL
-    ? `<img src="${renderDataURL}" style="width:180px;height:180px;object-fit:contain;border-radius:8px;border:1px solid #dde5f0;background:#ecf0f7;display:block">`
+    ? `<img src="${renderDataURL}" style="width:${imgW}px;height:${imgH}px;border-radius:8px;border:1px solid #dde5f0;background:#ecf0f7;display:block">`
     : '';
 
   const html = `

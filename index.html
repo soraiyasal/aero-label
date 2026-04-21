@@ -10,16 +10,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Montserrat:wght@400;700;900&family=Playfair+Display:wght@400;700&family=Oswald:wght@400;700&family=Bebas+Neue&family=Raleway:wght@300;700&family=Abril+Fatface&display=swap" rel="stylesheet">
 <style>
-:root{
-  --blue:#1557b0;--blue2:#1e6fd9;--blue-dark:#0a3578;--blue-nav:#0d3a7a;
-  --blue-bg:#f0f5fc;--border:#dde5f0;--bg:#f4f6fb;
-  --text:#0f172a;--sub:#334155;--muted:#64748b;--white:#fff;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
+:root{--blue:#1557b0;--blue2:#1e6fd9;--blue-dark:#0a3578;--blue-nav:#0d3a7a;--blue-bg:#f0f5fc;--border:#dde5f0;--bg:#f4f6fb;--text:#0f172a;--sub:#334155;--muted:#64748b;--white:#fff;}
+*{box-sizing:border-box;margin:0;padding:0}html,body{height:100%}
 body{font-family:"Lato",sans-serif;background:var(--bg);color:var(--text);font-size:13px;overflow-x:hidden}
-
-/* ── HEADER ── */
 .top-bar{background:var(--white);border-bottom:1px solid var(--border);height:52px;display:flex;align-items:center;padding:0 16px;justify-content:space-between;flex-shrink:0;position:sticky;top:0;z-index:100}
 .logo-wrap{display:flex;flex-direction:column;user-select:none;line-height:1;flex-shrink:0}
 .logo-ltr{display:flex;align-items:center}
@@ -30,36 +23,19 @@ body{font-family:"Lato",sans-serif;background:var(--bg);color:var(--text);font-s
 .hdr-sep{width:1px;height:14px;background:var(--border);flex-shrink:0}
 .hdr-btn{font-size:10px;font-weight:700;color:var(--blue);text-decoration:none;border:1.5px solid var(--blue);border-radius:20px;padding:3px 12px;white-space:nowrap;transition:all .15s}
 .hdr-btn:hover{background:var(--blue);color:#fff}
-
 .nav-bar{background:var(--blue-nav);height:34px;display:flex;align-items:center;padding:0 16px;flex-shrink:0;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;position:sticky;top:52px;z-index:99}.nav-bar::-webkit-scrollbar{display:none}
 .nav-bar a{color:rgba(255,255,255,.65);text-decoration:none;font-size:9.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:0 10px;height:34px;display:flex;align-items:center;transition:color .15s;white-space:nowrap;flex-shrink:0}
-.nav-bar a:hover{color:#fff}
-.nav-bar .spacer{flex:1}
+.nav-bar a:hover{color:#fff}.nav-bar .spacer{flex:1}
 .nb-div{width:1px;height:14px;background:rgba(255,255,255,.15);margin:0 2px;flex-shrink:0}
-
-/* ── MAIN LAYOUT ── */
-.layout{display:grid;grid-template-columns:minmax(0,1fr) 400px;height:calc(100vh - 86px);overflow:hidden}
-
-/* ── LEFT PANEL ── */
-.left{
-  overflow-y:auto;
-  overflow-x:hidden;
-  padding:18px 20px 28px;
-  scrollbar-width:thin;
-  scrollbar-color:var(--border) transparent;
-  min-width:0;
-}
-
-/* ── RIGHT PANEL (3D viewer) ── */
-.right{position:relative;background:radial-gradient(ellipse at 50% 40%,#f8f9fc 0%,#e6eaf2 100%);border-left:1px solid var(--border);overflow:hidden;flex-shrink:0}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 520px;height:calc(100vh - 86px);overflow:hidden}
+.left{overflow-y:auto;overflow-x:hidden;padding:18px 20px 28px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;min-width:0}
+.right{position:relative;background:#1a1c22;border-left:1px solid var(--border);overflow:hidden;flex-shrink:0}
 #c3{width:100%;height:100%;display:block;cursor:grab;touch-action:none;user-select:none}
 #c3:active{cursor:grabbing}
-.can-badge{position:absolute;top:14px;left:14px;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-radius:6px;padding:7px 12px;pointer-events:none;border:1px solid rgba(255,255,255,.8);box-shadow:0 2px 12px rgba(0,0,0,.08);max-width:200px}
-.badge-prod{font-size:10.5px;font-weight:700;color:var(--blue-dark);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.badge-spec{font-size:8.5px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.drag-hint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);opacity:.4;pointer-events:none;display:flex;align-items:center;gap:6px;white-space:nowrap}
-
-/* ── STEP PROGRESS ── */
+.can-badge{position:absolute;top:14px;left:14px;background:rgba(20,22,28,.82);backdrop-filter:blur(10px);border-radius:6px;padding:7px 12px;pointer-events:none;border:1px solid rgba(255,255,255,.12);box-shadow:0 2px 12px rgba(0,0,0,.4);max-width:200px}
+.badge-prod{font-size:10.5px;font-weight:700;color:#a8c4f0;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.badge-spec{font-size:8.5px;color:rgba(255,255,255,.5);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.drag-hint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:#fff;opacity:.35;pointer-events:none;display:flex;align-items:center;gap:6px;white-space:nowrap}
 .step-progress{display:flex;align-items:center;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px 16px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden}
 .sp-item{display:flex;align-items:center;gap:8px;cursor:pointer;flex-shrink:0;min-width:0}
 .sp-num{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--muted);flex-shrink:0;transition:all .2s}
@@ -72,23 +48,15 @@ body{font-family:"Lato",sans-serif;background:var(--bg);color:var(--text);font-s
 .sp-item.done .sp-label,.sp-item.done .sp-step{color:var(--blue);opacity:.8}
 .sp-connector{flex:1;height:1px;background:var(--border);margin:0 8px;min-width:8px}
 .sp-connector.past{background:var(--blue);opacity:.3}
-
-/* ── CONTENT BOX ── */
 .box{background:var(--white);border-radius:8px;border:1px solid var(--border);padding:20px 20px;box-shadow:0 1px 3px rgba(0,0,0,.04);min-width:0;overflow:hidden}
 .sec-title{font-size:18px;font-weight:300;color:var(--blue-dark);margin-bottom:16px;letter-spacing:-.2px}
 .field-label{font-size:8.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.9px;margin-bottom:7px;display:block}
-
-/* ── CATEGORY TABS ── */
 .cat-tabs{display:flex;gap:6px;margin-bottom:16px}
 .ct{flex:1;padding:9px 6px;border:1.5px solid var(--border);border-radius:7px;background:var(--white);color:var(--muted);font-size:10.5px;font-weight:700;cursor:pointer;text-align:center;transition:all .12s;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ct:hover{border-color:var(--blue2)}.ct.on{background:var(--blue-bg);border-color:var(--blue);color:var(--blue)}
-
-/* ── SIZE PILLS ── */
 .size-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:16px}
 .sz{padding:4px 11px;border-radius:4px;border:1px solid var(--border);font-size:11px;font-weight:600;cursor:pointer;background:var(--white);color:var(--muted);transition:all .14s;letter-spacing:.2px;white-space:nowrap}
 .sz:hover{border-color:var(--blue)}.sz.on{background:var(--blue);border-color:var(--blue);color:#fff}
-
-/* ── PRODUCT CARDS ── */
 .prod-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-bottom:16px}
 .pcard{border:1px solid var(--border);border-radius:7px;padding:11px 10px;cursor:pointer;transition:all .14s;background:var(--white);display:flex;align-items:center;gap:10px;min-width:0;overflow:hidden}
 .pcard:hover{border-color:var(--blue2);box-shadow:0 2px 8px rgba(21,87,176,.08)}.pcard.on{border-color:var(--blue);background:var(--blue-bg)}
@@ -97,8 +65,18 @@ body{font-family:"Lato",sans-serif;background:var(--bg);color:var(--text);font-s
 .pcard-name{font-size:11.5px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pcard-sub{font-size:9.5px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pcard.on .pcard-name{color:var(--blue-dark)}.pcard.on .pcard-sub{color:var(--blue)}
-
-/* ── PANTONE PICKER ── */
+/* Cap style grid - NEW */
+.cap-style-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.cap-style-card{border:1.5px solid var(--border);border-radius:8px;padding:10px 8px 8px;cursor:pointer;background:var(--white);transition:all .14s;text-align:center;overflow:hidden}
+.cap-style-card:hover{border-color:var(--blue2);box-shadow:0 2px 8px rgba(21,87,176,.08)}
+.cap-style-card.on{border-color:var(--blue);background:var(--blue-bg)}
+.cap-views-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;margin-bottom:7px}
+.cap-view-cell{display:flex;flex-direction:column;align-items:center;gap:2px}
+.cap-view-lbl{font-size:6.5px;font-weight:700;color:var(--muted);letter-spacing:.4px;text-transform:uppercase}
+.cap-style-card.on .cap-view-lbl{color:var(--blue);opacity:.8}
+.cap-style-name{font-size:10.5px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cap-style-desc{font-size:9px;color:var(--muted);margin-top:1px;line-height:1.3}
+.cap-style-card.on .cap-style-name{color:var(--blue)}
 .ptabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
 .pfam-btn{display:flex;align-items:center;gap:4px;padding:3px 9px;border-radius:4px;border:1px solid var(--border);font-size:10px;font-weight:600;cursor:pointer;background:var(--white);color:var(--muted);transition:all .12s;white-space:nowrap}
 .pfam-btn:hover{border-color:var(--blue2)}.pfam-btn.on{background:var(--blue);border-color:var(--blue);color:#fff}
@@ -119,8 +97,6 @@ body{font-family:"Lato",sans-serif;background:var(--bg);color:var(--text);font-s
 .custom-row input[type=color]{width:30px;height:30px;border-radius:50%;border:1px solid var(--border);padding:2px;cursor:pointer;background:none;flex-shrink:0}
 .hex-input{flex:1;min-width:0;padding:6px 9px;border:1px solid var(--border);border-radius:5px;font-size:11px;font-family:"Lato",monospace;color:var(--text);outline:none}
 .hex-input:focus{border-color:var(--blue)}
-
-/* ── MATCH TOGGLE ── */
 .match-toggle{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:7px;cursor:pointer;background:var(--white);margin-bottom:10px;transition:all .14s;min-width:0;overflow:hidden}
 .match-toggle:hover{border-color:var(--blue)}.match-toggle.on{border-color:var(--blue);background:var(--blue-bg)}
 .match-toggle svg{color:var(--muted);flex-shrink:0}.match-toggle.on svg{color:var(--blue)}
@@ -128,15 +104,12 @@ body{font-family:"Lato",sans-serif;background:var(--bg);color:var(--text);font-s
 .match-toggle.on .match-text{color:var(--blue)}
 .match-check{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .14s}
 .match-toggle.on .match-check{background:var(--blue);border-color:var(--blue)}
-
-/* ── FINISH GRID ── */
-.fin-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:14px}
-.fg{border:1px solid var(--border);border-radius:7px;padding:8px 4px 6px;text-align:center;cursor:pointer;background:var(--white);transition:all .14s;overflow:hidden}
-.fg:hover{border-color:var(--blue2)}.fg.on{border-color:var(--blue);background:var(--blue-bg)}
-.fg-ball{width:26px;height:26px;border-radius:50%;margin:0 auto 5px;border:1px solid rgba(0,0,0,.1);box-shadow:0 1px 4px rgba(0,0,0,.1)}
-.fg-name{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fg.on .fg-name{color:var(--blue)}
-
-/* ── BARE TOGGLE ── */
+/* Finish grid - 4 cols for new finishes */
+.fin-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
+.fg{border:2px solid var(--border);border-radius:9px;padding:10px 6px 8px;text-align:center;cursor:pointer;background:var(--white);transition:all .18s;overflow:hidden;position:relative}
+.fg:hover{border-color:var(--blue2);transform:translateY(-1px);box-shadow:0 3px 10px rgba(21,87,176,.12)}.fg.on{border-color:var(--blue);background:var(--blue-bg);box-shadow:0 0 0 3px rgba(21,87,176,.12)}
+.fg-ball{width:36px;height:36px;border-radius:50%;margin:0 auto 6px;border:1px solid rgba(0,0,0,.12);box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.fg-name{font-size:9.5px;font-weight:700;color:var(--muted);letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fg.on .fg-name{color:var(--blue)}.fg-check{display:none;position:absolute;top:5px;right:5px;width:14px;height:14px;border-radius:50%;background:var(--blue);align-items:center;justify-content:center}.fg.on .fg-check{display:flex}
 .bare-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--blue-bg);border:1px solid rgba(21,87,176,.12);border-radius:7px;margin-bottom:14px;gap:10px}
 .bare-lbl{font-size:11px;font-weight:600;color:var(--sub)}.bare-sub{font-size:9px;color:var(--muted);margin-top:1px}
 .toggle{position:relative;display:inline-block;width:38px;height:20px;flex-shrink:0}
@@ -145,8 +118,6 @@ body{font-family:"Lato",sans-serif;background:var(--bg);color:var(--text);font-s
 .tgl:before{position:absolute;content:"";height:14px;width:14px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.25s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 input:checked+.tgl{background:var(--blue)}
 input:checked+.tgl:before{transform:translateX(18px)}
-
-/* ── UPLOAD ── */
 .upload-zone{border:1.5px dashed var(--border);border-radius:7px;padding:18px 14px;text-align:center;cursor:pointer;background:var(--white);position:relative;transition:all .14s;overflow:hidden}
 .upload-zone:hover,.upload-zone.has{border-color:var(--blue);background:var(--blue-bg)}
 .up-icon-wrap{width:36px;height:36px;border-radius:50%;background:var(--blue-bg);display:flex;align-items:center;justify-content:center;margin:0 auto 9px;color:var(--blue);border:1px solid rgba(21,87,176,.15)}
@@ -160,16 +131,10 @@ input:checked+.tgl:before{transform:translateX(18px)}
 .sl-row input[type=range]{flex:1;height:3px;border-radius:3px;background:var(--border);-webkit-appearance:none;cursor:pointer;min-width:0}
 .sl-row input[type=range]::-webkit-slider-thumb{width:13px;height:13px;background:var(--blue);border-radius:50%;-webkit-appearance:none;border:2px solid #fff;box-shadow:0 0 0 1px var(--blue)}
 .sl-val{width:30px;font-size:9.5px;color:var(--blue);font-weight:700;text-align:right;flex-shrink:0}
-
-/* ── SPEC INFO BOX ── */
 .spec-box{background:var(--blue-bg);border:1px solid rgba(21,87,176,.14);border-radius:7px;padding:11px 14px;margin-bottom:12px}
 .spec-head{font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--blue);margin-bottom:8px}
 .spec-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 12px}
-.spec-item{}
-.spec-key{font-size:9px;color:var(--muted)}
-.spec-val{font-size:11px;font-weight:700;color:var(--text)}
-
-/* ── SUMMARY & FORM ── */
+.spec-key{font-size:9px;color:var(--muted)}.spec-val{font-size:11px;font-weight:700;color:var(--text)}
 .summary{background:var(--blue-bg);border-radius:7px;padding:12px 14px;margin-bottom:18px;border:1px solid rgba(21,87,176,.12)}
 .sum-head{font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--blue);margin-bottom:8px}
 .sum-row{display:flex;justify-content:space-between;align-items:baseline;font-size:11.5px;padding:3.5px 0;border-bottom:1px solid rgba(21,87,176,.07);gap:8px}.sum-row:last-child{border-bottom:none}
@@ -179,10 +144,6 @@ input:checked+.tgl:before{transform:translateX(18px)}
 .flb{font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
 .fi{padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:12.5px;color:var(--text);outline:none;transition:border-color .14s;background:var(--white);width:100%}
 .fi:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,87,176,.08)}
-.fta{padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:12.5px;color:var(--text);outline:none;resize:vertical;min-height:60px;background:var(--white);width:100%}
-.fta:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,87,176,.08)}
-
-/* ── BUTTONS ── */
 .navrow{display:flex;justify-content:space-between;align-items:center;margin-top:20px;padding-top:16px;border-top:1px solid var(--border);gap:10px}
 .btn-back{padding:8px 16px;border:1px solid var(--border);border-radius:6px;background:var(--white);color:var(--muted);cursor:pointer;font-family:inherit;font-size:12px;font-weight:700;transition:all .14s;white-space:nowrap;flex-shrink:0}
 .btn-back:hover{border-color:var(--blue);color:var(--blue)}
@@ -190,13 +151,7 @@ input:checked+.tgl:before{transform:translateX(18px)}
 .btn-next:hover{background:var(--blue-dark)}
 .success-wrap{text-align:center;padding:32px 16px}
 .ok-mark{width:56px;height:56px;border-radius:50%;background:var(--blue-bg);border:2px solid var(--blue);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;color:var(--blue)}
-
-/* ── FORM ── */
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-.fc{display:flex;flex-direction:column;gap:4px;min-width:0}.fc.full{grid-column:1/-1}
-
-/* ── EXAMPLE TEMPLATES ── */
-.tpl-section{margin-bottom:10px}
+/* Template grid with deselect */
 .tpl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:4px}
 .tpl-card{border:2px solid var(--border);border-radius:7px;overflow:hidden;cursor:pointer;position:relative;transition:all .14s;background:var(--white)}
 .tpl-card:hover{border-color:var(--blue2);box-shadow:0 2px 8px rgba(21,87,176,.1)}
@@ -206,38 +161,30 @@ input:checked+.tgl:before{transform:translateX(18px)}
 .tpl-card.on .tpl-label{color:var(--blue)}
 .tpl-check{position:absolute;top:4px;right:4px;width:16px;height:16px;border-radius:50%;background:var(--blue);display:none;align-items:center;justify-content:center}
 .tpl-card.on .tpl-check{display:flex}
-
-/* ── LANGUAGE TOGGLE ── */
+/* Deselect X button - shown on selected template */
+.tpl-desel{position:absolute;top:3px;left:3px;background:rgba(239,68,68,.9);border:none;border-radius:3px;color:#fff;padding:1px 5px;font-size:8px;cursor:pointer;display:none;font-family:inherit;font-weight:700;line-height:1.5;z-index:2}
+.tpl-card.on .tpl-desel{display:block}
 .lang-toggle{display:flex;align-items:center;background:var(--blue-bg);border:1.5px solid var(--border);border-radius:20px;overflow:hidden;flex-shrink:0}
 .lang-opt{padding:3px 11px;font-size:9.5px;font-weight:700;letter-spacing:.6px;cursor:pointer;transition:all .15s;color:var(--muted);white-space:nowrap;user-select:none}
 .lang-opt.active{background:var(--blue);color:#fff;border-radius:18px}
-
-/* ── ZOOM CONTROLS ── */
 .zoom-wrap{position:absolute;bottom:44px;right:12px;display:flex;flex-direction:column;gap:4px;z-index:10}
-.zoom-btn{width:30px;height:30px;border-radius:6px;border:1px solid rgba(255,255,255,.6);background:rgba(255,255,255,.88);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;font-weight:300;color:var(--blue-dark);transition:all .14s;line-height:1;box-shadow:0 1px 6px rgba(0,0,0,.1);padding:0}
-.zoom-btn:hover{background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.14)}
+.zoom-btn{width:30px;height:30px;border-radius:6px;border:1px solid rgba(255,255,255,.18);background:rgba(40,44,55,.82);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;font-weight:300;color:#a8c4f0;transition:all .14s;line-height:1;box-shadow:0 1px 6px rgba(0,0,0,.1);padding:0}
+.zoom-btn:hover{background:rgba(60,66,80,.95);box-shadow:0 2px 10px rgba(0,0,0,.4)}
 .zoom-reset{font-size:8px;font-weight:700;letter-spacing:.3px}
-
-/* ── REVIEW & SUBMIT ── */
 .action-row{display:flex;gap:10px;margin:20px 0 4px}
 .action-card{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;padding:22px 12px;border:1.5px solid var(--border);border-radius:10px;background:var(--white);cursor:pointer;transition:all .16s;text-align:center;min-width:0}
 .action-card:hover{border-color:var(--blue);background:var(--blue-bg);box-shadow:0 4px 16px rgba(21,87,176,.1)}
 .action-card svg{color:var(--blue);flex-shrink:0}
 .action-card-title{font-size:12.5px;font-weight:700;color:var(--blue-dark)}
 .action-card-sub{font-size:9.5px;color:var(--muted);line-height:1.4;max-width:120px}
-
-/* ── LABEL STUDIO ── */
 .art-tabs{display:flex;border:1px solid var(--border);border-radius:7px;overflow:hidden;margin-bottom:14px}
 .art-tab{flex:1;padding:9px 8px;text-align:center;font-size:10.5px;font-weight:700;cursor:pointer;background:var(--white);color:var(--muted);transition:all .14s;display:flex;align-items:center;justify-content:center;gap:5px}
 .art-tab+.art-tab{border-left:1px solid var(--border)}
-.art-tab:hover{color:var(--blue)}
-.art-tab.on{background:var(--blue);color:#fff}
-
+.art-tab:hover{color:var(--blue)}.art-tab.on{background:var(--blue);color:#fff}
 .studio-wrap{border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--white)}
 .studio-toolbar{display:flex;align-items:center;gap:5px;padding:8px 10px;background:var(--blue-bg);border-bottom:1px solid var(--border);flex-wrap:wrap}
 .studio-tbtn{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border:1px solid var(--border);border-radius:5px;background:var(--white);color:var(--sub);font-size:10.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .12s;white-space:nowrap;line-height:1}
-.studio-tbtn:hover{border-color:var(--blue);color:var(--blue)}
-.studio-tbtn.del:hover{border-color:#ef4444;color:#ef4444}
+.studio-tbtn:hover{border-color:var(--blue);color:var(--blue)}.studio-tbtn.del:hover{border-color:#ef4444;color:#ef4444}
 .studio-sep{width:1px;height:22px;background:var(--border);margin:0 2px;flex-shrink:0}
 .studio-canvas-wrap{line-height:0;background:#c8cdd6;position:relative}
 .studio-canvas-wrap canvas{display:block!important}
@@ -253,7 +200,7 @@ input:checked+.tgl:before{transform:translateX(18px)}
 .spr-toggle.on{background:var(--blue);border-color:var(--blue);color:#fff}
 .studio-footer{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-top:1px solid var(--border)}
 .studio-hint{font-size:9.5px;color:var(--muted);line-height:1.4}
-.studio-emoji-panel{display:none;padding:10px;background:var(--white);border-top:1px solid var(--border);position:relative}
+.studio-emoji-panel{display:none;padding:10px;background:var(--white);border-top:1px solid var(--border)}
 .studio-emoji-panel.open{display:block}
 .emoji-cats{display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap}
 .emoji-cat-btn{padding:3px 9px;border:1px solid var(--border);border-radius:4px;font-size:10px;font-weight:700;cursor:pointer;background:var(--white);color:var(--muted);transition:all .12s}
@@ -261,52 +208,34 @@ input:checked+.tgl:before{transform:translateX(18px)}
 .emoji-grid{display:flex;flex-wrap:wrap;gap:3px;max-height:108px;overflow-y:auto;scrollbar-width:thin}
 .emoji-btn{width:30px;height:30px;border:1px solid transparent;border-radius:5px;background:none;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;transition:all .1s;line-height:1;padding:0}
 .emoji-btn:hover{background:var(--blue-bg);border-color:var(--border)}
-.studio-img-overlay{position:absolute;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;z-index:5;cursor:pointer;opacity:0;transition:opacity .15s}
-.studio-canvas-wrap:hover .studio-img-overlay{opacity:1}
-
 .viewer-bar,.viewer-strip{display:none}
 @media(max-width:768px){
-  .viewer-bar{display:flex}
-  html,body{height:auto}
-  .top-bar{padding:0 14px;height:48px}
-  .logo-lt{font-size:19px}
-  .logo-contract{font-size:10px;padding-left:43px}
-  .hdr-tag{display:none}
-  .hdr-sep{display:none}
-  .layout{display:block;height:auto;overflow:visible}
-  .right{display:none}
+  .viewer-bar{display:flex}html,body{height:auto}
+  .top-bar{padding:0 14px;height:48px}.logo-lt{font-size:19px}.logo-contract{font-size:10px;padding-left:43px}
+  .hdr-tag{display:none}.hdr-sep{display:none}
+  .layout{display:block;height:auto;overflow:visible}.right{display:none}
   .left{padding:12px 12px 80px;overflow:visible}
-  .viewer-strip{display:flex;flex-direction:column;background:radial-gradient(ellipse at 50% 40%,#f8f9fc 0%,#e6eaf2 100%);height:260px;position:relative;border-bottom:1px solid var(--border);cursor:grab}
+  .viewer-strip{display:flex;flex-direction:column;background:#1a1c22;height:260px;position:relative;border-bottom:1px solid var(--border);cursor:grab}
   .viewer-strip.collapsed{height:0;overflow:hidden}
   .viewer-strip canvas{width:100%!important;height:100%!important}
   .viewer-bar{background:var(--white);border-bottom:1px solid var(--border);padding:9px 14px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:82px;z-index:97;cursor:pointer}
   .viewer-bar-label{font-size:10px;font-weight:700;color:var(--blue);letter-spacing:.5px;text-transform:uppercase;display:flex;align-items:center;gap:6px}
-  .viewer-bar-chev{transition:transform .25s;color:var(--blue)}
-  .viewer-bar-chev.open{transform:rotate(90deg)}
-  .step-progress{padding:8px 10px}
-  .sp-label{display:none}
-  .sp-step{font-size:7px}
-  .sp-connector{margin:0 4px;min-width:3px}
-  .box{padding:14px 12px}
-  .sec-title{font-size:15px;margin-bottom:12px}
-  .prod-grid{grid-template-columns:1fr 1fr}
-  .fin-grid{grid-template-columns:repeat(5,1fr)}
-  .form-grid{grid-template-columns:1fr}
-  .tpl-grid{grid-template-columns:repeat(2,1fr)}
-  .navrow{margin-top:16px;padding-top:12px}
-  .spec-grid{grid-template-columns:1fr 1fr}
+  .viewer-bar-chev{transition:transform .25s;color:var(--blue)}.viewer-bar-chev.open{transform:rotate(90deg)}
+  .step-progress{padding:8px 10px}.sp-label{display:none}.sp-step{font-size:7px}
+  .sp-connector{margin:0 4px;min-width:3px}.box{padding:14px 12px}.sec-title{font-size:15px;margin-bottom:12px}
+  .prod-grid{grid-template-columns:1fr 1fr}.fin-grid{grid-template-columns:repeat(4,1fr)}
+  .form-grid{grid-template-columns:1fr}.tpl-grid{grid-template-columns:repeat(2,1fr)}
+  .cap-style-grid{grid-template-columns:1fr 1fr}.navrow{margin-top:16px;padding-top:12px}
   .pgrid-color{max-height:120px}
 }
 @media(max-width:480px){
-  .cat-tabs{gap:5px}
-  .ct{font-size:9.5px;padding:7px 4px}
-  .tpl-grid{grid-template-columns:repeat(2,1fr)}
-  .fin-grid{grid-template-columns:repeat(5,1fr)}
+  .cat-tabs{gap:5px}.ct{font-size:9.5px;padding:7px 4px}
+  .tpl-grid{grid-template-columns:repeat(2,1fr)}.fin-grid{grid-template-columns:repeat(2,1fr)}
+  .cap-style-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
-
 <div class="top-bar">
   <div class="logo-wrap">
     <div class="logo-ltr">
@@ -337,8 +266,6 @@ input:checked+.tgl:before{transform:translateX(18px)}
   <div class="spacer"></div>
   <a href="#" id="nav-catalog">Online Catalog</a><a href="#" id="nav-website">Website</a>
 </div>
-
-
 <div class="viewer-bar" onclick="toggleMobileViewer()" id="vbar">
   <div class="viewer-bar-label">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -349,376 +276,299 @@ input:checked+.tgl:before{transform:translateX(18px)}
 <div class="viewer-strip collapsed" id="vstrip">
   <canvas id="c3m" style="touch-action:none;cursor:grab"></canvas>
   <div class="can-badge" id="mbdg" style="max-width:160px">
-    <div class="badge-prod" id="bdg-name-m">400 ml Air Freshener</div>
-    <div class="badge-spec" id="bdg-sub-m">Label: 204 × 160 mm</div>
+    <div class="badge-prod" id="bdg-name-m">300 ml Air Freshener</div>
+    <div class="badge-spec" id="bdg-sub-m">Matte · Standard Cap</div>
   </div>
   <div class="drag-hint">
-    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M5 12L9 8M5 12L9 16"/><path d="M5 12h14m0 0l-4-4m4 4l-4 4"/></svg>
-    Drag to rotate
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M5 12L9 8M5 12L9 16"/><path d="M5 12h14m0 0l-4-4m4 4l-4 4"/></svg>Drag to rotate
   </div>
 </div>
 <div class="layout">
-  <div class="left">
-    <div id="snav"></div>
-    <div class="box" id="sbox"></div>
-  </div>
+  <div class="left"><div id="snav"></div><div class="box" id="sbox"></div></div>
   <div class="right">
     <canvas id="c3"></canvas>
     <div class="can-badge">
-      <div class="badge-prod" id="bdg-name">400 ml Air Freshener</div>
-      <div class="badge-spec" id="bdg-sub">Label: 204 × 160 mm</div>
+      <div class="badge-prod" id="bdg-name">300 ml Air Freshener</div>
+      <div class="badge-spec" id="bdg-sub">Matte · Standard Cap</div>
     </div>
     <div class="zoom-wrap">
       <button class="zoom-btn" onclick="zoomIn()" title="Zoom in">+</button>
-      <button class="zoom-btn zoom-reset" onclick="zoomReset()" title="Reset zoom" id="zoom-reset-btn">1:1</button>
-      <button class="zoom-btn" onclick="zoomOut()" title="Zoom out">−</button>
+      <button class="zoom-btn zoom-reset" onclick="zoomReset()" title="Reset">1:1</button>
+      <button class="zoom-btn" onclick="zoomOut()" title="Zoom out">&#8722;</button>
     </div>
-    <div class="drag-hint" id="drag-hint-desktop">
+    <div class="drag-hint">
       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M5 12L9 8M5 12L9 16"/><path d="M5 12h14m0 0l-4-4m4 4l-4 4"/></svg>
-      <span id="drag-hint-text">Drag to rotate · Scroll to zoom</span>
+      <span id="drag-hint-text">Drag to rotate &middot; Scroll to zoom</span>
     </div>
   </div>
 </div>
-
 <script>
-/* ════════════════════════════════════════════
-   LANGUAGE SYSTEM
-════════════════════════════════════════════ */
-let LANG = 'en';
-const T = {
-  en: {
-    /* Header / Nav */
-    hdrTag:'Packaging Configurator', feedback:'Feedback',
-    navAbout:'About Us', navServices:'Our Services', navProducts:'Products',
-    navContacts:'Contacts', navCatalog:'Online Catalog', navWebsite:'Website',
-    /* 3D Viewer */
-    preview3d:'Preview 3D Can', dragHint:'Drag to rotate · Scroll to zoom',
-    /* Step nav */
-    step:'Step',
-    s1label:'Can Selection', s2label:'Body Colour',
-    s3label:'Cap & Finish', s4label:'Design & Artwork',
-    /* Step 1 */
-    s1title:'Can Selection',
-    prodCat:'Product Category',
-    catBeauty:'Beauty & Personal Care', catAir:'Air Freshener & Home',
-    prodType:'Product Type', fillVol:'Fill Volume',
-    /* Products */
-    pDeodorant:'Deodorant', pDeodorantSub:'Antiperspirant · Body',
-    pHairspray:'Hair Spray', pHairspraySub:'Styling · Hold',
-    pBodymist:'Body Mist', pBodymistSub:'Fragrance · Mist',
-    pPerfume:'Perfume', pPerfumeSub:'Fine Fragrance',
-    pRoomspray:'Room Spray', pRoomspraySub:'Air Care · Home',
-    pCarfresh:'Car Fresh', pCarfreshSub:'Auto · Cabin',
-    pFabric:'Fabric Mist', pFabricSub:'Textile · Refresh',
-    /* Step 2 */
-    s2title:'Body Colour', pantoneSel:'Pantone Colour Selection',
-    searchPlaceholder:'Search PMS code or name…',
-    noColour:'No colour selected', customLbl:'Custom',
-    /* Step 3 */
-    s3title:'Cap Colour & Finish',
-    stdCapHead:'Standard Cap',
-    stdCapDesc:'One fixed overcap profile is used across the configurator for a cleaner and more realistic setup. Customers can customise the <strong>finish</strong> and <strong>colour</strong>, while the cap shape stays consistent.',
-    surfaceFinish:'Surface Finish', capColour:'Cap Colour',
-    matchedBody:'Matched to body colour — click to choose a separate cap colour',
-    useBodyCol:'Use same colour as can body',
-    fMatte:'Matte', fSatin:'Satin', fGloss:'Gloss', fMetallic:'Metallic', fChrome:'Chrome',
-    /* Step 4 */
-    s4title:'Design & Artwork',
-    bareCanLbl:'Bare Can Mode', bareCanSub:'Uniform colour only — no label artwork',
-    artworkFile:'Artwork File',
-    artSpecHead:'Artwork Canvas Specification',
-    canvasSize:'Canvas size', aspectRatio:'Aspect ratio',
-    frontZone:'Front-face zone', safePanel:'Safe label panel',
-    artCentreHint:'Centre your artwork horizontally — the canvas centre maps to the front face of the can.',
-    tplLabel:'Example Templates — click to apply',
-    tplMinimal:'Minimal', tplBold:'Bold', tplStripe:'Stripe', tplGradient:'Gradient',
-    uploadHint:'Or upload your own artwork below ↓',
-    dlTemplate:'Download Template PNG',
-    uploadZoneTxt:'Upload Artwork File',
-    uploadHint2:'PNG · JPG · Ideal size 2048 × 1080 px',
-    removeLbl:'Remove',
-    posLbl:'Position', scaleLbl:'Scale',
-    bareModeText:'Bare can — uniform colour coat, no label artwork',
-    /* Studio */
-    artTabUpload:'Templates & Upload', artTabStudio:'Label Studio',
-    studioText:'Text', studioRect:'Rectangle', studioCircle:'Circle',
-    studioBg:'Background', studioDelete:'Delete', studioApply:'Apply to Can',
-    studioHint:'Double-click text to edit · Drag to move · Handles to resize',
-    studioFont:'Font', studioSize:'Size', studioColor:'Color',
-    studioFill:'Fill', studioOpacity:'Opacity', studioStroke:'Stroke',
-    studioAlign:'Align', studioApplied:'Studio label applied to can',
-    studioSelectHint:'Click an object to edit its properties',
-    studioEmoji:'Emoji', studioImage:'Add Logo / PNG',
-    emojiCatAll:'All', emojiCatFace:'😊 Faces', emojiCatNature:'🌿 Nature',
-    emojiCatFood:'🍋 Food', emojiCatSymbol:'✨ Symbols', emojiCatObjects:'💎 Objects',
-    /* Step 5 */
-    s5title:'Review & Submit', configSummary:'Configuration Summary',
-    sumProduct:'Product', sumBodyCol:'Body Colour', sumFinish:'Surface Finish',
-    sumCapStyle:'Cap Style', sumCapStyleVal:'Standard angled overcap',
-    sumCapCol:'Cap Colour', sumArtwork:'Artwork',
-    sumBare:'Bare can', sumCustomArt:'Custom artwork uploaded', sumNoArt:'No artwork',
-    matchBodyStr:'Match Body',
-    dlPdfTitle:'Download PDF', dlPdfSub:'Config summary + 3D render',
-    emailTitle:'Send by Email', emailSub:'Open in your mail client',
-    emailSubject:'Aerostar — Packaging Configuration',
-    /* Buttons */
-    btnBack:'Back', btnNext:'Next', btnBodyCol:'Body Colour',
-    btnCapFinish:'Cap & Finish', btnDesign:'Design & Artwork',
-    btnReview:'Review & Submit', btnSubmit:'Submit Request',
-    btnNewConfig:'New Configuration',
-    /* Family names */
-    famAll:'All', famR:'Red', famO:'Orange', famY:'Yellow', famG:'Green',
-    famB:'Blue', famP:'Purple', famK:'Pink', famN:'Neutral', famM:'Metallic',
-    /* Success */
-    submitted:'Request Submitted',
-    submittedDesc:'Your packaging specification has been received.<br>A member of the Aerostar team will respond within one business day.',
-    /* Badge */
-    badgeLabel:'Label: 204 × 160 mm',
-  },
-  ru: {
-    /* Header / Nav */
-    hdrTag:'Конфигуратор упаковки', feedback:'Обратная связь',
-    navAbout:'О компании', navServices:'Наши услуги', navProducts:'Продукция',
-    navContacts:'Контакты', navCatalog:'Каталог', navWebsite:'Сайт',
-    /* 3D Viewer */
-    preview3d:'3D-просмотр', dragHint:'Перетащите для вращения · Прокрутка для зума',
-    /* Step nav */
-    step:'Шаг',
-    s1label:'Выбор флакона', s2label:'Цвет корпуса',
-    s3label:'Крышка и финиш', s4label:'Дизайн',
-    /* Step 1 */
-    s1title:'Выбор флакона',
-    prodCat:'Категория продукта',
-    catBeauty:'Красота и уход', catAir:'Освежитель воздуха',
-    prodType:'Тип продукта', fillVol:'Объём наполнения',
-    /* Products */
-    pDeodorant:'Дезодорант', pDeodorantSub:'Антиперспирант · Тело',
-    pHairspray:'Лак для волос', pHairspraySub:'Укладка · Фиксация',
-    pBodymist:'Мист для тела', pBodymistSub:'Аромат · Спрей',
-    pPerfume:'Духи', pPerfumeSub:'Парфюмерия',
-    pRoomspray:'Спрей для помещений', pRoomspraySub:'Уход за воздухом · Дом',
-    pCarfresh:'Ароматизатор авто', pCarfreshSub:'Авто · Салон',
-    pFabric:'Мист для ткани', pFabricSub:'Текстиль · Освежение',
-    /* Step 2 */
-    s2title:'Цвет корпуса', pantoneSel:'Выбор цвета Pantone',
-    searchPlaceholder:'Поиск по коду PMS или названию…',
-    noColour:'Цвет не выбран', customLbl:'Свой цвет',
-    /* Step 3 */
-    s3title:'Цвет крышки и финиш',
-    stdCapHead:'Стандартная крышка',
-    stdCapDesc:'В конфигураторе используется один профиль крышки. Покупатели могут настроить <strong>финиш</strong> и <strong>цвет</strong>, тогда как форма крышки остаётся неизменной.',
-    surfaceFinish:'Поверхность', capColour:'Цвет крышки',
-    matchedBody:'Совпадает с корпусом — нажмите для выбора отдельного цвета',
-    useBodyCol:'Использовать цвет корпуса',
-    fMatte:'Матовый', fSatin:'Сатин', fGloss:'Глянец', fMetallic:'Металлик', fChrome:'Хром',
-    /* Step 4 */
-    s4title:'Дизайн и изображение',
-    bareCanLbl:'Режим без этикетки', bareCanSub:'Только однотонное покрытие — без этикетки',
-    artworkFile:'Файл изображения',
-    artSpecHead:'Параметры холста',
-    canvasSize:'Размер холста', aspectRatio:'Соотношение сторон',
-    frontZone:'Лицевая зона', safePanel:'Безопасная зона',
-    artCentreHint:'Центрируйте изображение горизонтально — центр холста соответствует лицевой стороне флакона.',
-    tplLabel:'Шаблоны — нажмите для применения',
-    tplMinimal:'Минимальный', tplBold:'Жирный', tplStripe:'Полосы', tplGradient:'Градиент',
-    uploadHint:'Или загрузите своё изображение ↓',
-    dlTemplate:'Скачать шаблон PNG',
-    uploadZoneTxt:'Загрузить изображение',
-    uploadHint2:'PNG · JPG · Рекомендуемый размер 2048 × 1080 пкс',
-    removeLbl:'Удалить',
-    posLbl:'Позиция', scaleLbl:'Масштаб',
-    bareModeText:'Голый флакон — однотонное покрытие, без этикетки',
-    /* Studio */
-    artTabUpload:'Шаблоны и загрузка', artTabStudio:'Дизайн-студия',
-    studioText:'Текст', studioRect:'Прямоугольник', studioCircle:'Круг',
-    studioBg:'Фон', studioDelete:'Удалить', studioApply:'Применить к флакону',
-    studioHint:'Двойной щелчок: редактировать · Перетащить: переместить',
-    studioFont:'Шрифт', studioSize:'Размер', studioColor:'Цвет',
-    studioFill:'Заливка', studioOpacity:'Прозрачность', studioStroke:'Обводка',
-    studioAlign:'Выравнивание', studioApplied:'Дизайн из студии применён к флакону',
-    studioSelectHint:'Нажмите на объект для редактирования',
-    studioEmoji:'Эмодзи', studioImage:'Логотип / PNG',
-    emojiCatAll:'Все', emojiCatFace:'😊 Лица', emojiCatNature:'🌿 Природа',
-    emojiCatFood:'🍋 Еда', emojiCatSymbol:'✨ Символы', emojiCatObjects:'💎 Объекты',
-    /* Step 5 */
-    s5title:'Обзор и отправка', configSummary:'Сводка конфигурации',
-    sumProduct:'Продукт', sumBodyCol:'Цвет корпуса', sumFinish:'Поверхность',
-    sumCapStyle:'Тип крышки', sumCapStyleVal:'Стандартная наклонная крышка',
-    sumCapCol:'Цвет крышки', sumArtwork:'Изображение',
-    sumBare:'Без этикетки', sumCustomArt:'Загружено изображение', sumNoArt:'Без изображения',
-    matchBodyStr:'Совпадает с корпусом',
-    dlPdfTitle:'Скачать PDF', dlPdfSub:'Сводка конфигурации + 3D-рендер',
-    emailTitle:'Отправить по email', emailSub:'Открыть в почтовом клиенте',
-    emailSubject:'Aerostar — Конфигурация упаковки',
-    /* Buttons */
-    btnBack:'Назад', btnNext:'Далее', btnBodyCol:'Цвет корпуса',
-    btnCapFinish:'Крышка и финиш', btnDesign:'Дизайн',
-    btnReview:'Обзор и отправка', btnSubmit:'Отправить запрос',
-    btnNewConfig:'Новая конфигурация',
-    /* Family names */
-    famAll:'Все', famR:'Красный', famO:'Оранжевый', famY:'Жёлтый', famG:'Зелёный',
-    famB:'Синий', famP:'Фиолетовый', famK:'Розовый', famN:'Нейтральный', famM:'Металлик',
-    /* Success */
-    submitted:'Запрос отправлен',
-    submittedDesc:'Ваша спецификация упаковки получена.<br>Специалист Aerostar свяжется с вами в течение одного рабочего дня.',
-    /* Badge */
-    badgeLabel:'Этикетка: 204 × 160 мм',
-  }
-};
 
-function t(key){ return (T[LANG] && T[LANG][key]) || T.en[key] || key; }
-
+/* ════ LANGUAGE ════ */
+let LANG='en';
+const T={
+en:{
+  hdrTag:'Packaging Configurator',feedback:'Feedback',
+  navAbout:'About Us',navServices:'Our Services',navProducts:'Products',navContacts:'Contacts',navCatalog:'Online Catalog',navWebsite:'Website',
+  preview3d:'Preview 3D Can',dragHint:'Drag to rotate \u00b7 Scroll to zoom',
+  step:'Step',
+  s1label:'Can Selection',s2label:'Cap & Finish',s3label:'Design & Artwork',s4label:'Review & Submit',
+  s1title:'Can Selection',
+  prodCat:'Product Category',
+  catBeauty:'Beauty & Personal Care',
+  catAir:'Air Freshener',
+  catHome:'Home',
+  prodType:'Product Type',fillVol:'Fill Volume',
+  pDeodorant:'Deodorant',pDeodorantSub:'Antiperspirant \u00b7 Body',
+  pHairspray:'Hair Spray',pHairspraySub:'Styling \u00b7 Hold',
+  pBodymist:'Body Mist',pBodymistSub:'Fragrance \u00b7 Mist',
+  pPerfume:'Perfume',pPerfumeSub:'Fine Fragrance',
+  pAFWater:'AF \u2013 Water Base',pAFWaterSub:'Water-based formula',
+  pAFAlcohol:'AF \u2013 Alcohol Base',pAFAlcoholSub:'Alcohol-based formula',
+  pAFRefill:'AF \u2013 Auto Refill',pAFRefillSub:'Automatic dispenser refill',
+  pHomeSpray:'Home Spray',pHomeSpraySub:'Interior \u00b7 Fragrance',
+  pFabricFresh:'Fabric Refresher',pFabricFreshSub:'Textile \u00b7 Care',
+  s2title:'Cap Style & Finish',
+  capStyleHead:'Cap Style',
+  capStdName:'Standard Overcap',capStdDesc:'Classic angled aerosol cap',
+  capDomeName:'Dome Cap',capDomeDesc:'Rounded dome-style overcap',
+  capSlimName:'Slim Overcap',capSlimDesc:'Sleek narrow-profile cap',
+  surfaceFinish:'External Surface Finish',capColour:'Cap Colour',
+  matchedBody:'Matched to body \u2014 click to choose separate cap colour',
+  useBodyCol:'Match can body (silver / aluminium)',
+  fMatte:'Matte',fSemiMatte:'Semi-Matte',fGloss:'Gloss',fPearl:'Pearl',
+  s3title:'Design & Artwork',
+  bareCanLbl:'Bare Can Mode',bareCanSub:'Uniform coating \u2014 no label artwork',
+  artSpecHead:'Artwork Canvas Specification',
+  canvasSize:'Canvas size',aspectRatio:'Aspect ratio',frontZone:'Front-face zone',safePanel:'Safe label panel',
+  artCentreHint:'Centre your design horizontally \u2014 the canvas centre maps to the front face of the can.',
+  tplLabel:'Example Templates \u2014 click to apply (click again to remove)',
+  tplMinimal:'Minimal',tplBold:'Bold',tplStripe:'Stripe',tplGradient:'Gradient',
+  uploadHint:'Or upload your own artwork below \u2193',
+  dlTemplate:'Download Template PNG',
+  uploadZoneTxt:'Upload Artwork File',
+  uploadHint2:'PNG \u00b7 JPG \u00b7 Designed for 52\u00d7195 mm can (full wrap)',
+  removeLbl:'Remove',posLbl:'Position',scaleLbl:'Scale',
+  bareModeText:'Bare can \u2014 uniform coating, no label artwork',
+  artTabUpload:'Templates & Upload',artTabStudio:'Label Studio',
+  studioText:'Text',studioRect:'Rectangle',studioCircle:'Circle',
+  studioBg:'Background',studioDelete:'Delete',studioApply:'Apply to Can',
+  studioHint:'Double-click text to edit \u00b7 Drag to move \u00b7 Handles to resize',
+  studioFont:'Font',studioSize:'Size',studioColor:'Color',
+  studioFill:'Fill',studioOpacity:'Opacity',studioStroke:'Stroke',
+  studioAlign:'Align',studioApplied:'Studio label applied to can',
+  studioSelectHint:'Click an object to edit its properties',
+  studioEmoji:'Emoji',studioImage:'Add Logo / PNG',
+  emojiCatAll:'All',emojiCatFace:'\ud83d\ude0a Faces',emojiCatNature:'\ud83c\udf3f Nature',
+  emojiCatFood:'\ud83c\udf4b Food',emojiCatSymbol:'\u2728 Symbols',emojiCatObjects:'\ud83d\udc8e Objects',
+  s4title:'Review & Submit',configSummary:'Configuration Summary',
+  sumProduct:'Product',sumFinish:'Surface Finish',
+  sumCapStyle:'Cap Style',sumCapCol:'Cap Colour',sumArtwork:'Artwork',
+  sumBare:'Bare can',sumCustomArt:'Custom artwork uploaded',sumNoArt:'No artwork',
+  matchBodyStr:'Match Body (Silver)',
+  dlPdfTitle:'Download PDF',dlPdfSub:'Config summary + 3D render',
+  emailTitle:'Send by Email',emailSub:'Open in your mail client',
+  emailSubject:'Aerostar \u2014 Packaging Configuration',
+  btnBack:'Back',btnNext:'Next',
+  btnCapFinish:'Cap & Finish',btnDesign:'Design & Artwork',
+  btnReview:'Review & Submit',btnSubmit:'Submit Request',btnNewConfig:'New Configuration',
+  famAll:'All',famR:'Red',famO:'Orange',famY:'Yellow',famG:'Green',
+  famB:'Blue',famP:'Purple',famK:'Pink',famN:'Neutral',famM:'Metallic',
+  submitted:'Request Submitted',
+  submittedDesc:'Your packaging specification has been received.<br>A member of the Aerostar team will respond within one business day.',
+  noColour:'No colour selected',customLbl:'Custom',searchPlaceholder:'Search PMS code or name\u2026',
+},
+ru:{
+  hdrTag:'\u041a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0442\u043e\u0440 \u0443\u043f\u0430\u043a\u043e\u0432\u043a\u0438',feedback:'\u041e\u0431\u0440\u0430\u0442\u043d\u0430\u044f \u0441\u0432\u044f\u0437\u044c',
+  navAbout:'\u041e \u043a\u043e\u043c\u043f\u0430\u043d\u0438\u0438',navServices:'\u041d\u0430\u0448\u0438 \u0443\u0441\u043b\u0443\u0433\u0438',navProducts:'\u041f\u0440\u043e\u0434\u0443\u043a\u0446\u0438\u044f',
+  navContacts:'\u041a\u043e\u043d\u0442\u0430\u043a\u0442\u044b',navCatalog:'\u041a\u0430\u0442\u0430\u043b\u043e\u0433',navWebsite:'\u0421\u0430\u0439\u0442',
+  preview3d:'3D-\u043f\u0440\u043e\u0441\u043c\u043e\u0442\u0440',dragHint:'\u041f\u0435\u0440\u0435\u0442\u0430\u0449\u0438\u0442\u0435 \u0434\u043b\u044f \u0432\u0440\u0430\u0449\u0435\u043d\u0438\u044f \u00b7 \u041f\u0440\u043e\u043a\u0440\u0443\u0442\u043a\u0430 \u0434\u043b\u044f \u0437\u0443\u043c\u0430',
+  step:'\u0428\u0430\u0433',
+  s1label:'\u0412\u044b\u0431\u043e\u0440 \u0444\u043b\u0430\u043a\u043e\u043d\u0430',s2label:'\u041a\u0440\u044b\u0448\u043a\u0430 \u0438 \u0444\u0438\u043d\u0438\u0448',s3label:'\u0414\u0438\u0437\u0430\u0439\u043d',s4label:'\u041e\u0431\u0437\u043e\u0440 \u0438 \u043e\u0442\u043f\u0440\u0430\u0432\u043a\u0430',
+  s1title:'\u0412\u044b\u0431\u043e\u0440 \u0444\u043b\u0430\u043a\u043e\u043d\u0430',
+  prodCat:'\u041a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f',catBeauty:'\u041a\u0440\u0430\u0441\u043e\u0442\u0430 \u0438 \u0443\u0445\u043e\u0434',catAir:'\u041e\u0441\u0432\u0435\u0436\u0438\u0442\u0435\u043b\u044c \u0432\u043e\u0437\u0434\u0443\u0445\u0430',catHome:'\u0414\u043e\u043c',
+  prodType:'\u0422\u0438\u043f',fillVol:'\u041e\u0431\u044a\u0451\u043c',
+  pDeodorant:'\u0414\u0435\u0437\u043e\u0434\u043e\u0440\u0430\u043d\u0442',pDeodorantSub:'\u0410\u043d\u0442\u0438\u043f\u0435\u0440\u0441\u043f\u0438\u0440\u0430\u043d\u0442',
+  pHairspray:'\u041b\u0430\u043a \u0434\u043b\u044f \u0432\u043e\u043b\u043e\u0441',pHairspraySub:'\u0423\u043a\u043b\u0430\u0434\u043a\u0430',
+  pBodymist:'\u041c\u0438\u0441\u0442',pBodymistSub:'\u0410\u0440\u043e\u043c\u0430\u0442',
+  pPerfume:'\u0414\u0443\u0445\u0438',pPerfumeSub:'\u041f\u0430\u0440\u0444\u044e\u043c\u0435\u0440\u0438\u044f',
+  pAFWater:'\u041e\u0412 \u2013 \u0412\u043e\u0434\u043d\u0430\u044f',pAFWaterSub:'\u0412\u043e\u0434\u043d\u0430\u044f \u0444\u043e\u0440\u043c\u0443\u043b\u0430',
+  pAFAlcohol:'\u041e\u0412 \u2013 \u0421\u043f\u0438\u0440\u0442\u043e\u0432\u0430\u044f',pAFAlcoholSub:'\u0421\u043f\u0438\u0440\u0442\u043e\u0432\u0430\u044f \u0444\u043e\u0440\u043c\u0443\u043b\u0430',
+  pAFRefill:'\u041e\u0412 \u2013 \u0410\u0432\u0442\u043e\u0440\u0435\u0444\u0438\u043b\u043b',pAFRefillSub:'\u0414\u043b\u044f \u0430\u0432\u0442\u043e\u0434\u0438\u0441\u043f\u0435\u043d\u0441\u0435\u0440\u0430',
+  pHomeSpray:'\u0421\u043f\u0440\u0435\u0439 \u0434\u043b\u044f \u0434\u043e\u043c\u0430',pHomeSpraySub:'\u0418\u043d\u0442\u0435\u0440\u044c\u0435\u0440 \u00b7 \u0410\u0440\u043e\u043c\u0430\u0442',
+  pFabricFresh:'\u041e\u0441\u0432\u0435\u0436\u0438\u0442\u0435\u043b\u044c \u0442\u043a\u0430\u043d\u0438',pFabricFreshSub:'\u0422\u0435\u043a\u0441\u0442\u0438\u043b\u044c',
+  s2title:'\u041a\u0440\u044b\u0448\u043a\u0430 \u0438 \u0444\u0438\u043d\u0438\u0448',
+  capStyleHead:'\u0422\u0438\u043f \u043a\u0440\u044b\u0448\u043a\u0438',
+  capStdName:'\u0421\u0442\u0430\u043d\u0434\u0430\u0440\u0442\u043d\u0430\u044f',capStdDesc:'\u041a\u043b\u0430\u0441\u0441\u0438\u0447\u0435\u0441\u043a\u0430\u044f \u043a\u0440\u044b\u0448\u043a\u0430',
+  capDomeName:'\u041a\u0443\u043f\u043e\u043b',capDomeDesc:'\u041e\u043a\u0440\u0443\u0433\u043b\u0430\u044f \u043a\u0440\u044b\u0448\u043a\u0430',
+  capSlimName:'\u0421\u043b\u0438\u043c',capSlimDesc:'\u0423\u0437\u043a\u0430\u044f \u043a\u0440\u044b\u0448\u043a\u0430',
+  surfaceFinish:'\u0412\u043d\u0435\u0448\u043d\u044f\u044f \u043e\u0442\u0434\u0435\u043b\u043a\u0430',capColour:'\u0426\u0432\u0435\u0442 \u043a\u0440\u044b\u0448\u043a\u0438',
+  matchedBody:'\u0421\u043e\u0432\u043f\u0430\u0434\u0430\u0435\u0442 \u2014 \u043d\u0430\u0436\u043c\u0438\u0442\u0435 \u0434\u043b\u044f \u0432\u044b\u0431\u043e\u0440\u0430',
+  useBodyCol:'\u0421\u043e\u0432\u043f\u0430\u0434\u0430\u0435\u0442 \u0441 \u043a\u043e\u0440\u043f\u0443\u0441\u043e\u043c',
+  fMatte:'\u041c\u0430\u0442\u043e\u0432\u044b\u0439',fSemiMatte:'\u041f\u043e\u043b\u0443\u043c\u0430\u0442',fGloss:'\u0413\u043b\u044f\u043d\u0435\u0446',fPearl:'\u041f\u0435\u0440\u043b\u0430\u043c\u0443\u0442\u0440',
+  s3title:'\u0414\u0438\u0437\u0430\u0439\u043d \u0438 \u0438\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u0435',
+  bareCanLbl:'\u0411\u0435\u0437 \u044d\u0442\u0438\u043a\u0435\u0442\u043a\u0438',bareCanSub:'\u0422\u043e\u043b\u044c\u043a\u043e \u043f\u043e\u043a\u0440\u044b\u0442\u0438\u0435',
+  artSpecHead:'\u041f\u0430\u0440\u0430\u043c\u0435\u0442\u0440\u044b \u0445\u043e\u043b\u0441\u0442\u0430',canvasSize:'\u0420\u0430\u0437\u043c\u0435\u0440',aspectRatio:'\u0421\u043e\u043e\u0442\u043d\u043e\u0448\u0435\u043d\u0438\u0435',
+  frontZone:'\u041b\u0438\u0446\u0435\u0432\u0430\u044f \u0437\u043e\u043d\u0430',safePanel:'\u0411\u0435\u0437\u043e\u043f\u0430\u0441\u043d\u0430\u044f \u0437\u043e\u043d\u0430',
+  artCentreHint:'\u0426\u0435\u043d\u0442\u0440\u0438\u0440\u0443\u0439\u0442\u0435 \u0434\u0438\u0437\u0430\u0439\u043d \u0433\u043e\u0440\u0438\u0437\u043e\u043d\u0442\u0430\u043b\u044c\u043d\u043e.',
+  tplLabel:'\u0428\u0430\u0431\u043b\u043e\u043d\u044b \u2014 \u043d\u0430\u0436\u043c\u0438\u0442\u0435 \u0434\u043b\u044f \u043f\u0440\u0438\u043c\u0435\u043d\u0435\u043d\u0438\u044f',
+  tplMinimal:'\u041c\u0438\u043d\u0438\u043c\u0430\u043b\u044c\u043d\u044b\u0439',tplBold:'\u0416\u0438\u0440\u043d\u044b\u0439',tplStripe:'\u041f\u043e\u043b\u043e\u0441\u044b',tplGradient:'\u0413\u0440\u0430\u0434\u0438\u0435\u043d\u0442',
+  uploadHint:'\u0418\u043b\u0438 \u0437\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u0435 \u0441\u0432\u043e\u0451 \u0438\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u0435 \u2193',
+  dlTemplate:'\u0421\u043a\u0430\u0447\u0430\u0442\u044c \u0448\u0430\u0431\u043b\u043e\u043d PNG',
+  uploadZoneTxt:'\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044c \u0438\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u0435',
+  uploadHint2:'PNG \u00b7 JPG \u00b7 \u0414\u043b\u044f \u0444\u043b\u0430\u043a\u043e\u043d\u0430 52\u00d7195 \u043c\u043c',
+  removeLbl:'\u0423\u0434\u0430\u043b\u0438\u0442\u044c',posLbl:'\u041f\u043e\u0437\u0438\u0446\u0438\u044f',scaleLbl:'\u041c\u0430\u0441\u0448\u0442\u0430\u0431',
+  bareModeText:'\u0413\u043e\u043b\u044b\u0439 \u0444\u043b\u0430\u043a\u043e\u043d',
+  artTabUpload:'\u0428\u0430\u0431\u043b\u043e\u043d\u044b \u0438 \u0437\u0430\u0433\u0440\u0443\u0437\u043a\u0430',artTabStudio:'\u0414\u0438\u0437\u0430\u0439\u043d-\u0441\u0442\u0443\u0434\u0438\u044f',
+  studioText:'\u0422\u0435\u043a\u0441\u0442',studioRect:'\u041f\u0440\u044f\u043c\u043e\u0443\u0433\u043e\u043b\u044c\u043d\u0438\u043a',studioCircle:'\u041a\u0440\u0443\u0433',
+  studioBg:'\u0424\u043e\u043d',studioDelete:'\u0423\u0434\u0430\u043b\u0438\u0442\u044c',studioApply:'\u041f\u0440\u0438\u043c\u0435\u043d\u0438\u0442\u044c',
+  studioHint:'\u0414\u0432\u043e\u0439\u043d\u043e\u0439 \u0449\u0435\u043b\u0447\u043e\u043a: \u0440\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c',
+  studioFont:'\u0428\u0440\u0438\u0444\u0442',studioSize:'\u0420\u0430\u0437\u043c\u0435\u0440',studioColor:'\u0426\u0432\u0435\u0442',
+  studioFill:'\u0417\u0430\u043b\u0438\u0432\u043a\u0430',studioOpacity:'\u041f\u0440\u043e\u0437\u0440\u0430\u0447\u043d\u043e\u0441\u0442\u044c',studioStroke:'\u041e\u0431\u0432\u043e\u0434\u043a\u0430',
+  studioAlign:'\u0412\u044b\u0440\u0430\u0432\u043d\u0438\u0432\u0430\u043d\u0438\u0435',studioApplied:'\u0414\u0438\u0437\u0430\u0439\u043d \u043f\u0440\u0438\u043c\u0435\u043d\u0451\u043d',
+  studioSelectHint:'\u041d\u0430\u0436\u043c\u0438\u0442\u0435 \u043e\u0431\u044a\u0435\u043a\u0442',
+  studioEmoji:'\u042d\u043c\u043e\u0434\u0437\u0438',studioImage:'\u041b\u043e\u0433\u043e\u0442\u0438\u043f / PNG',
+  emojiCatAll:'\u0412\u0441\u0435',emojiCatFace:'\ud83d\ude0a \u041b\u0438\u0446\u0430',emojiCatNature:'\ud83c\udf3f \u041f\u0440\u0438\u0440\u043e\u0434\u0430',
+  emojiCatFood:'\ud83c\udf4b \u0415\u0434\u0430',emojiCatSymbol:'\u2728 \u0421\u0438\u043c\u0432\u043e\u043b\u044b',emojiCatObjects:'\ud83d\udc8e \u041e\u0431\u044a\u0435\u043a\u0442\u044b',
+  s4title:'\u041e\u0431\u0437\u043e\u0440 \u0438 \u043e\u0442\u043f\u0440\u0430\u0432\u043a\u0430',configSummary:'\u0421\u0432\u043e\u0434\u043a\u0430',
+  sumProduct:'\u041f\u0440\u043e\u0434\u0443\u043a\u0442',sumFinish:'\u041e\u0442\u0434\u0435\u043b\u043a\u0430',
+  sumCapStyle:'\u0422\u0438\u043f \u043a\u0440\u044b\u0448\u043a\u0438',sumCapCol:'\u0426\u0432\u0435\u0442 \u043a\u0440\u044b\u0448\u043a\u0438',sumArtwork:'\u0418\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u0435',
+  sumBare:'\u0411\u0435\u0437 \u044d\u0442\u0438\u043a\u0435\u0442\u043a\u0438',sumCustomArt:'\u0417\u0430\u0433\u0440\u0443\u0436\u0435\u043d\u043e',sumNoArt:'\u041d\u0435\u0442',
+  matchBodyStr:'\u0421\u043e\u0432\u043f\u0430\u0434\u0430\u0435\u0442',
+  dlPdfTitle:'\u0421\u043a\u0430\u0447\u0430\u0442\u044c PDF',dlPdfSub:'\u0421\u0432\u043e\u0434\u043a\u0430 + 3D',
+  emailTitle:'\u041e\u0442\u043f\u0440\u0430\u0432\u0438\u0442\u044c email',emailSub:'\u041e\u0442\u043a\u0440\u044b\u0442\u044c \u0432 \u043f\u043e\u0447\u0442\u0435',
+  emailSubject:'Aerostar \u2014 \u041a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f',
+  btnBack:'\u041d\u0430\u0437\u0430\u0434',btnNext:'\u0414\u0430\u043b\u0435\u0435',
+  btnCapFinish:'\u041a\u0440\u044b\u0448\u043a\u0430 \u0438 \u0444\u0438\u043d\u0438\u0448',btnDesign:'\u0414\u0438\u0437\u0430\u0439\u043d',
+  btnReview:'\u041e\u0431\u0437\u043e\u0440 \u0438 \u043e\u0442\u043f\u0440\u0430\u0432\u043a\u0430',btnSubmit:'\u041e\u0442\u043f\u0440\u0430\u0432\u0438\u0442\u044c',btnNewConfig:'\u041d\u043e\u0432\u0430\u044f \u043a\u043e\u043d\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044f',
+  famAll:'\u0412\u0441\u0435',famR:'\u041a\u0440\u0430\u0441\u043d\u044b\u0439',famO:'\u041e\u0440\u0430\u043d\u0436\u0435\u0432\u044b\u0439',famY:'\u0416\u0451\u043b\u0442\u044b\u0439',famG:'\u0417\u0435\u043b\u0451\u043d\u044b\u0439',
+  famB:'\u0421\u0438\u043d\u0438\u0439',famP:'\u0424\u0438\u043e\u043b\u0435\u0442\u043e\u0432\u044b\u0439',famK:'\u0420\u043e\u0437\u043e\u0432\u044b\u0439',famN:'\u041d\u0435\u0439\u0442\u0440\u0430\u043b\u044c\u043d\u044b\u0439',famM:'\u041c\u0435\u0442\u0430\u043b\u043b\u0438\u043a',
+  submitted:'\u0417\u0430\u043f\u0440\u043e\u0441 \u043e\u0442\u043f\u0440\u0430\u0432\u043b\u0435\u043d',
+  submittedDesc:'\u0421\u043f\u0435\u0446\u0438\u0444\u0438\u043a\u0430\u0446\u0438\u044f \u043f\u043e\u043b\u0443\u0447\u0435\u043d\u0430.',
+  noColour:'\u0426\u0432\u0435\u0442 \u043d\u0435 \u0432\u044b\u0431\u0440\u0430\u043d',customLbl:'\u0421\u0432\u043e\u0439 \u0446\u0432\u0435\u0442',searchPlaceholder:'\u041f\u043e\u0438\u0441\u043a\u2026',
+}};
+function t(key){return(T[LANG]&&T[LANG][key])||T.en[key]||key;}
 function setLang(lang){
-  LANG = lang;
-  document.getElementById('lo-en').classList.toggle('active', lang==='en');
-  document.getElementById('lo-ru').classList.toggle('active', lang==='ru');
-  document.documentElement.lang = lang;
-  // Update static elements
-  const $ = id => { const el=document.getElementById(id); return el; };
-  const setText = (id, key) => { const el=$(id); if(el) el.textContent=t(key); };
-  setText('hdr-tag-text','hdrTag');
-  setText('hdr-feedback','feedback');
-  setText('nav-about','navAbout');
-  setText('nav-services','navServices');
-  setText('nav-products','navProducts');
-  setText('nav-contacts','navContacts');
-  setText('nav-catalog','navCatalog');
-  setText('nav-website','navWebsite');
-  setText('vbar-label','preview3d');
-  setText('drag-hint-text','dragHint');
-  rebox();
-  renderNav();
-  updateBadge();
+  LANG=lang;
+  document.getElementById('lo-en').classList.toggle('active',lang==='en');
+  document.getElementById('lo-ru').classList.toggle('active',lang==='ru');
+  document.documentElement.lang=lang;
+  const setText=(id,key)=>{const el=document.getElementById(id);if(el)el.textContent=t(key);};
+  setText('hdr-tag-text','hdrTag');setText('hdr-feedback','feedback');
+  setText('nav-about','navAbout');setText('nav-services','navServices');setText('nav-products','navProducts');
+  setText('nav-contacts','navContacts');setText('nav-catalog','navCatalog');setText('nav-website','navWebsite');
+  setText('vbar-label','preview3d');setText('drag-hint-text','dragHint');
+  rebox();renderNav();updateBadge();
 }
-
-/* ════════════════════════════════════════════
-   ZOOM SYSTEM
-════════════════════════════════════════════ */
-let zoomFactor = 1.0;
-const ZOOM_MIN = 0.45, ZOOM_MAX = 2.2, ZOOM_STEP = 0.12;
-
-function zoomIn(){  zoomFactor = Math.max(ZOOM_MIN, zoomFactor - ZOOM_STEP); updateCamera(); }
-function zoomOut(){ zoomFactor = Math.min(ZOOM_MAX, zoomFactor + ZOOM_STEP); updateCamera(); }
-function zoomReset(){ zoomFactor = 1.0; updateCamera(); }
-
-/* ════════════════════════════════════════════
-   SVG ICONS
-════════════════════════════════════════════ */
+let zoomFactor=1.0;const ZOOM_MIN=0.45,ZOOM_MAX=2.2,ZOOM_STEP=0.12;
+function zoomIn(){zoomFactor=Math.max(ZOOM_MIN,zoomFactor-ZOOM_STEP);updateCamera();}
+function zoomOut(){zoomFactor=Math.min(ZOOM_MAX,zoomFactor+ZOOM_STEP);updateCamera();}
+function zoomReset(){zoomFactor=1.0;updateCamera();}
 const IC={
   can:`<svg width="22" height="38" viewBox="0 0 22 38" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="11" width="14" height="23" rx="2.5"/><path d="M4 11 Q4 4 6 3L9 2H13L16 3Q18 4 18 11Z"/><rect x="8" y="1" width="6" height="2" rx="1"/></svg>`,
   spray:`<svg width="22" height="38" viewBox="0 0 22 38" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="5" y="14" width="12" height="20" rx="2.5"/><path d="M5 14 Q5 8 8 6L11 5H13L16 6Q17 8 17 14Z"/><rect x="8" y="3" width="6" height="3" rx="1.5"/></svg>`,
+  home:`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>`,
   check:`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>`,
   chevron:`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>`,
   upload:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>`,
   match:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg>`,
   dl:`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`,
 };
-/* ════════════════════════════════════════════
-   PANTONE DATA
-════════════════════════════════════════════ */
+
+/* ════ PANTONE ════ */
 const PANTONE=[
-  {code:"485 C", name:"Red",          hex:"#DA291C",f:"R"},
-  {code:"032 C", name:"Warm Red",     hex:"#EF3340",f:"R"},
-  {code:"1795 C",name:"Flame",        hex:"#C8102E",f:"R"},
-  {code:"200 C", name:"Crimson",      hex:"#A6192E",f:"R"},
-  {code:"202 C", name:"Burgundy",     hex:"#7C2D35",f:"R"},
-  {code:"021 C", name:"Orange",       hex:"#FE5000",f:"O"},
-  {code:"151 C", name:"Tangerine",    hex:"#FF7900",f:"O"},
-  {code:"144 C", name:"Amber",        hex:"#E07000",f:"O"},
-  {code:"715 C", name:"Peach",        hex:"#F4A46A",f:"O"},
-  {code:"012 C", name:"Yellow",       hex:"#FFD900",f:"Y"},
-  {code:"109 C", name:"Gold Yellow",  hex:"#FFD700",f:"Y"},
-  {code:"130 C", name:"Sunflower",    hex:"#F0AC00",f:"Y"},
-  {code:"1235 C",name:"Saffron",      hex:"#FFC72C",f:"Y"},
-  {code:"375 C", name:"Lime",         hex:"#97D700",f:"G"},
-  {code:"368 C", name:"Green",        hex:"#72B542",f:"G"},
-  {code:"354 C", name:"Emerald",      hex:"#00A651",f:"G"},
-  {code:"342 C", name:"Forest",       hex:"#007A53",f:"G"},
-  {code:"3295 C",name:"Teal",         hex:"#00827F",f:"G"},
-  {code:"7729 C",name:"Racing Green", hex:"#215732",f:"G"},
-  {code:"2975 C",name:"Baby Blue",    hex:"#A8D8EA",f:"B"},
-  {code:"279 C", name:"Cornflower",   hex:"#5B9AD3",f:"B"},
-  {code:"285 C", name:"Process Blue", hex:"#0085CA",f:"B"},
-  {code:"300 C", name:"Classic Blue", hex:"#005BAC",f:"B"},
-  {code:"286 C", name:"Royal Blue",   hex:"#003DA5",f:"B"},
-  {code:"072 C", name:"Reflex Blue",  hex:"#10069F",f:"B"},
-  {code:"2758 C",name:"Indigo",       hex:"#1A265A",f:"B"},
-  {code:"2587 C",name:"Lilac",        hex:"#C5B4E3",f:"P"},
-  {code:"2577 C",name:"Lavender",     hex:"#9B8EC4",f:"P"},
-  {code:"2665 C",name:"Violet",       hex:"#7B68EE",f:"P"},
-  {code:"266 C", name:"Grape",        hex:"#7B5EA7",f:"P"},
-  {code:"2627 C",name:"Plum",         hex:"#4B3488",f:"P"},
-  {code:"269 C", name:"Deep Purple",  hex:"#2D1160",f:"P"},
-  {code:"1895 C",name:"Baby Pink",    hex:"#FFB6C1",f:"K"},
-  {code:"210 C", name:"Rose",         hex:"#F9A8C9",f:"K"},
-  {code:"812 C", name:"Hot Pink",     hex:"#FF5DA0",f:"K"},
-  {code:"212 C", name:"Fuchsia",      hex:"#E95F9A",f:"K"},
-  {code:"218 C", name:"Magenta",      hex:"#D31C81",f:"K"},
-  {code:"2395 C",name:"Deep Pink",    hex:"#B40068",f:"K"},
-  {code:"9180 C",name:"Cream",        hex:"#F5ECD7",f:"N"},
-  {code:"468 C", name:"Sand",         hex:"#D4B896",f:"N"},
-  {code:"476 C", name:"Brown",        hex:"#6F4E37",f:"N"},
-  {code:"CG-2 C",name:"Light Gray",   hex:"#C8C9C7",f:"N"},
-  {code:"CG-6 C",name:"Mid Gray",     hex:"#9E9E9C",f:"N"},
-  {code:"CG-10", name:"Dark Gray",    hex:"#63666A",f:"N"},
-  {code:"Black C",name:"Black",       hex:"#2B2926",f:"N"},
-  {code:"White",  name:"White",       hex:"#F8F8F8",f:"N"},
-  {code:"877 C",  name:"Silver",      hex:"#A7A9AC",f:"M",met:true},
-  {code:"871 C",  name:"Old Gold",    hex:"#85754E",f:"M",met:true},
-  {code:"872 C",  name:"Gold",        hex:"#9A7B4F",f:"M",met:true},
-  {code:"873 C",  name:"Antique Gold",hex:"#876C3B",f:"M",met:true},
-  {code:"875 C",  name:"Copper",      hex:"#965A38",f:"M",met:true},
-  {code:"876 C",  name:"Bronze",      hex:"#7D5D3B",f:"M",met:true},
+  {code:"485 C",name:"Red",hex:"#DA291C",f:"R"},{code:"032 C",name:"Warm Red",hex:"#EF3340",f:"R"},
+  {code:"1795 C",name:"Flame",hex:"#C8102E",f:"R"},{code:"200 C",name:"Crimson",hex:"#A6192E",f:"R"},
+  {code:"202 C",name:"Burgundy",hex:"#7C2D35",f:"R"},{code:"021 C",name:"Orange",hex:"#FE5000",f:"O"},
+  {code:"151 C",name:"Tangerine",hex:"#FF7900",f:"O"},{code:"144 C",name:"Amber",hex:"#E07000",f:"O"},
+  {code:"715 C",name:"Peach",hex:"#F4A46A",f:"O"},{code:"012 C",name:"Yellow",hex:"#FFD900",f:"Y"},
+  {code:"109 C",name:"Gold Yellow",hex:"#FFD700",f:"Y"},{code:"130 C",name:"Sunflower",hex:"#F0AC00",f:"Y"},
+  {code:"1235 C",name:"Saffron",hex:"#FFC72C",f:"Y"},{code:"375 C",name:"Lime",hex:"#97D700",f:"G"},
+  {code:"368 C",name:"Green",hex:"#72B542",f:"G"},{code:"354 C",name:"Emerald",hex:"#00A651",f:"G"},
+  {code:"342 C",name:"Forest",hex:"#007A53",f:"G"},{code:"3295 C",name:"Teal",hex:"#00827F",f:"G"},
+  {code:"7729 C",name:"Racing Green",hex:"#215732",f:"G"},{code:"2975 C",name:"Baby Blue",hex:"#A8D8EA",f:"B"},
+  {code:"279 C",name:"Cornflower",hex:"#5B9AD3",f:"B"},{code:"285 C",name:"Process Blue",hex:"#0085CA",f:"B"},
+  {code:"300 C",name:"Classic Blue",hex:"#005BAC",f:"B"},{code:"286 C",name:"Royal Blue",hex:"#003DA5",f:"B"},
+  {code:"072 C",name:"Reflex Blue",hex:"#10069F",f:"B"},{code:"2758 C",name:"Indigo",hex:"#1A265A",f:"B"},
+  {code:"2587 C",name:"Lilac",hex:"#C5B4E3",f:"P"},{code:"2577 C",name:"Lavender",hex:"#9B8EC4",f:"P"},
+  {code:"2665 C",name:"Violet",hex:"#7B68EE",f:"P"},{code:"266 C",name:"Grape",hex:"#7B5EA7",f:"P"},
+  {code:"2627 C",name:"Plum",hex:"#4B3488",f:"P"},{code:"269 C",name:"Deep Purple",hex:"#2D1160",f:"P"},
+  {code:"1895 C",name:"Baby Pink",hex:"#FFB6C1",f:"K"},{code:"210 C",name:"Rose",hex:"#F9A8C9",f:"K"},
+  {code:"812 C",name:"Hot Pink",hex:"#FF5DA0",f:"K"},{code:"212 C",name:"Fuchsia",hex:"#E95F9A",f:"K"},
+  {code:"218 C",name:"Magenta",hex:"#D31C81",f:"K"},{code:"2395 C",name:"Deep Pink",hex:"#B40068",f:"K"},
+  {code:"9180 C",name:"Cream",hex:"#F5ECD7",f:"N"},{code:"468 C",name:"Sand",hex:"#D4B896",f:"N"},
+  {code:"476 C",name:"Brown",hex:"#6F4E37",f:"N"},{code:"CG-2 C",name:"Light Gray",hex:"#C8C9C7",f:"N"},
+  {code:"CG-6 C",name:"Mid Gray",hex:"#9E9E9C",f:"N"},{code:"CG-10",name:"Dark Gray",hex:"#63666A",f:"N"},
+  {code:"Black C",name:"Black",hex:"#2B2926",f:"N"},{code:"White",name:"White",hex:"#F8F8F8",f:"N"},
+  {code:"877 C",name:"Silver",hex:"#A7A9AC",f:"M",met:true},{code:"871 C",name:"Old Gold",hex:"#85754E",f:"M",met:true},
+  {code:"872 C",name:"Gold",hex:"#9A7B4F",f:"M",met:true},{code:"873 C",name:"Antique Gold",hex:"#876C3B",f:"M",met:true},
+  {code:"875 C",name:"Copper",hex:"#965A38",f:"M",met:true},{code:"876 C",name:"Bronze",hex:"#7D5D3B",f:"M",met:true},
 ];
 const FAM_COL={R:"#DA291C",O:"#FE5000",Y:"#FFD900",G:"#72B542",B:"#005BAC",P:"#7B5EA7",K:"#E95F9A",N:"#9E9E9C",M:"#9A7B4F"};
-const FAM_NAME={All:"All",R:"Red",O:"Orange",Y:"Yellow",G:"Green",B:"Blue",P:"Purple",K:"Pink",N:"Neutral",M:"Metallic"};
 
-/* ════════════════════════════════════════════
-   PRODUCTS / SIZES / CAPS / FINISHES
-════════════════════════════════════════════ */
+/* ════ PRODUCTS (per-product sizes) ════ */
 const PRODUCTS={
   beauty:[
-    {id:"deodorant",name:"Deodorant",   sub:"Antiperspirant · Body",sx:1.00,sy:1.00},
-    {id:"hairspray",name:"Hair Spray",  sub:"Styling · Hold",       sx:1.00,sy:1.20},
-    {id:"bodymist", name:"Body Mist",   sub:"Fragrance · Mist",     sx:0.92,sy:1.06},
-    {id:"perfume",  name:"Perfume",     sub:"Fine Fragrance",       sx:0.82,sy:0.94},
+    {id:"deodorant",name:"Deodorant",  sub:"Antiperspirant",sx:1.0,sy:1.0,sizes:["75 ml","100 ml","150 ml","200 ml"]},
+    {id:"hairspray",name:"Hair Spray", sub:"Styling \u00b7 Hold",    sx:1.0,sy:1.2,sizes:["150 ml","200 ml","300 ml","400 ml"]},
+    {id:"bodymist", name:"Body Mist",  sub:"Fragrance \u00b7 Mist",  sx:0.92,sy:1.06,sizes:["100 ml","150 ml","200 ml"]},
+    {id:"perfume",  name:"Perfume",    sub:"Fine Fragrance",sx:0.82,sy:0.94,sizes:["50 ml","75 ml","100 ml"]},
   ],
   airfresh:[
-    {id:"roomspray",name:"Room Spray",  sub:"Air Care · Home",      sx:1.02,sy:1.08},
-    {id:"carfresh", name:"Car Fresh",   sub:"Auto · Cabin",         sx:0.88,sy:0.90},
-    {id:"fabric",   name:"Fabric Mist", sub:"Textile · Refresh",    sx:1.00,sy:1.14},
+    {id:"afwater",  name:"AF \u2013 Water Base",  sub:"Water-based formula",        sx:1.0,sy:1.0,sizes:["250 ml","300 ml","350 ml","400 ml"]},
+    {id:"afalcohol",name:"AF \u2013 Alcohol Base",sub:"Alcohol-based formula",      sx:1.0,sy:1.0,sizes:["300 ml"]},
+    {id:"afrefill", name:"AF \u2013 Auto Refill", sub:"Automatic dispenser refill", sx:0.88,sy:0.88,sizes:["230 ml","250 ml"]},
+  ],
+  home:[
+    {id:"homespray",   name:"Home Spray",      sub:"Interior \u00b7 Fragrance",sx:1.0,sy:1.0,sizes:["200 ml","300 ml"]},
+    {id:"fabricfresh", name:"Fabric Refresher",sub:"Textile \u00b7 Care",      sx:1.0,sy:1.05,sizes:["200 ml","300 ml"]},
   ],
 };
-const SIZES=[
-  {ml:"75 ml",scale:0.82},{ml:"100 ml",scale:0.90},{ml:"150 ml",scale:1.00},
-  {ml:"200 ml",scale:1.08},{ml:"300 ml",scale:1.18},{ml:"400 ml",scale:1.28},
-];
+
+/* ════ FINISHES: Matte, Semi-Matte, Gloss, Pearl ════ */
 const FINISHES=[
-  {id:"matte",   name:"Matte",    r:0.92,m:0.00,ball:"linear-gradient(135deg,#8a8a8a,#6a6a6a)"},
-  {id:"satin",   name:"Satin",    r:0.48,m:0.00,ball:"linear-gradient(135deg,#c8c8c8,#a0a0a0)"},
-  {id:"gloss",   name:"Gloss",    r:0.12,m:0.00,ball:"radial-gradient(circle at 35% 35%,#eee,#aaa)"},
-  {id:"metallic",name:"Metallic", r:0.28,m:0.84,ball:"linear-gradient(145deg,#a8a8a8,#efefef,#a0a0a0)"},
-  {id:"chrome",  name:"Chrome",   r:0.06,m:0.98,ball:"radial-gradient(circle at 28% 28%,#fff,#ccc,#777)"},
+  {id:"matte",    name:"Matte",      r:0.92,m:0.00,ball:"linear-gradient(145deg,#a0a0a0 0%,#787878 50%,#606060 100%)"},
+  {id:"semimatte",name:"Semi-Matte", r:0.58,m:0.06,ball:"linear-gradient(145deg,#d4d4d4 0%,#aaa 40%,#909090 100%)"},
+  {id:"gloss",    name:"Gloss",      r:0.10,m:0.00,ball:"radial-gradient(circle at 30% 28%,#fff 0%,#e8e8e8 25%,#b0b0b0 60%,#787878 100%)"},
+  {id:"pearl",    name:"Pearl",      r:0.32,m:0.40,ball:"linear-gradient(145deg,#f0e8f8 0%,#d4b8e8 30%,#b8d4e8 60%,#e8f0d8 100%)"},
 ];
 
-/* ════════════════════════════════════════════
-   STATE
-════════════════════════════════════════════ */
-let S={
-  step:1, category:"beauty", prod:PRODUCTS.beauty[0], size:SIZES[2],
-  bodyColor:PANTONE.find(p=>p.code==="877 C"),
-  capMatchBody:false, capColor:PANTONE.find(p=>p.code==="Black C"),
-  finish:FINISHES[1],
-  designImg:null, labelPosY:0.48, labelScale:0.82, bareMode:false,
-  pfam:"All", psearch:"", selectedTemplate:null,
-  artTab:'upload',
+/* ════ SIZE → SCALE FACTORS (relative to 300ml reference) ════ */
+const SIZE_SCALES={
+  "50 ml":0.72,"75 ml":0.78,"100 ml":0.84,"150 ml":0.90,
+  "200 ml":0.96,"230 ml":1.00,"250 ml":1.04,
+  "300 ml":1.10,"350 ml":1.17,"400 ml":1.25,
 };
 
+/* ════ CAP STYLES ════ */
+const CAP_STYLES=[
+  {id:"standard",nameKey:"capStdName",descKey:"capStdDesc"},
+  {id:"dome",    nameKey:"capDomeName",descKey:"capDomeDesc"},
+  {id:"slim",    nameKey:"capSlimName",descKey:"capSlimDesc"},
+];
 
+/* ════ FIXED BODY BASE (no user colour selection) ════ */
+const BODY_BASE={code:"Aluminium",name:"Silver Aluminium",hex:"#d4d4d6"};
 
-/* ════════════════════════════════════════════
-   STEPS
-════════════════════════════════════════════ */
+/* ════ STATE ════ */
+let S={
+  step:1,
+  category:"airfresh",
+  prod:null, /* set after init */
+  size:null, /* set after product init */
+  capMatchBody:true,
+  capColor:null, /* set after init */
+  capStyle:"standard",
+  finish:FINISHES[0],
+  designImg:null,labelPosY:0.5,labelScale:1.0,bareMode:false,
+  pfam:"All",psearch:"",selectedTemplate:null,artTab:"upload",
+};
+/* init after data */
+S.prod=PRODUCTS.airfresh[0];
+S.size=S.prod.sizes[0]; /* start at smallest size */
+S.capColor=PANTONE.find(p=>p.code==="877 C");
+
+/* ════ NAV STEPS (4 steps — body colour removed) ════ */
 const NAV_STEPS=[
   {n:"01",label:"s1label"},
   {n:"02",label:"s2label"},
@@ -726,926 +576,520 @@ const NAV_STEPS=[
   {n:"04",label:"s4label"},
 ];
 function renderNav(){
-  document.getElementById("snav").innerHTML=`<div class="step-progress">`+
+  document.getElementById("snav").innerHTML='<div class="step-progress">'+
     NAV_STEPS.map((st,i)=>{
-      const s=i+1,isActive=s===S.step,isDone=s<S.step;
-      const cl=isActive?"sp-item active":isDone?"sp-item done":"sp-item";
-      return`${i>0?`<div class="sp-connector${isDone?" past":""}"></div>`:""}
+      const s=i+1,isA=s===S.step,isD=s<S.step;
+      const cl=isA?"sp-item active":isD?"sp-item done":"sp-item";
+      return`${i>0?`<div class="sp-connector${isD?" past":""}"></div>`:""}
         <div class="${cl}" onclick="if(${s}<=${S.step})goStep(${s})">
-          <div class="sp-num">${isDone?IC.check:st.n}</div>
-          <div class="sp-meta"><div class="sp-step">${t('step')} ${st.n}</div><div class="sp-label">${t(st.label)}</div></div>
+          <div class="sp-num">${isD?IC.check:st.n}</div>
+          <div class="sp-meta"><div class="sp-step">${t("step")} ${st.n}</div><div class="sp-label">${t(st.label)}</div></div>
         </div>`;
-    }).join("")+`</div>`;
+    }).join("")+'</div>';
 }
 
+/* ════ CAP SVG VIEWS ════ */
+function getCapSVG(id,view){
+  const c1="#d4d4d6",c2="#b8b8ba",c3="#e8e8ea",rg="#a0a0a2";
+  if(view==="top"){
+    const r=id==="slim"?9:13;
+    return`<svg width="30" height="30" viewBox="0 0 30 30"><ellipse cx="15" cy="15" rx="${r}" ry="${r}" fill="${c1}" stroke="${rg}" stroke-width="0.8"/><ellipse cx="15" cy="14" rx="${Math.round(r*0.55)}" ry="${Math.round(r*0.5)}" fill="${c2}" stroke="${rg}" stroke-width="0.5"/></svg>`;
+  }
+  if(id==="standard"){
+    if(view==="front"||view==="back")
+      return`<svg width="30" height="40" viewBox="0 0 30 40"><polygon points="3,12 27,12 25,4 5,4" fill="${c2}" stroke="${rg}" stroke-width="0.7"/><rect x="3" y="12" width="24" height="22" rx="1.5" fill="${c1}" stroke="${rg}" stroke-width="0.7"/><rect x="2" y="34" width="26" height="3" rx="1" fill="${c2}" stroke="${rg}" stroke-width="0.6"/></svg>`;
+    return`<svg width="30" height="40" viewBox="0 0 30 40"><polygon points="5,4 25,8 25,34 5,34" fill="${c1}" stroke="${rg}" stroke-width="0.7"/><rect x="4" y="34" width="22" height="3" rx="1" fill="${c2}" stroke="${rg}" stroke-width="0.6"/></svg>`;
+  }
+  if(id==="dome"){
+    if(view==="front"||view==="back")
+      return`<svg width="30" height="40" viewBox="0 0 30 40"><path d="M5,20 Q5,4 15,4 Q25,4 25,20 L25,34 L5,34 Z" fill="${c1}" stroke="${rg}" stroke-width="0.7"/><rect x="2" y="34" width="26" height="3" rx="1" fill="${c2}" stroke="${rg}" stroke-width="0.6"/></svg>`;
+    return`<svg width="30" height="40" viewBox="0 0 30 40"><path d="M7,20 Q7,4 15,4 Q23,4 23,20 L23,34 L7,34 Z" fill="${c3}" stroke="${rg}" stroke-width="0.7"/><rect x="4" y="34" width="22" height="3" rx="1" fill="${c2}" stroke="${rg}" stroke-width="0.6"/></svg>`;
+  }
+  if(id==="slim"){
+    if(view==="front"||view==="back")
+      return`<svg width="30" height="40" viewBox="0 0 30 40"><rect x="9" y="4" width="12" height="30" rx="2.5" fill="${c1}" stroke="${rg}" stroke-width="0.7"/><rect x="7" y="34" width="16" height="3" rx="1" fill="${c2}" stroke="${rg}" stroke-width="0.6"/></svg>`;
+    return`<svg width="30" height="40" viewBox="0 0 30 40"><rect x="9" y="4" width="12" height="30" rx="2.5" fill="${c3}" stroke="${rg}" stroke-width="0.7"/><rect x="7" y="34" width="16" height="3" rx="1" fill="${c2}" stroke="${rg}" stroke-width="0.6"/></svg>`;
+  }
+  return`<svg width="30" height="40" viewBox="0 0 30 40"><rect x="4" y="4" width="22" height="33" rx="2" fill="${c1}" stroke="${rg}" stroke-width="0.7"/></svg>`;
+}
 
-/* ════════════════════════════════════════════════════════════════
-   THREE.JS — 400 ml HOUSEHOLD AIR FRESHENER AEROSOL
-   Technical spec (all in metres, 1mm = 0.001m):
+function renderCapStyleGrid(){
+  const views=["front","side","back","top"];
+  return CAP_STYLES.map(cs=>{
+    const isOn=S.capStyle===cs.id;
+    return`<div class="cap-style-card${isOn?" on":""}" onclick="selectCapStyle('${cs.id}')">
+      <div class="cap-views-grid">
+        ${views.map(v=>`<div class="cap-view-cell">
+          <div class="cap-view-lbl">${v.charAt(0).toUpperCase()+v.slice(1)}</div>
+          ${getCapSVG(cs.id,v)}
+        </div>`).join("")}
+      </div>
+      <div class="cap-style-name">${t(cs.nameKey)}</div>
+      <div class="cap-style-desc">${t(cs.descKey)}</div>
+    </div>`;
+  }).join("");
+}
 
-   BODY:    R=0.0325m  H=0.195m  (straight wall)
-   SHOULDER: H=0.022m  from R=0.0325 → R=0.0135
-   NECK:    R=0.0135m  (valve cup: R=0.0137m, H=0.004m)
-   CAP:     outerR=0.0335m  H=0.052m  topDome=0.004m
-   TOTAL:   0.247m with cap
+function selectCapStyle(id){
+  S.capStyle=id;
+  buildCapGeometry(id);
+  capGroup.visible=true;
+  rebox();
+}
 
-   Label area: 204.2mm wide (full circumference) × 160mm tall
-   Label canvas: 2048 × 1607px (maintains physical ratio)
-════════════════════════════════════════════════════════════════ */
-const mm = 0.001; // 1mm in Three.js metres
+/* ════ THREE.JS — NEW CAN GEOMETRY (Ø52×195mm) ════
+   Based on threejs_aerosol_can.html
+   Scale: bodyRadius=0.92, bodyHeight=8.45
+   Label canvas: 1633×1950 (matches π×52 : 195mm ratio)
+   Full-circumference, full-height label ✅
+*/
+const CAN={bodyR:0.92,bodyH:8.45,capR:0.945,capH:1.68};
 
-/* Spec values (metres) */
-const S3 = {
-  bodyR:        31.5 * mm,
-  bodyH:        195  * mm,
-  shoulderH:    22   * mm,
-  neckR:        13.5 * mm,
-  valveR:       13.7 * mm,
-  valveH:       4    * mm,
-  capOuterR:    32.0 * mm,
-  capH:         58   * mm,
-  capDomeH:     4    * mm,
-  actW:         14   * mm,
-  actD:         10   * mm,
-  actH:         12   * mm,
-  totalH:       247  * mm,
-};
+const canvas3=document.getElementById("c3");
+const renderer=new THREE.WebGLRenderer({canvas:canvas3,antialias:true,preserveDrawingBuffer:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.outputEncoding=THREE.sRGBEncoding;
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 
-/* Y positions (bottom of can = 0) */
-const Y_body_bot  = 0;
-const Y_body_top  = S3.bodyH;
-const Y_shld_top  = S3.bodyH + S3.shoulderH;
-const Y_valve_top = S3.bodyH + S3.shoulderH + S3.valveH;
-/* Cap sits higher on the can so more of the shoulder is visible.
-   Bottom now sits 2mm below shoulder start instead of 8mm.
-   This gives a lighter, less bulky look while still covering the valve area. */
-const Y_cap_bot   = Y_body_top + 0.012;
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x1a1c22);
+const camera=new THREE.PerspectiveCamera(24,1,0.01,100);
 
-/* ── RENDERER ── */
-const canvas3 = document.getElementById("c3");
-const renderer = new THREE.WebGLRenderer({ canvas: canvas3, antialias: true, preserveDrawingBuffer: true });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.toneMapping = THREE.NoToneMapping;
-renderer.toneMappingExposure = 1.0;
-renderer.outputEncoding = THREE.sRGBEncoding;
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+/* lighting — matches threejs_aerosol_can.html reference exactly */
+const ambient=new THREE.HemisphereLight(0xffffff,0xd5d5d5,1.45);scene.add(ambient);
+const keyL=new THREE.DirectionalLight(0xffffff,1.55);
+keyL.position.set(5,8,7);keyL.castShadow=true;
+keyL.shadow.mapSize.set(2048,2048);
+keyL.shadow.camera.left=-7;keyL.shadow.camera.right=7;
+keyL.shadow.camera.top=8;keyL.shadow.camera.bottom=-8;
+keyL.shadow.bias=-0.0002;keyL.shadow.normalBias=0.025;scene.add(keyL);
+const rimL=new THREE.DirectionalLight(0xffffff,0.8);rimL.position.set(-5,5,-5);scene.add(rimL);
+const fillL=new THREE.DirectionalLight(0xffffff,0.45);fillL.position.set(-2,2,7);scene.add(fillL);
 
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xecf0f7);
+/* helpers */
+function toLinear(hex){return new THREE.Color().setStyle(hex).convertSRGBToLinear();}
+function setLinear(col,hex){col.setStyle(hex).convertSRGBToLinear();return col;}
 
-const camera = new THREE.PerspectiveCamera(28, 1, 0.001, 10);
+/* materials — matching threejs_aerosol_can.html reference */
+const silverMat=new THREE.MeshStandardMaterial({
+  color:toLinear("#e3e3e6"),metalness:0.72,roughness:0.34
+});
+/* paintedBody: matte painted finish matching reference */
+const paintedBody=new THREE.MeshStandardMaterial({
+  color:toLinear("#cecece"),metalness:0.06,roughness:0.80
+});
+let labelMat=new THREE.MeshBasicMaterial({
+  color:0xffffff,
+  polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2
+});
+let capMat=new THREE.MeshStandardMaterial({
+  color:toLinear(PANTONE.find(p=>p.code==="877 C").hex),
+  metalness:0.04,roughness:0.42
+});
+const valveMat=new THREE.MeshStandardMaterial({
+  color:new THREE.Color(1,1,1).convertSRGBToLinear(),metalness:0.30,roughness:0.45
+});
+const ringMat=silverMat; /* bottom lip/bead same silver as reference */
 
-/* ── STUDIO LIGHTING ── */
-scene.add(new THREE.AmbientLight(0xffffff, 0.25));
-const keyL = new THREE.DirectionalLight(0xffffff, 0.85);
-keyL.position.set(-0.3, 0.8, 0.6);
-keyL.castShadow = true;
-keyL.shadow.mapSize.set(2048, 2048);
-keyL.shadow.camera.left = -0.2; keyL.shadow.camera.right = 0.2;
-keyL.shadow.camera.top  =  0.4; keyL.shadow.camera.bottom = -0.1;
-keyL.shadow.radius = 8; keyL.shadow.bias = -0.0005;
-scene.add(keyL);
-const fillL = new THREE.DirectionalLight(0xffffff, 0.35); fillL.position.set(0.5, 0.2, 0.4);   scene.add(fillL);
-const rimL  = new THREE.DirectionalLight(0xffffff, 0.20); rimL.position.set(0,   0.6, -0.7);   scene.add(rimL);
-const botL  = new THREE.DirectionalLight(0xffffff, 0.08); botL.position.set(0,  -0.5,  0.3);   scene.add(botL);
+let tCapCol=toLinear(PANTONE.find(p=>p.code==="877 C").hex);
+let tR=S.finish.r,tM=S.finish.m;
 
-/* ── MATERIALS ── */
-let bodyMat  = new THREE.MeshStandardMaterial({ color: toLinear(S.bodyColor.hex), roughness: S.finish.r, metalness: S.finish.m });
-let labelMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: false });
-let capMat   = new THREE.MeshStandardMaterial({ color: toLinear(S.capMatchBody ? S.bodyColor.hex : S.capColor.hex), roughness: 0.42, metalness: 0.02 });
-let ringMat  = new THREE.MeshStandardMaterial({ color: 0x888888, roughness: 0.40, metalness: 0.60 });
-function toLinear(hex) { return new THREE.Color().setStyle(hex).convertSRGBToLinear(); }
-function setLinear(col, hex) { col.setStyle(hex).convertSRGBToLinear(); return col; }
-let tBodyCol = toLinear(S.bodyColor.hex);
-let tCapCol  = toLinear(S.capMatchBody ? S.bodyColor.hex : S.capColor.hex);
-let tR = S.finish.r, tM = S.finish.m;
-
-const canGroup = new THREE.Group();
+/* can group — y=0 at base */
+const canGroup=new THREE.Group();
 scene.add(canGroup);
 
-/* ── BODY ── straight-wall cylinder, 80% label area */
-const bodyMesh = new THREE.Mesh(new THREE.CylinderGeometry(S3.bodyR, S3.bodyR, S3.bodyH, 80, 1), bodyMat);
-bodyMesh.position.y = S3.bodyH / 2;
-bodyMesh.castShadow = true;
+/* BODY — uses paintedBody matching reference */
+const bodyMesh=new THREE.Mesh(
+  new THREE.CylinderGeometry(CAN.bodyR,CAN.bodyR,CAN.bodyH,160,1,false),paintedBody);
+bodyMesh.position.y=CAN.bodyH/2;
 canGroup.add(bodyMesh);
 
-/* ── LABEL ── open-ended cylinder, sits 1mm above body bottom, covers 80% height */
-const labelH = S3.bodyH * 0.82;
-const labelMesh = new THREE.Mesh(new THREE.CylinderGeometry(S3.bodyR + 0.0002, S3.bodyR + 0.0002, labelH, 80, 1, true), labelMat);
-labelMesh.position.y = S3.bodyH * 0.50;
+/* BODY HIGHLIGHT — semi-transparent gloss sheen (from reference) */
+const bodyHighlight=new THREE.Mesh(
+  new THREE.CylinderGeometry(CAN.bodyR*1.0025,CAN.bodyR*1.0025,CAN.bodyH*0.996,160,1,true),
+  new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0.045,side:THREE.DoubleSide})
+);
+bodyHighlight.position.y=CAN.bodyH/2;
+canGroup.add(bodyHighlight);
+
+/* LABEL — full height, full circumference ✅
+   polygonOffset on labelMat prevents z-fighting at all zoom levels */
+const labelMesh=new THREE.Mesh(
+  new THREE.CylinderGeometry(CAN.bodyR+0.008,CAN.bodyR+0.008,CAN.bodyH,160,1,true),labelMat);
+labelMesh.position.y=CAN.bodyH/2;
 canGroup.add(labelMesh);
 
-/* ── BOTTOM RIM ── metallic seam ring */
-const bRim = new THREE.Mesh(new THREE.TorusGeometry(S3.bodyR * 1.005, 1.4 * mm, 8, 72), ringMat);
-bRim.rotation.x = Math.PI / 2; bRim.position.y = 3 * mm;
-canGroup.add(bRim);
+/* TOP RIM */
+const topRim=new THREE.Mesh(new THREE.TorusGeometry(CAN.bodyR*0.995,0.048,28,140),silverMat);
+topRim.rotation.x=Math.PI/2;topRim.position.y=CAN.bodyH+0.02;canGroup.add(topRim);
 
-/* ── BOTTOM DOME ── very shallow concave base (standard aerosol) */
-const domePts = [];
-for (let i = 0; i <= 28; i++) {
-  const t = i / 28, a = t * Math.PI * 0.5;
-  domePts.push(new THREE.Vector2(S3.bodyR * Math.sin(a), -5 * mm * (1 - Math.cos(a))));
-}
-const domeMesh = new THREE.Mesh(new THREE.LatheGeometry(domePts, 72), bodyMat);
-canGroup.add(domeMesh);
+/* SHOULDER (LatheGeometry — from threejs_aerosol_can.html spec) */
+const shoulderProfile=[
+  new THREE.Vector2(CAN.bodyR*1.010,0.00),new THREE.Vector2(CAN.bodyR*1.005,0.03),
+  new THREE.Vector2(CAN.bodyR*0.990,0.07),new THREE.Vector2(CAN.bodyR*0.950,0.12),
+  new THREE.Vector2(CAN.bodyR*0.890,0.18),new THREE.Vector2(CAN.bodyR*0.820,0.24),
+  new THREE.Vector2(CAN.bodyR*0.740,0.30),new THREE.Vector2(CAN.bodyR*0.670,0.35),
+  new THREE.Vector2(CAN.bodyR*0.620,0.39),new THREE.Vector2(CAN.bodyR*0.590,0.42),
+  new THREE.Vector2(CAN.bodyR*0.580,0.45),
+];
+const shoulderMesh=new THREE.Mesh(new THREE.LatheGeometry(shoulderProfile,160),silverMat);
+shoulderMesh.position.y=CAN.bodyH;canGroup.add(shoulderMesh);
 
-/* ── SHOULDER ── smooth S-curve LatheGeometry from body-R to neck-R */
-const shPts = [];
-for (let i = 0; i <= 48; i++) {
-  const t = i / 48;
-  /* ease-in-out cubic for smooth tangent join at both ends */
-  const e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-  const r = S3.bodyR + (S3.neckR - S3.bodyR) * e;
-  const y = t * S3.shoulderH;
-  shPts.push(new THREE.Vector2(r, y));
-}
-const shMesh = new THREE.Mesh(new THREE.LatheGeometry(shPts, 72), bodyMat);
-shMesh.position.y = Y_body_top;
-shMesh.castShadow = true;
-canGroup.add(shMesh);
+/* SHOULDER CAP TORUS */
+const shoulderCap=new THREE.Mesh(new THREE.TorusGeometry(CAN.bodyR*0.60,0.021,20,120),silverMat);
+shoulderCap.rotation.x=Math.PI/2;shoulderCap.position.y=CAN.bodyH+0.448;canGroup.add(shoulderCap);
 
-/* ── VALVE CUP ── small metallic cylinder at top of shoulder */
-const valveMesh = new THREE.Mesh(new THREE.CylinderGeometry(S3.valveR, S3.valveR, S3.valveH, 48), ringMat);
-valveMesh.position.y = Y_shld_top + S3.valveH / 2;
-canGroup.add(valveMesh);
+/* TOP PLATE */
+const topPlate=new THREE.Mesh(
+  new THREE.CylinderGeometry(CAN.bodyR*0.625,CAN.bodyR*0.645,0.05,140),silverMat);
+topPlate.position.y=CAN.bodyH+0.455;canGroup.add(topPlate);
 
-/* ── CAP ────────────────────────────────────────────────────────
-   Standard fixed overcap with an angled top profile.
-   This is not a lathed shape. It is built from a cylinder and then
-   deformed so the top stays high at the back and falls smoothly toward
-   the front, matching the reference cap style the user shared.
-──────────────────────────────────────────────────────────────── */
-const capGroup = new THREE.Group();
-capGroup.position.y = Y_cap_bot;
+/* TOP INNER DISC */
+const topInnerDisc=new THREE.Mesh(
+  new THREE.CylinderGeometry(CAN.bodyR*0.48,CAN.bodyR*0.48,0.02,120),silverMat);
+topInnerDisc.position.y=CAN.bodyH+0.49;canGroup.add(topInnerDisc);
+
+/* VALVE STEM */
+const valveStem=new THREE.Mesh(new THREE.CylinderGeometry(0.045,0.045,0.34,48),valveMat);
+valveStem.position.y=CAN.bodyH+0.66;canGroup.add(valveStem);
+
+/* BOTTOM LIP */
+const bottomLip=new THREE.Mesh(
+  new THREE.CylinderGeometry(CAN.bodyR*1.035,CAN.bodyR*1.035,0.06,140),ringMat);
+bottomLip.position.y=0.03;canGroup.add(bottomLip);
+
+/* BOTTOM BEAD */
+const bottomBead=new THREE.Mesh(new THREE.TorusGeometry(CAN.bodyR*0.995,0.052,24,140),ringMat);
+bottomBead.rotation.x=Math.PI/2;bottomBead.position.y=0.09;canGroup.add(bottomBead);
+
+/* CAP GROUP */
+const capGroup=new THREE.Group();
+capGroup.position.y=CAN.bodyH+0.47; /* just above shoulder top (0.45) — no z-fighting */
 canGroup.add(capGroup);
 
-function makeAngledCapGeometry(outerRadius, height, radialSegments = 96, heightSegments = 30) {
-  const g = new THREE.CylinderGeometry(outerRadius, outerRadius * 1.01, height, radialSegments, heightSegments, false);
-  const pos = g.attributes.position;
-  const halfH = height / 2;
-  const backStartZ = -outerRadius * 0.58;   // back section stays flatter for longer
-  const frontEndZ  =  outerRadius * 0.92;   // front edge reaches the lowest top point
-  const maxDrop    =  height * 0.14;        // gentler front drop so the top stays covered
-  const softenBand =  11 * mm;               // softer moulded rounding at the top edge
-
-  for (let i = 0; i < pos.count; i++) {
-    const x = pos.getX(i);
-    let y = pos.getY(i);
-    const z = pos.getZ(i);
-
-    const t = THREE.MathUtils.clamp((z - backStartZ) / (frontEndZ - backStartZ), 0, 1);
-    const slope = Math.pow(t, 1.75);
-    const topLimit = halfH - maxDrop * slope;
-
-    if (y > topLimit) {
-      const above = y - topLimit;
-      const compression = Math.max(0, 1 - above / softenBand);
-      y = topLimit + above * compression * 0.18;
-    }
-
-    // Gentle side softening so the silhouette feels more injection-moulded
-    const sideFactor = Math.abs(x) / outerRadius;
-    if (y > halfH - 14 * mm) {
-      y -= sideFactor * sideFactor * 0.5 * mm;
-    }
-
-    pos.setY(i, y);
+function makeAngledCapGeom(outerR,height,rSegs,hSegs){
+  rSegs=rSegs||96;hSegs=hSegs||28;
+  const g=new THREE.CylinderGeometry(outerR,outerR*1.012,height,rSegs,hSegs,false);
+  const pos=g.attributes.position;
+  const halfH=height/2,backZ=-outerR*0.58,frontZ=outerR*0.92;
+  const maxDrop=height*0.14,soften=height*0.042;
+  for(let i=0;i<pos.count;i++){
+    const x=pos.getX(i);let y=pos.getY(i);const z=pos.getZ(i);
+    const tt=Math.max(0,Math.min(1,(z-backZ)/(frontZ-backZ)));
+    const topLim=halfH-maxDrop*Math.pow(tt,1.75);
+    if(y>topLim){const ab=y-topLim;y=topLim+ab*Math.max(0,1-ab/soften)*0.18;}
+    const sf=Math.abs(x)/outerR;
+    if(y>halfH-height*0.05)y-=sf*sf*height*0.001;
+    pos.setY(i,y);
   }
-
-  g.computeVertexNormals();
-  return g;
+  g.computeVertexNormals();return g;
 }
 
-const capOuterGeom = makeAngledCapGeometry(S3.capOuterR, S3.capH);
-const capShellM = new THREE.Mesh(capOuterGeom, capMat);
-capShellM.castShadow = true;
-capGroup.add(capShellM);
+function buildCapGeometry(styleId){
+  while(capGroup.children.length)capGroup.remove(capGroup.children[0]);
+  const R=CAN.capR,H=CAN.capH;
+  if(styleId==="standard"){
+    const stdMesh=new THREE.Mesh(makeAngledCapGeom(R,H),capMat);
+    stdMesh.position.y=H/2; /* shift up so BOTTOM sits at capGroup.y — avoids body z-fighting */
+    capGroup.add(stdMesh);
+    const lip=new THREE.Mesh(new THREE.TorusGeometry(R*1.002,0.015,8,96),ringMat);
+    lip.rotation.x=Math.PI/2;lip.position.y=0.018;capGroup.add(lip);
+  } else if(styleId==="dome"){
+    /* dome: lathe profile — cylinder body topped by quarter-sphere */
+    const pts=[];
+    for(let i=0;i<=40;i++){
+      const tt=i/40;
+      if(tt<0.62){pts.push(new THREE.Vector2(R*0.96,tt*H));}
+      else{
+        const dt=(tt-0.62)/0.38;
+        const r=R*0.96*(1-dt*dt);
+        const y=tt*H+dt*dt*R*0.28;
+        if(r>0.001)pts.push(new THREE.Vector2(r,y));
+      }
+    }
+    capGroup.add(new THREE.Mesh(new THREE.LatheGeometry(pts,96),capMat));
+    const lip=new THREE.Mesh(new THREE.TorusGeometry(R*0.96,0.015,8,96),ringMat);
+    lip.rotation.x=Math.PI/2;lip.position.y=0.018;capGroup.add(lip);
+  } else if(styleId==="slim"){
+    const sR=R*0.68,sH=H*1.08;
+    const body=new THREE.Mesh(new THREE.CylinderGeometry(sR*0.86,sR,sH,96,1,false),capMat);
+    body.position.y=sH/2;capGroup.add(body);
+    const top=new THREE.Mesh(new THREE.CylinderGeometry(sR*0.86,sR*0.86,0.04,96),capMat);
+    top.position.y=sH+0.02;capGroup.add(top);
+    const lip=new THREE.Mesh(new THREE.TorusGeometry(sR,0.015,8,96),ringMat);
+    lip.rotation.x=Math.PI/2;lip.position.y=0.018;capGroup.add(lip);
+  }
+}
+buildCapGeometry(S.capStyle);
+capGroup.visible=false; /* hidden until step 2 */
 
-const capInnerGeom = makeAngledCapGeometry(S3.capOuterR - 1.0 * mm, S3.capH - 2.5 * mm, 96, 28);
-const capInnerM = new THREE.Mesh(capInnerGeom, capMat);
-capInnerM.scale.set(0.992, 0.96, 0.992);
-capInnerM.position.y = 1.2 * mm;
-capGroup.add(capInnerM);
+/* Position matches reference: canGroup.y = -4.0 */
+canGroup.position.y = -4.0;
 
-const capLipM = new THREE.Mesh(new THREE.TorusGeometry(S3.capOuterR * 1.002, 0.7 * mm, 8, 96), ringMat);
-capLipM.rotation.x = Math.PI / 2;
-capLipM.position.y = 1.8 * mm;
-capGroup.add(capLipM);
-
-/* D. Actuator button (14×10×12mm box, sits on valve, centred) */
-const actMat2 = new THREE.MeshStandardMaterial({ color: 0x777777, roughness: 0.55, metalness: 0.05 });
-const actMesh = new THREE.Mesh(
-  new THREE.BoxGeometry(S3.actW, S3.actH, S3.actD),
-  actMat2
+/* contact shadow — gradient matches reference */
+const shadowCv=document.createElement('canvas');shadowCv.width=256;shadowCv.height=256;
+const sCtx=shadowCv.getContext('2d');
+const sGr=sCtx.createRadialGradient(128,128,20,128,128,120);
+sGr.addColorStop(0,'rgba(0,0,0,0.22)');sGr.addColorStop(0.45,'rgba(0,0,0,0.12)');sGr.addColorStop(1,'rgba(0,0,0,0)');
+sCtx.fillStyle=sGr;sCtx.fillRect(0,0,256,256);
+const shadowTex=new THREE.CanvasTexture(shadowCv);
+const shadowPlane=new THREE.Mesh(
+  new THREE.PlaneGeometry(3.4,3.4),
+  new THREE.MeshBasicMaterial({map:shadowTex,transparent:true,depthWrite:false})
 );
-actMesh.position.y = Y_shld_top + S3.valveH + S3.actH / 2 - 2 * mm;
-actMesh.rotation.y = 0; /* faces front */
-canGroup.add(actMesh);
+shadowPlane.rotation.x=-Math.PI/2;
+shadowPlane.position.y=canGroup.position.y+0.015;
+scene.add(shadowPlane);
 
-/* ── POSITION WHOLE CAN ── origin at base, centred in view */
-canGroup.position.y = -(S3.totalH / 2);
-
-/* ── CAMERA ── proportioned for 247mm tall model */
-function updateCamera() {
-  const s = S.size.scale * ((S.prod.sx + S.prod.sy) / 2);
-  const h = S3.totalH * s;
-  const fovRad = (28 * Math.PI) / 180;
-  const dist = (h / 2) / Math.tan(fovRad / 2) * 1.35 * zoomFactor;
-  camera.position.set(0, 0, dist);
-  camera.lookAt(0, h * 0.03, 0);
+/* camera — base position matches reference; z scaled by zoomFactor */
+function updateCamera(){
+  const sc=SIZE_SCALES[S.size]||1.0;
+  canGroup.scale.setScalar(sc);
+  /* push camera back proportionally so can fills frame nicely at any size */
+  const dist=12.4*sc*zoomFactor;
+  camera.position.set(0, 3.15*sc, dist);
+  camera.lookAt(0, 3.0*sc, 0);
   camera.updateProjectionMatrix();
 }
 
-/* ── LABEL TEXTURE ──────────────────────────────────────────────
-   Physical label spec: 204.2mm wide × 160mm tall (safe zone)
-   Canvas represents full 360° wrap:
-     Circumference = π × 65mm = 204.2mm
-     Label height (safe) = 160mm
+/* ════ LABEL TEXTURE — full wrap, correct 52×195mm ratio ════
+   Canvas: 1633×1950 (π×52 : 195 = 163.4 : 195 ≈ 0.838)
+   labelScale=1.0 → artwork fills full canvas → full 360° wrap ✅
+   labelMesh height = CAN.bodyH → stretches to bottom ✅
+*/
+const LABEL_W=1633,LABEL_H=1950;
+let labelTex=null;
 
-   Canvas size: 2048 × 1607px  (ratio = 204.2:160 = 1.276:1)
-   texture.offset.x = 0.5  → canvas centre = front face (U=0)
-   texture.wrapS = RepeatWrapping → seamless at seam
-──────────────────────────────────────────────────────────────── */
-const LABEL_W = 2048, LABEL_H = 1607; /* matches 204.2 × 160mm ratio */
-let labelTex = null;
-
-function generateLabel() {
-  const W = LABEL_W, H = LABEL_H;
-  const cv = document.createElement("canvas"); cv.width = W; cv.height = H;
-  const ctx = cv.getContext("2d");
-
-  /* Base coat — body colour covers the full cylinder */
-  ctx.fillStyle = S.bodyColor.hex; ctx.fillRect(0, 0, W, H);
-
-  /* Metallic shimmer for metallic/chrome finishes */
-  if (S.finish.id === "metallic" || S.finish.id === "chrome") {
-    const g = ctx.createLinearGradient(0, 0, W, 0);
-    g.addColorStop(0,    "rgba(0,0,0,0.22)");
-    g.addColorStop(0.15, "rgba(255,255,255,0.10)");
-    g.addColorStop(0.40, "rgba(255,255,255,0.26)");
-    g.addColorStop(0.60, "rgba(255,255,255,0.12)");
-    g.addColorStop(0.85, "rgba(0,0,0,0.06)");
-    g.addColorStop(1,    "rgba(0,0,0,0.22)");
-    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+function generateLabel(){
+  const W=LABEL_W,H=LABEL_H;
+  const cv=document.createElement("canvas");cv.width=W;cv.height=H;
+  const ctx=cv.getContext("2d");
+  /* base coat — neutral aluminium white */
+  ctx.fillStyle="#f2f2f2";ctx.fillRect(0,0,W,H);
+  /* matte/semi-matte base tint */
+  if(S.finish.id==="matte"){
+    ctx.fillStyle="rgba(0,0,0,0.04)";ctx.fillRect(0,0,W,H);
+  } else if(S.finish.id==="semimatte"){
+    ctx.fillStyle="rgba(0,0,0,0.02)";ctx.fillRect(0,0,W,H);
   }
-
-  /* User artwork — draw at full opacity on a white panel so it always shows clearly */
-  if (S.designImg && !S.bareMode) {
-    const img = S.designImg;
-    const dw = W * S.labelScale;
-    const dh = (dw / img.width) * img.height;
-    const dx = W/2 - dw/2;
-    const dy = H * S.labelPosY - dh/2;
-    /* White backing panel behind the artwork */
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(dx, dy, dw, dh);
-    ctx.globalAlpha = 1.0;
-    ctx.drawImage(img, dx, dy, dw, dh);
+  /* user artwork — drawn first, finish overlay comes after ✅ */
+  if(S.designImg&&!S.bareMode){
+    const img=S.designImg;
+    const dw=W*S.labelScale;
+    const dh=H*S.labelScale;
+    const dx=(W-dw)/2;
+    const dy=H*S.labelPosY-dh/2;
+    ctx.drawImage(img,dx,dy,dw,dh);
   }
-
-  if (labelTex) labelTex.dispose();
-  labelTex = new THREE.CanvasTexture(cv);
-  labelTex.encoding      = THREE.sRGBEncoding;  /* decode canvas sRGB→linear; sRGB output re-encodes = pixel-perfect */
-  labelTex.wrapS         = THREE.RepeatWrapping;
-  labelTex.offset.x      = 0.5; /* front-face centre */
-
-  labelMat.map         = labelTex;
+  /* finish overlays applied OVER artwork so they visibly affect it */
+  if(S.finish.id==="matte"){
+    /* matte: subtle vignette + desaturation hint */
+    const gm=ctx.createLinearGradient(0,0,W,0);
+    gm.addColorStop(0,"rgba(0,0,0,0.08)");gm.addColorStop(0.5,"rgba(0,0,0,0)");
+    gm.addColorStop(1,"rgba(0,0,0,0.08)");ctx.fillStyle=gm;ctx.fillRect(0,0,W,H);
+    ctx.fillStyle="rgba(255,255,255,0.07)";ctx.fillRect(0,0,W,H);
+  } else if(S.finish.id==="semimatte"){
+    /* semi-matte: narrow soft specular band */
+    const gs=ctx.createLinearGradient(W*0.25,0,W*0.55,0);
+    gs.addColorStop(0,"rgba(255,255,255,0)");gs.addColorStop(0.5,"rgba(255,255,255,0.14)");
+    gs.addColorStop(1,"rgba(255,255,255,0)");ctx.fillStyle=gs;ctx.fillRect(0,0,W,H);
+  } else if(S.finish.id==="gloss"){
+    /* gloss: bright wide specular highlight band + edge darken */
+    const gg=ctx.createLinearGradient(0,0,W,0);
+    gg.addColorStop(0,"rgba(0,0,0,0.10)");
+    gg.addColorStop(0.28,"rgba(255,255,255,0.20)");
+    gg.addColorStop(0.46,"rgba(255,255,255,0.38)");
+    gg.addColorStop(0.62,"rgba(255,255,255,0.18)");
+    gg.addColorStop(1,"rgba(0,0,0,0.10)");
+    ctx.fillStyle=gg;ctx.fillRect(0,0,W,H);
+    /* thin bright left-edge specular streak */
+    const gstreak=ctx.createLinearGradient(W*0.3,0,W*0.44,0);
+    gstreak.addColorStop(0,"rgba(255,255,255,0)");
+    gstreak.addColorStop(0.5,"rgba(255,255,255,0.18)");
+    gstreak.addColorStop(1,"rgba(255,255,255,0)");
+    ctx.fillStyle=gstreak;ctx.fillRect(0,0,W,H);
+  } else if(S.finish.id==="pearl"){
+    /* pearl: iridescent colour-shift overlay */
+    const gp=ctx.createLinearGradient(0,0,W,0);
+    gp.addColorStop(0,"rgba(220,200,240,0.22)");
+    gp.addColorStop(0.35,"rgba(255,255,255,0.30)");
+    gp.addColorStop(0.5,"rgba(200,230,250,0.22)");
+    gp.addColorStop(0.65,"rgba(255,255,255,0.30)");
+    gp.addColorStop(1,"rgba(220,240,220,0.22)");
+    ctx.fillStyle=gp;ctx.fillRect(0,0,W,H);
+    /* second pass — subtle shimmer */
+    const gp2=ctx.createLinearGradient(W*0.15,0,W*0.55,0);
+    gp2.addColorStop(0,"rgba(255,255,255,0)");
+    gp2.addColorStop(0.5,"rgba(255,255,255,0.15)");
+    gp2.addColorStop(1,"rgba(255,255,255,0)");
+    ctx.fillStyle=gp2;ctx.fillRect(0,0,W,H);
+  }
+  if(labelTex)labelTex.dispose();
+  labelTex=new THREE.CanvasTexture(cv);
+  labelTex.encoding=THREE.sRGBEncoding;
+  labelTex.wrapS=THREE.RepeatWrapping;
+  labelTex.offset.x=0.5; /* centre = front face */
+  labelMat.map=labelTex;
   labelMat.color.set(0xffffff);
-  labelMat.needsUpdate = true;
+  labelMat.needsUpdate=true;
 }
 
-/* ── COLOUR + FINISH UPDATE ── */
-function applyColors() {
-  setLinear(tBodyCol, S.bodyColor.hex);
-  setLinear(tCapCol, S.capMatchBody ? S.bodyColor.hex : S.capColor.hex);
-  tR = S.finish.r; tM = S.finish.m;
+function applyColors(){
+  const capHex=S.capMatchBody?BODY_BASE.hex:S.capColor.hex;
+  /* Set directly — no lerp, prevents per-frame material dirty + flicker */
+  capMat.color.copy(toLinear(capHex));
+  capMat.roughness=S.finish.r;
+  capMat.metalness=S.finish.m*0.04+0.02;
+  tR=S.finish.r;tM=S.finish.m;
   generateLabel();
   updateBadge();
 }
 
-function updateBadge() {
-  const n = S.prod.name.toUpperCase() + "  ·  " + S.size.ml;
-  const sp = "PMS " + S.bodyColor.code + "  ·  " + S.finish.name;
-  const bn = document.getElementById("bdg-name"); if(bn) bn.textContent=n;
-  const bs = document.getElementById("bdg-sub");  if(bs) bs.textContent=sp;
-  const bm = document.getElementById("bdg-name-m"); if(bm) bm.textContent=n;
-  const bsm= document.getElementById("bdg-sub-m");  if(bsm) bsm.textContent=sp;
+function updateBadge(){
+  const n=(S.prod?S.prod.name.toUpperCase():"CAN")+"  \u00b7  "+S.size;
+  const sp=S.finish.name+" Finish  \u00b7  "+S.capStyle.charAt(0).toUpperCase()+S.capStyle.slice(1)+" Cap";
+  ["bdg-name","bdg-name-m"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=n;});
+  ["bdg-sub","bdg-sub-m"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=sp;});
 }
 
-/* ── ROTATION ──────────────────────────────────────────────────
-   autoSpin   = accumulated Y rotation (degrees equiv, in radians)
-   When drag starts: freeze autoSpin at current canGroup.rotation.y
-   While dragging:   directly set canGroup.rotation.y = autoSpin + delta
-   When drag ends:   persist new rotation back into autoSpin
-─────────────────────────────────────────────────────────────── */
-let autoSpin = 0, isDrag = false, lastX = 0;
-
-function startDrag(x) {
-  isDrag  = true;
-  lastX   = x;
-  autoSpin = canGroup.rotation.y; /* freeze at current position */
-}
-function moveDrag(x) {
-  if (!isDrag) return;
-  autoSpin += (x - lastX) * 0.012;
-  lastX = x;
-  canGroup.rotation.y = autoSpin;
-}
-function endDrag() {
-  isDrag = false;
-}
-
-canvas3.addEventListener("mousedown",  e => { startDrag(e.clientX); e.preventDefault(); });
-window.addEventListener("mousemove",   e => { moveDrag(e.clientX); });
-window.addEventListener("mouseup",     ()=> { endDrag(); });
-canvas3.addEventListener("touchstart", e => { startDrag(e.touches[0].clientX); e.preventDefault(); }, {passive:false});
-canvas3.addEventListener("touchmove",  e => { moveDrag(e.touches[0].clientX);  e.preventDefault(); }, {passive:false});
-canvas3.addEventListener("touchend",   ()=> { endDrag(); });
-
-/* ── ZOOM: Scroll wheel ── */
-canvas3.addEventListener('wheel', e => {
+/* drag to rotate */
+let autoSpin=0,isDrag=false,lastX=0;
+function startDrag(x){isDrag=true;lastX=x;autoSpin=canGroup.rotation.y;}
+function moveDrag(x){if(!isDrag)return;autoSpin+=(x-lastX)*0.012;lastX=x;canGroup.rotation.y=autoSpin;}
+function endDrag(){isDrag=false;}
+canvas3.addEventListener("mousedown",e=>{startDrag(e.clientX);e.preventDefault();});
+window.addEventListener("mousemove",e=>{moveDrag(e.clientX);});
+window.addEventListener("mouseup",()=>{endDrag();});
+canvas3.addEventListener("touchstart",e=>{startDrag(e.touches[0].clientX);e.preventDefault();},{passive:false});
+canvas3.addEventListener("touchmove",e=>{moveDrag(e.touches[0].clientX);e.preventDefault();},{passive:false});
+canvas3.addEventListener("touchend",()=>{endDrag();});
+canvas3.addEventListener('wheel',e=>{
   e.preventDefault();
-  const delta = e.deltaY > 0 ? ZOOM_STEP : -ZOOM_STEP;
-  zoomFactor = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, zoomFactor + delta));
+  zoomFactor=Math.min(ZOOM_MAX,Math.max(ZOOM_MIN,zoomFactor+(e.deltaY>0?ZOOM_STEP:-ZOOM_STEP)));
   updateCamera();
-}, { passive: false });
-
-/* ── ZOOM: Pinch-to-zoom ── */
-let pinchDist0 = null, pinchZoom0 = 1.0;
-canvas3.addEventListener('touchstart', e => {
-  if (e.touches.length === 2) {
-    pinchDist0 = Math.hypot(e.touches[0].clientX - e.touches[1].clientX,
-                             e.touches[0].clientY - e.touches[1].clientY);
-    pinchZoom0 = zoomFactor;
-    e.preventDefault();
+},{passive:false});
+let pinchDist0=null,pinchZoom0=1.0;
+canvas3.addEventListener('touchstart',e=>{
+  if(e.touches.length===2){pinchDist0=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);pinchZoom0=zoomFactor;e.preventDefault();}
+},{passive:false});
+canvas3.addEventListener('touchmove',e=>{
+  if(e.touches.length===2&&pinchDist0!==null){
+    const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+    zoomFactor=Math.min(ZOOM_MAX,Math.max(ZOOM_MIN,pinchZoom0*(pinchDist0/d)));updateCamera();e.preventDefault();
   }
-}, { passive: false });
-canvas3.addEventListener('touchmove', e => {
-  if (e.touches.length === 2 && pinchDist0 !== null) {
-    const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX,
-                          e.touches[0].clientY - e.touches[1].clientY);
-    zoomFactor = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, pinchZoom0 * (pinchDist0 / d)));
-    updateCamera();
-    e.preventDefault();
-  }
-}, { passive: false });
-canvas3.addEventListener('touchend', () => { pinchDist0 = null; });
+},{passive:false});
+canvas3.addEventListener('touchend',()=>{pinchDist0=null;});
 
-/* ── ANIMATE ── */
-function animate() {
+function animate(){
   requestAnimationFrame(animate);
-  if (!isDrag) {
-    autoSpin += 0.004;
-    canGroup.rotation.y = autoSpin;
+  if(!isDrag){autoSpin+=0.004;canGroup.rotation.y=autoSpin;}
+  /* No lerp — direct color set avoids per-frame material dirty flag and flicker */
+  renderer.render(scene,camera);
+}
+
+function isMobile(){return window.innerWidth<=768;}
+function resizeMobile(){
+  const strip=document.getElementById("vstrip");
+  if(!strip||strip.classList.contains("collapsed"))return;
+  const W=strip.clientWidth||window.innerWidth,H=strip.clientHeight||260;
+  if(W<1||H<1)return;renderer.setSize(W,H);camera.aspect=W/H;camera.updateProjectionMatrix();updateCamera();
+}
+function resize(){
+  if(isMobile()){resizeMobile();return;}
+  const r=document.querySelector(".right");const W=r.clientWidth,H=r.clientHeight;
+  if(W<1||H<1)return;renderer.setSize(W,H);camera.aspect=W/H;camera.updateProjectionMatrix();updateCamera();
+}
+window.addEventListener("resize",()=>{if(isMobile())resizeMobile();else resize();});
+
+function toggleMobileViewer(){
+  const strip=document.getElementById("vstrip"),chev=document.getElementById("vchev");
+  const isOpen=!strip.classList.contains("collapsed");
+  if(isOpen){strip.classList.add("collapsed");chev.classList.remove("open");}
+  else{strip.classList.remove("collapsed");chev.classList.add("open");setTimeout(()=>resizeMobile(),50);}
+}
+function initMobile(){
+  if(!isMobile())return;
+  const fakeC=document.getElementById("c3m");
+  if(fakeC&&fakeC!==canvas3){
+    const ph=document.createElement("div");ph.id="c3m-ph";ph.style.cssText="position:absolute;inset:0";
+    fakeC.replaceWith(ph);ph.appendChild(canvas3);
   }
-  bodyMat.color.lerp(tBodyCol, 0.08);
-  bodyMat.roughness += (tR - bodyMat.roughness) * 0.08;
-  bodyMat.metalness += (tM - bodyMat.metalness) * 0.08;
-  capMat.color.lerp(tCapCol, 0.08);
-
-  renderer.render(scene, camera);
+  canvas3.style.width="100%";canvas3.style.height="100%";
 }
 
-/* ── RESIZE ── */
-function isMobile() { return window.innerWidth <= 768; }
-
-function resizeMobile() {
-  const strip = document.getElementById("vstrip");
-  if (!strip || strip.classList.contains("collapsed")) return;
-  const W = strip.clientWidth || window.innerWidth;
-  const H = strip.clientHeight || 260;
-  if (W < 1 || H < 1) return;
-  renderer.setSize(W, H);
-  camera.aspect = W / H;
-  camera.updateProjectionMatrix();
-  updateCamera();
+/* ════ TEMPLATES + STUDIO (unchanged logic, deselect fix) ════ */
+function downloadTemplate(){
+  const url="./AerostarTemplate_52x195.png";
+  fetch(url).then(r=>{if(!r.ok)throw new Error("not found");return r.blob();}).then(blob=>{
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="AerostarTemplate_52x195.png";
+    document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);document.body.removeChild(a);},1000);
+  }).catch(()=>window.open(url,"_blank"));
 }
 
-function resize() {
-  if (isMobile()) { resizeMobile(); return; }
-  const r = document.querySelector(".right");
-  const W = r.clientWidth, H = r.clientHeight;
-  if (W < 1 || H < 1) return;
-  renderer.setSize(W, H);
-  camera.aspect = W / H;
-  camera.updateProjectionMatrix();
-  updateCamera();
-}
-window.addEventListener("resize", ()=>{
-  if (isMobile()) { resizeMobile(); } else { resize(); }
-});
-
-/* ── TEMPLATE DOWNLOAD ── */
-function downloadTemplate() {
-  const url = "./Air Freshener.png";
-  /* Try fetch → blob → forced download (works on servers and localhost) */
-  fetch(url)
-    .then(r => {
-      if (!r.ok) throw new Error("not found");
-      return r.blob();
-    })
-    .then(blob => {
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = "Air Freshener.png";
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(() => { URL.revokeObjectURL(a.href); document.body.removeChild(a); }, 1000);
-    })
-    .catch(() => {
-      /* Fallback: open in new tab — user can save manually */
-      window.open(url, "_blank");
-    });
-}
-
-/* ── EXAMPLE TEMPLATES ── */
-const EXAMPLE_TEMPLATES = [
-  {id:"minimal", label:"Minimal",    draw(ctx,W,H,col){ ctx.fillStyle="#fff";ctx.fillRect(0,0,W,H);ctx.fillStyle=col;ctx.fillRect(0,0,W,H*.12);ctx.fillRect(0,H*.88,W,H*.12);ctx.fillStyle="#fff";ctx.font=`bold ${H*.18}px Lato,sans-serif`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("YOUR",W*.5,H*.38);ctx.fillText("BRAND",W*.5,H*.58); }},
-  {id:"bold",    label:"Bold",       draw(ctx,W,H,col){ ctx.fillStyle=col;ctx.fillRect(0,0,W,H);const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,"rgba(0,0,0,.55)");g.addColorStop(1,"rgba(0,0,0,.05)");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.fillStyle="#fff";ctx.font=`900 ${H*.26}px Lato,sans-serif`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("BOLD",W*.5,H*.4);ctx.font=`${H*.12}px Lato,sans-serif`;ctx.fillText("COLLECTION",W*.5,H*.62); }},
-  {id:"stripe",  label:"Stripe",     draw(ctx,W,H,col){ ctx.fillStyle="#fff";ctx.fillRect(0,0,W,H);for(let i=0;i<8;i++){ctx.fillStyle=i%2===0?col:"rgba(255,255,255,.0)";ctx.fillRect(0,i*H/8,W,H/8);}ctx.globalAlpha=.9;ctx.fillStyle=i=>i%2?"#fff":col;ctx.fillStyle="#fff";ctx.globalAlpha=1;ctx.fillStyle=col;ctx.fillRect(0,H*.25,W,H*.5);ctx.fillStyle="#fff";ctx.font=`bold ${H*.22}px Lato,sans-serif`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("FRESH",W*.5,H*.5); }},
-  {id:"gradient",label:"Gradient",   draw(ctx,W,H,col){ const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,col);g.addColorStop(.5,"rgba(255,255,255,.9)");g.addColorStop(1,col);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.fillStyle="rgba(0,0,0,.55)";ctx.font=`bold ${H*.17}px Lato,sans-serif`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("PREMIUM",W*.5,H*.4);ctx.font=`${H*.1}px Lato,sans-serif`;ctx.fillText("COLLECTION",W*.5,H*.6); }},
+const EXAMPLE_TEMPLATES=[
+  {id:"minimal",label:"Minimal",draw(ctx,W,H){ctx.fillStyle="#fff";ctx.fillRect(0,0,W,H);ctx.fillStyle="#1557b0";ctx.fillRect(0,0,W,H*.1);ctx.fillRect(0,H*.9,W,H*.1);ctx.fillStyle="#1557b0";ctx.font=`bold ${H*.16}px Lato,sans-serif`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("YOUR",W*.5,H*.4);ctx.fillText("BRAND",W*.5,H*.58);}},
+  {id:"bold",label:"Bold",draw(ctx,W,H){ctx.fillStyle="#1557b0";ctx.fillRect(0,0,W,H);const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,"rgba(0,0,0,.5)");g.addColorStop(1,"rgba(0,0,0,.05)");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.fillStyle="#fff";ctx.font=`900 ${H*.22}px Lato,sans-serif`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("BOLD",W*.5,H*.38);ctx.font=`${H*.1}px Lato,sans-serif`;ctx.fillText("COLLECTION",W*.5,H*.6);}},
+  {id:"stripe",label:"Stripe",draw(ctx,W,H){ctx.fillStyle="#fff";ctx.fillRect(0,0,W,H);for(let i=0;i<8;i++){if(i%2===0){ctx.fillStyle="rgba(21,87,176,.08)";ctx.fillRect(0,i*H/8,W,H/8);}}ctx.fillStyle="#1557b0";ctx.fillRect(0,H*.28,W,H*.44);ctx.fillStyle="#fff";ctx.font=`bold ${H*.18}px Lato,sans-serif`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("FRESH",W*.5,H*.5);}},
+  {id:"gradient",label:"Gradient",draw(ctx,W,H){const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,"#1557b0");g.addColorStop(.5,"rgba(255,255,255,.9)");g.addColorStop(1,"#1557b0");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.fillStyle="rgba(10,53,120,.7)";ctx.font=`bold ${H*.14}px Lato,sans-serif`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText("PREMIUM",W*.5,H*.38);ctx.font=`${H*.08}px Lato,sans-serif`;ctx.fillText("COLLECTION",W*.5,H*.56);}},
 ];
 
-function buildTemplateCanvas(tpl, w, h) {
-  const cv = document.createElement("canvas"); cv.width=w; cv.height=h;
-  const ctx = cv.getContext("2d");
-  tpl.draw(ctx, w, h, S.bodyColor.hex);
-  return cv;
+function buildTemplateCanvas(tpl,w,h){
+  const cv=document.createElement("canvas");cv.width=w;cv.height=h;
+  const ctx=cv.getContext("2d");
+  tpl.draw(ctx,w,h);return cv;
 }
 
-function applyTemplate(id) {
-  const tpl = EXAMPLE_TEMPLATES.find(t=>t.id===id);
-  if (!tpl) return;
-  S.selectedTemplate = id;
-  const cv = buildTemplateCanvas(tpl, 2048, 1080);
-  const img = new Image();
-  img.onload = () => { S.designImg = img; generateLabel(); rebox(); };
-  img.src = cv.toDataURL();
+/* ✅ Click selected template again to deselect */
+function applyTemplate(id){
+  if(S.selectedTemplate===id){
+    /* deselect */
+    S.selectedTemplate=null;S.designImg=null;
+    generateLabel();rebox();return;
+  }
+  const tpl=EXAMPLE_TEMPLATES.find(tt=>tt.id===id);
+  if(!tpl)return;
+  S.selectedTemplate=id;
+  const cv=buildTemplateCanvas(tpl,LABEL_W,LABEL_H);
+  const img=new Image();
+  img.onload=()=>{S.designImg=img;S.labelScale=1.0;S.labelPosY=0.5;generateLabel();rebox();};
+  img.src=cv.toDataURL();
 }
 
-function renderTemplateGrid(tplLabels) {
+function renderTemplateGrid(){
   const labelKeys={minimal:'tplMinimal',bold:'tplBold',stripe:'tplStripe',gradient:'tplGradient'};
-  return EXAMPLE_TEMPLATES.map(tpl => {
-    const isOn = S.selectedTemplate === tpl.id;
-    const cv = buildTemplateCanvas(tpl, 380, 200);
-    const label = t(labelKeys[tpl.id]) || tpl.label;
-    return `<div class="tpl-card${isOn?" on":""}" onclick="applyTemplate('${tpl.id}')">
-      <img class="tpl-canvas" src="${cv.toDataURL()}" alt="${label}">
-      <div class="tpl-label">${label}</div>
+  return EXAMPLE_TEMPLATES.map(tpl=>{
+    const isOn=S.selectedTemplate===tpl.id;
+    const cv=buildTemplateCanvas(tpl,380,200);
+    const label=t(labelKeys[tpl.id])||tpl.label;
+    return`<div class="tpl-card${isOn?" on":""}" onclick="applyTemplate('${tpl.id}')">
+      <img class="tpl-canvas" src="${cv.toDataURL()}" alt="${label}" style="pointer-events:none">
+      <div class="tpl-label">${label}${isOn?' <span style="color:#ef4444;font-size:8px">&#x2715; click to remove</span>':''}</div>
       <div class="tpl-check"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
     </div>`;
   }).join("");
 }
 
-/* ════════════════════════════════════════════
-   LABEL DESIGN STUDIO (Fabric.js)
-════════════════════════════════════════════ */
-let fabricCanvas  = null;
-let studioJSON    = null;
-let studioApplied = false;
-let emojiCat      = 'All';
-
-const STUDIO_FONTS = [
-  'Lato','Montserrat','Playfair Display','Oswald','Bebas Neue','Raleway','Abril Fatface'
-];
-
-const EMOJIS = {
-  Face:   ['😊','😍','🥰','😎','🤩','😄','🥳','😇','🤗','😏','🌝','👑','💋','🫦','🤭'],
-  Nature: ['🌿','🌸','🌺','🍃','🌱','🌊','☀️','🌙','❄️','🌈','🌻','🦋','🌾','🍀','🌴'],
-  Food:   ['🍋','🍊','🌶️','🫐','🍓','🍯','🥥','🍵','🧃','🍷','🫧','🧊','🍫','🧁','🍑'],
-  Symbol: ['✨','💫','⭐','🔥','⚡','💥','❤️','💙','💚','💛','🖤','🤍','♻️','✅','🏆'],
-  Objects:['💎','💄','🧴','🌹','🎁','💐','🧿','🪄','🎨','🪞','👜','💍','🪷','🎀','🧲'],
-};
-const EMOJI_ALL = Object.values(EMOJIS).flat();
-
-function switchArtTab(tab){
-  S.artTab = tab;
-  if (fabricCanvas){ studioJSON = fabricCanvas.toJSON(); }
-  rebox();
-  if (tab === 'studio') setTimeout(initStudio, 30);
-}
-
-function initStudio(){
-  const el  = document.getElementById('studio-canvas');
-  if (!el) return;
-  const wrap = document.getElementById('studio-canvas-wrap');
-  const W = wrap ? Math.max(300, wrap.clientWidth) : 520;
-  const H = Math.round(W * (1080 / 2048));
-
-  if (fabricCanvas){ fabricCanvas.dispose(); fabricCanvas = null; }
-
-  fabricCanvas = new fabric.Canvas('studio-canvas', {
-    width: W, height: H,
-    backgroundColor: '#ffffff',
-    preserveObjectStacking: true,
-  });
-
-  fabric.Object.prototype.set({
-    borderColor:'#1557b0', cornerColor:'#1557b0',
-    cornerSize:8, cornerStyle:'circle',
-    transparentCorners:false, padding:4,
-  });
-
-  if (studioJSON){
-    fabricCanvas.loadFromJSON(studioJSON, ()=>{ fabricCanvas.renderAll(); studioUpdateProps(); });
-  } else {
-    // Default starter: body colour background
-    fabricCanvas.setBackgroundColor(S.bodyColor.hex, ()=>fabricCanvas.renderAll());
-    studioUpdateProps();
-  }
-
-  fabricCanvas.on('selection:created', studioUpdateProps);
-  fabricCanvas.on('selection:updated', studioUpdateProps);
-  fabricCanvas.on('selection:cleared',  studioUpdateProps);
-  fabricCanvas.on('object:modified',    studioSave);
-  fabricCanvas.on('object:added',       studioSave);
-}
-
-function studioSave(){
-  if (fabricCanvas) studioJSON = fabricCanvas.toJSON();
-}
-
-function studioAddText(){
-  if (!fabricCanvas) return;
-  const fs = Math.round(fabricCanvas.height * 0.13);
-  const txt = new fabric.IText(LANG==='ru'?'Ваш текст':'Your Text', {
-    left: fabricCanvas.width  * 0.5,
-    top:  fabricCanvas.height * 0.5,
-    originX:'center', originY:'center',
-    fontFamily:'Montserrat', fontSize:fs,
-    fill:'#0f172a', fontWeight:'bold', textAlign:'center',
-  });
-  fabricCanvas.add(txt);
-  fabricCanvas.setActiveObject(txt);
-  fabricCanvas.renderAll();
-  studioSave();
-  studioUpdateProps();
-  txt.enterEditing();
-  txt.selectAll();
-}
-
-function studioAddRect(){
-  if (!fabricCanvas) return;
-  const rect = new fabric.Rect({
-    left: fabricCanvas.width  * 0.15,
-    top:  fabricCanvas.height * 0.2,
-    width:  fabricCanvas.width  * 0.7,
-    height: fabricCanvas.height * 0.6,
-    fill: '#1557b0', opacity:0.85, rx:6, ry:6,
-  });
-  fabricCanvas.add(rect);
-  fabricCanvas.setActiveObject(rect);
-  fabricCanvas.renderAll();
-  studioSave(); studioUpdateProps();
-}
-
-function studioAddCircle(){
-  if (!fabricCanvas) return;
-  const r = Math.round(fabricCanvas.height * 0.22);
-  const c = new fabric.Circle({
-    left: fabricCanvas.width  * 0.5 - r,
-    top:  fabricCanvas.height * 0.5 - r,
-    radius: r, fill:'#1557b0', opacity:0.85,
-  });
-  fabricCanvas.add(c);
-  fabricCanvas.setActiveObject(c);
-  fabricCanvas.renderAll();
-  studioSave(); studioUpdateProps();
-}
-
-function studioSetBg(hex){
-  if (!fabricCanvas) return;
-  fabricCanvas.setBackgroundColor(hex, ()=>fabricCanvas.renderAll());
-  studioSave();
-}
-
-function studioDelete(){
-  if (!fabricCanvas) return;
-  const obj = fabricCanvas.getActiveObject();
-  if (!obj) return;
-  if (obj.type==='activeSelection'){
-    obj.forEachObject(o=>fabricCanvas.remove(o));
-    fabricCanvas.discardActiveObject();
-  } else { fabricCanvas.remove(obj); }
-  fabricCanvas.renderAll();
-  studioSave(); studioUpdateProps();
-}
-
-function studioClear(){
-  if (!fabricCanvas) return;
-  fabricCanvas.clear();
-  fabricCanvas.setBackgroundColor(S.bodyColor.hex, ()=>fabricCanvas.renderAll());
-  studioSave(); studioUpdateProps();
-}
-
-/* ── EMOJI PICKER ── */
-function toggleEmojiPicker(){
-  const panel = document.getElementById('emoji-panel');
-  if (!panel) return;
-  panel.classList.toggle('open');
-}
-
-function setEmojiCat(cat){
-  emojiCat = cat;
-  const list = cat==='All' ? EMOJI_ALL : (EMOJIS[cat]||[]);
-  const grid = document.getElementById('emoji-grid');
-  if (!grid) return;
-  grid.innerHTML = list.map(e =>
-    `<button class="emoji-btn" data-e="${encodeURIComponent(e)}" onclick="studioAddEmoji(decodeURIComponent(this.dataset.e))" title="${e}">${e}</button>`
-  ).join('');
-  // Update cat button states
-  document.querySelectorAll('.emoji-cat-btn').forEach(b => {
-    b.classList.toggle('on', b.dataset.cat === cat);
-  });
-}
-
-function studioAddEmoji(emoji){
-  if (!fabricCanvas) return;
-  const fs = Math.round(fabricCanvas.height * 0.22);
-  const txt = new fabric.IText(emoji, {
-    left: fabricCanvas.width  * 0.5,
-    top:  fabricCanvas.height * 0.5,
-    originX:'center', originY:'center',
-    fontSize: fs,
-    fontFamily: 'Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, Arial, sans-serif',
-    textAlign: 'center',
-  });
-  fabricCanvas.add(txt);
-  fabricCanvas.setActiveObject(txt);
-  fabricCanvas.renderAll();
-  studioSave();
-  studioUpdateProps();
-  // Close emoji panel after adding
-  const panel = document.getElementById('emoji-panel');
-  if (panel) panel.classList.remove('open');
-}
-
-/* ── IMAGE / LOGO UPLOAD ── */
-function studioTriggerImageUpload(){
-  const inp = document.getElementById('studio-img-input');
-  if (inp) inp.click();
-}
-
-function studioUploadImage(e){
-  const file = e.target.files[0];
-  if (!file || !fabricCanvas) return;
-
-  // Use createObjectURL — cleaner than base64 and avoids some taint edge cases.
-  // We re-encode as a data URL through an Image + offscreen canvas so the
-  // pixel data is always same-origin by the time Fabric uses it.
-  const objectURL = URL.createObjectURL(file);
-  const tempImg   = new Image();
-  tempImg.crossOrigin = 'anonymous';
-  tempImg.onload = () => {
-    // Re-draw into an offscreen canvas → get a clean same-origin data URL
-    const oc  = document.createElement('canvas');
-    oc.width  = tempImg.naturalWidth;
-    oc.height = tempImg.naturalHeight;
-    oc.getContext('2d').drawImage(tempImg, 0, 0);
-    URL.revokeObjectURL(objectURL);
-
-    let cleanURL;
-    try { cleanURL = oc.toDataURL('image/png'); }
-    catch(_){ cleanURL = objectURL; } // fallback — unlikely
-
-    fabric.Image.fromURL(cleanURL, img => {
-      const maxW  = fabricCanvas.width  * 0.6;
-      const maxH  = fabricCanvas.height * 0.7;
-      const scale = Math.min(maxW / img.width, maxH / img.height, 1);
-      img.set({
-        left:    fabricCanvas.width  * 0.5,
-        top:     fabricCanvas.height * 0.5,
-        originX: 'center',
-        originY: 'center',
-        scaleX:  scale,
-        scaleY:  scale,
-        crossOrigin: 'anonymous',
-      });
-      fabricCanvas.add(img);
-      fabricCanvas.setActiveObject(img);
-      fabricCanvas.renderAll();
-      studioSave();
-      studioUpdateProps();
-    }, { crossOrigin: 'anonymous' });
-  };
-  tempImg.onerror = () => {
-    URL.revokeObjectURL(objectURL);
-    alert(LANG==='ru'?'Не удалось загрузить изображение.':'Could not load image.');
-  };
-  tempImg.src = objectURL;
-  e.target.value = ''; // reset input
-}
-
-function studioSetTextProp(prop, val){
-  if (!fabricCanvas) return;
-  const obj = fabricCanvas.getActiveObject();
-  if (!obj) return;
-  if (prop==='fontSize') val = parseInt(val)||12;
-  obj.set(prop, val);
-  fabricCanvas.renderAll();
-  studioSave();
-}
-
-function studioSetShapeProp(prop, val){
-  if (!fabricCanvas) return;
-  const obj = fabricCanvas.getActiveObject();
-  if (!obj) return;
-  if (prop==='opacity') val = parseFloat(val);
-  if (prop==='strokeWidth') val = parseInt(val)||0;
-  obj.set(prop, val);
-  fabricCanvas.renderAll();
-  studioSave();
-}
-
-function studioUpdateProps(){
-  const el = document.getElementById('studio-props');
-  if (!el || !fabricCanvas) return;
-  const obj = fabricCanvas.getActiveObject();
-
-  if (!obj){
-    el.innerHTML = `<span class="studio-hint">${t('studioSelectHint')}</span>`;
-    return;
-  }
-
-  const isText  = obj.type==='i-text' || obj.type==='text';
-  const isShape = obj.type==='rect' || obj.type==='circle' || obj.type==='ellipse' || obj.type==='triangle';
-  const isImage = obj.type==='image';
-
-  if (isText){
-    const fontOpts = STUDIO_FONTS.map(f=>
-      `<option value="${f}" ${obj.fontFamily===f?'selected':''}
-       style="font-family:${f}">${f}</option>`).join('');
-    el.innerHTML = `
-      <div class="spr-group">
-        <span class="spr-lbl">${t('studioFont')}</span>
-        <select class="spr-select" onchange="studioSetTextProp('fontFamily',this.value)">${fontOpts}</select>
-      </div>
-      <div class="spr-group">
-        <span class="spr-lbl">${t('studioSize')}</span>
-        <input class="spr-num" type="number" min="6" max="400" value="${Math.round(obj.fontSize||40)}"
-          oninput="studioSetTextProp('fontSize',this.value)">
-      </div>
-      <div class="spr-group">
-        <span class="spr-lbl">${t('studioColor')}</span>
-        <input type="color" class="spr-color" value="${obj.fill||'#000000'}"
-          oninput="studioSetTextProp('fill',this.value)">
-      </div>
-      <div class="spr-group" style="gap:3px">
-        <button class="spr-toggle${obj.fontWeight==='bold'?' on':''}"
-          onclick="studioSetTextProp('fontWeight',fabricCanvas.getActiveObject().fontWeight==='bold'?'normal':'bold');studioUpdateProps()"><b>B</b></button>
-        <button class="spr-toggle${obj.fontStyle==='italic'?' on':''}"
-          onclick="studioSetTextProp('fontStyle',fabricCanvas.getActiveObject().fontStyle==='italic'?'normal':'italic');studioUpdateProps()"><i>I</i></button>
-      </div>
-      <div class="spr-group" style="gap:3px">
-        <span class="spr-lbl">${t('studioAlign')}</span>
-        <button class="spr-toggle${obj.textAlign==='left'?' on':''}"
-          onclick="studioSetTextProp('textAlign','left');studioUpdateProps()">&#9776;L</button>
-        <button class="spr-toggle${(!obj.textAlign||obj.textAlign==='center')?' on':''}"
-          onclick="studioSetTextProp('textAlign','center');studioUpdateProps()">&#9776;C</button>
-        <button class="spr-toggle${obj.textAlign==='right'?' on':''}"
-          onclick="studioSetTextProp('textAlign','right');studioUpdateProps()">&#9776;R</button>
-      </div>`;
-  } else if (isShape){
-    const fillVal = (typeof obj.fill==='string') ? obj.fill : '#1557b0';
-    const strokeVal = obj.stroke || '#000000';
-    el.innerHTML = `
-      <div class="spr-group">
-        <span class="spr-lbl">${t('studioFill')}</span>
-        <input type="color" class="spr-color" value="${fillVal}"
-          oninput="studioSetShapeProp('fill',this.value)">
-      </div>
-      <div class="spr-group">
-        <span class="spr-lbl">${t('studioOpacity')}</span>
-        <input type="range" min="0.05" max="1" step="0.05" value="${obj.opacity||1}"
-          style="width:72px;cursor:pointer" oninput="studioSetShapeProp('opacity',this.value)">
-        <span style="font-size:10px;color:var(--muted);width:28px">${Math.round((obj.opacity||1)*100)}%</span>
-      </div>
-      <div class="spr-group">
-        <span class="spr-lbl">${t('studioStroke')}</span>
-        <input type="color" class="spr-color" value="${strokeVal}"
-          oninput="studioSetShapeProp('stroke',this.value)">
-        <input class="spr-num" type="number" min="0" max="20" value="${obj.strokeWidth||0}" style="width:40px"
-          oninput="studioSetShapeProp('strokeWidth',this.value)">
-      </div>`;
-  } else if (isImage){
-    const pct = Math.round((obj.scaleX||1) * obj.width / fabricCanvas.width * 100);
-    el.innerHTML = `
-      <div class="spr-group">
-        <span class="spr-lbl">${LANG==='ru'?'Масштаб':'Scale'}</span>
-        <input type="range" min="5" max="200" value="${pct}"
-          style="width:90px;cursor:pointer"
-          oninput="(function(v){const o=fabricCanvas.getActiveObject();if(!o)return;const s=v/100*(fabricCanvas.width/o.width);o.set({scaleX:s,scaleY:s});fabricCanvas.renderAll();studioSave();})(this.value)">
-        <span style="font-size:10px;color:var(--muted);width:32px">${pct}%</span>
-      </div>
-      <div class="spr-group">
-        <span class="spr-lbl">${LANG==='ru'?'Прозрачность':'Opacity'}</span>
-        <input type="range" min="0.05" max="1" step="0.05" value="${obj.opacity||1}"
-          style="width:72px;cursor:pointer" oninput="studioSetShapeProp('opacity',this.value)">
-        <span style="font-size:10px;color:var(--muted);width:28px">${Math.round((obj.opacity||1)*100)}%</span>
-      </div>
-      <div class="spr-group" style="margin-left:auto">
-        <span style="font-size:9.5px;color:var(--muted)">${LANG==='ru'?'PNG/JPG · Перетащить для позиции':'PNG/JPG · Drag to reposition'}</span>
-      </div>`;
-  } else {
-    el.innerHTML = `<span class="studio-hint" style="text-transform:capitalize">${obj.type}</span>`;
-  }
-}
-
-function applyStudio(){
-  if (!fabricCanvas) return;
-  studioSave();
-  fabricCanvas.discardActiveObject();
-  fabricCanvas.renderAll();
-
-  function doApply(dataURL){
-    const img = new Image();
-    img.onload = () => {
-      S.designImg = img;
-      S.bareMode  = false;
-      S.selectedTemplate = null;
-      studioApplied = true;
-      generateLabel();
-      rebox();
-      setTimeout(initStudio, 30);
-    };
-    img.onerror = () => {
-      alert(LANG==='ru'?'Ошибка загрузки изображения. Попробуйте снова.':'Image load failed. Please try again.');
-    };
-    img.src = dataURL;
-  }
-
-  // Try high-res export first, fall back to 1× if canvas is tainted by an image
-  try {
-    const scale   = 2048 / fabricCanvas.width;
-    const dataURL = fabricCanvas.toDataURL({ format:'png', multiplier: scale, enableRetinaScaling: false });
-    doApply(dataURL);
-  } catch(e1) {
-    console.warn('High-res studio export failed, trying 1×:', e1.message||e1);
-    try {
-      const dataURL = fabricCanvas.toDataURL({ format:'png', enableRetinaScaling: false });
-      doApply(dataURL);
-    } catch(e2) {
-      console.error('Studio export failed entirely:', e2);
-      alert(LANG==='ru'
-        ? 'Экспорт не удался. Если вы добавили изображение — попробуйте его убрать и повторить.'
-        : 'Export failed. If you added a logo/image, try removing it and applying again, or use a PNG with no embedded colour profile.');
-    }
-  }
-}
-
-
-/* ── MOBILE VIEWER TOGGLE ── */
-function toggleMobileViewer() {
-  const strip = document.getElementById("vstrip");
-  const chev  = document.getElementById("vchev");
-  const isOpen = !strip.classList.contains("collapsed");
-  if (isOpen) {
-    strip.classList.add("collapsed");
-    chev.classList.remove("open");
-  } else {
-    strip.classList.remove("collapsed");
-    chev.classList.add("open");
-    setTimeout(()=>{ resizeMobile(); }, 50);
-  }
-}
-
-function initMobile() {
-  if (!isMobile()) return;
-  // Replace the placeholder <canvas id="c3m"> with the real renderer canvas
-  const fakeC = document.getElementById("c3m");
-  if (fakeC && fakeC !== canvas3) {
-    // Create a wrapper div to hold the real canvas
-    const ph = document.createElement("div");
-    ph.id = "c3m-ph";
-    ph.style.cssText = "position:absolute;inset:0";
-    fakeC.replaceWith(ph);
-    ph.appendChild(canvas3);
-  }
-  canvas3.style.width  = "100%";
-  canvas3.style.height = "100%";
-}
-
-function updateCanScale() {} /* stub — camera handles sizing */
-function renderPicker(prop) {
-  const cur = S[prop];
-  const fams = ["All","R","O","Y","G","B","P","K","N","M"];
+/* ════ PANTONE PICKER (unchanged) ════ */
+function renderPicker(prop){
+  const cur=S[prop];
+  const fams=["All","R","O","Y","G","B","P","K","N","M"];
   const famKeys={All:'famAll',R:'famR',O:'famO',Y:'famY',G:'famG',B:'famB',P:'famP',K:'famK',N:'famN',M:'famM'};
-  const q = S.psearch.toLowerCase();
-  let list = S.pfam === "All" ? PANTONE : PANTONE.filter(c => c.f === S.pfam);
-  if (q) list = PANTONE.filter(c => c.code.toLowerCase().includes(q) || c.name.toLowerCase().includes(q));
-  const famH = fams.map(f => {
-    const dot = f !== "All" ? `<span class="pfam-dot" style="background:${FAM_COL[f]}"></span>` : "";
-    return `<div class="pfam-btn${S.pfam===f?" on":""}" onclick="S.pfam='${f}';S.psearch='';rebox()">${dot}${t(famKeys[f])}</div>`;
+  const q=S.psearch.toLowerCase();
+  let list=S.pfam==="All"?PANTONE:PANTONE.filter(c=>c.f===S.pfam);
+  if(q)list=PANTONE.filter(c=>c.code.toLowerCase().includes(q)||c.name.toLowerCase().includes(q));
+  const famH=fams.map(f=>{
+    const dot=f!=="All"?`<span class="pfam-dot" style="background:${FAM_COL[f]}"></span>`:"";
+    return`<div class="pfam-btn${S.pfam===f?" on":""}" onclick="S.pfam='${f}';S.psearch='';rebox()">${dot}${t(famKeys[f])}</div>`;
   }).join("");
-  const swH = list.map(c => {
-    const sh = c.met ? "box-shadow:inset 0 0 0 1px rgba(255,255,255,.3),0 1px 4px rgba(0,0,0,.25)" : "box-shadow:0 1px 4px rgba(0,0,0,.18)";
-    return `<button type="button" class="psw${cur&&cur.code===c.code?" on":""}" title="PMS ${c.code} — ${c.name}" aria-label="PMS ${c.code} — ${c.name}" style="background:${c.hex};${sh}" onclick="pickColor('${prop}','${c.code}')"></button>`;
+  const swH=list.map(c=>{
+    const sh=c.met?"box-shadow:inset 0 0 0 1px rgba(255,255,255,.3),0 1px 4px rgba(0,0,0,.25)":"box-shadow:0 1px 4px rgba(0,0,0,.18)";
+    return`<button type="button" class="psw${cur&&cur.code===c.code?" on":""}" title="PMS ${c.code} \u2014 ${c.name}" style="background:${c.hex};${sh}" onclick="pickColor('${prop}','${c.code}')"></button>`;
   }).join("");
-  const selH = cur
-    ? `<div class="p-selected"><div class="p-sel-swatch" style="background:${cur.hex}"></div><div><div class="p-sel-code">PMS ${cur.code}</div><div class="p-sel-name">${cur.name}</div></div></div>`
-    : `<div class="p-selected" style="opacity:.4;font-size:11px;color:var(--muted)">${t('noColour')}</div>`;
-  return `<div class="p-search-wrap">
+  const selH=cur
+    ?`<div class="p-selected"><div class="p-sel-swatch" style="background:${cur.hex}"></div><div><div class="p-sel-code">PMS ${cur.code}</div><div class="p-sel-name">${cur.name}</div></div></div>`
+    :`<div class="p-selected" style="opacity:.4;font-size:11px;color:var(--muted)">${t('noColour')}</div>`;
+  return`<div class="p-search-wrap">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
     <input class="psearch" placeholder="${t('searchPlaceholder')}" value="${S.psearch}" oninput="S.psearch=this.value;rebox()">
   </div>
@@ -1655,79 +1099,197 @@ function renderPicker(prop) {
   <div class="custom-row">
     <span class="custom-lbl">${t('customLbl')}</span>
     <input type="color" value="${cur?cur.hex:"#1557b0"}" onchange="pickHex('${prop}',this.value)">
-    <input class="hex-input" type="text" placeholder="#RRGGBB" value="${cur?cur.hex:""}" oninput="if(this.value.match(/^#[0-9a-fA-F]{6}$/)) pickHex('${prop}',this.value)">
+    <input class="hex-input" type="text" placeholder="#RRGGBB" value="${cur?cur.hex:""}" oninput="if(this.value.match(/^#[0-9a-fA-F]{6}$/))pickHex('${prop}',this.value)">
   </div>`;
 }
 
-
-function rStep1(){
-  const cats={beauty:t('catBeauty'),airfresh:t('catAir')};
-  const catIco={beauty:IC.can,airfresh:IC.spray};
-  const prods=PRODUCTS[S.category];
-  const prodKeys={
-    deodorant:{name:'pDeodorant',sub:'pDeodorantSub'},
-    hairspray:{name:'pHairspray',sub:'pHairspraySub'},
-    bodymist:{name:'pBodymist',sub:'pBodymistSub'},
-    perfume:{name:'pPerfume',sub:'pPerfumeSub'},
-    roomspray:{name:'pRoomspray',sub:'pRoomspraySub'},
-    carfresh:{name:'pCarfresh',sub:'pCarfreshSub'},
-    fabric:{name:'pFabric',sub:'pFabricSub'},
+/* ════ LABEL STUDIO (fabric.js — unchanged) ════ */
+let fabricCanvas=null,studioJSON=null,studioApplied=false,emojiCat='All';
+const STUDIO_FONTS=['Lato','Montserrat','Playfair Display','Oswald','Bebas Neue','Raleway','Abril Fatface'];
+const EMOJIS={
+  Face:['\ud83d\ude0a','\ud83d\ude0d','\ud83e\udd70','\ud83d\ude0e','\ud83e\udd29','\ud83d\ude04','\ud83e\udd73','\ud83d\ude07','\ud83e\udd17','\ud83d\ude0f','\ud83c\udf1d','\ud83d\udc51','\ud83d\udc8b','\ud83e\udeb6','\ud83e\udd2d'],
+  Nature:['\ud83c\udf3f','\ud83c\udf38','\ud83c\udf3a','\ud83c\udf43','\ud83c\udf31','\ud83c\udf0a','\u2600\ufe0f','\ud83c\udf19','\u2744\ufe0f','\ud83c\udf08','\ud83c\udf3b','\ud83e\udd8b','\ud83c\udf3e','\ud83c\udf40','\ud83c\udf34'],
+  Food:['\ud83c\udf4b','\ud83c\udf4a','\ud83c\udf36\ufe0f','\ud83e\uded0','\ud83c\udf53','\ud83c\udf6f','\ud83e\udd65','\ud83c\udf75','\ud83e\uddc3','\ud83c\udf77','\ud83e\udee7','\ud83e\uddca','\ud83c\udf6b','\ud83e\uddc1','\ud83c\udf51'],
+  Symbol:['\u2728','\ud83d\udcab','\u2b50','\ud83d\udd25','\u26a1','\ud83d\udca5','\u2764\ufe0f','\ud83d\udc99','\ud83d\udc9a','\ud83d\udc9b','\ud83d\udda4','\ud83e\udd0d','\u267b\ufe0f','\u2705','\ud83c\udfc6'],
+  Objects:['\ud83d\udc8e','\ud83d\udc84','\ud83e\uddf4','\ud83c\udf39','\ud83c\udf81','\ud83d\udc90','\ud83e\uddff','\ud83e\ude84','\ud83c\udfa8','\ud83e\udee0','\ud83d\udc5c','\ud83d\udc8d','\ud83e\udedb','\ud83c\udf80','\ud83e\uddf2'],
+};
+const EMOJI_ALL=Object.values(EMOJIS).flat();
+let _emojiRef=[];
+function _buildEmojiGrid(list){
+  _emojiRef=list;
+  return list.map((e,i)=>`<button class="emoji-btn" onclick="studioAddEmoji(_emojiRef[${i}])" title="${e}">${e}</button>`).join('');
+}
+function switchArtTab(tab){S.artTab=tab;if(fabricCanvas)studioJSON=fabricCanvas.toJSON();rebox();if(tab==='studio')setTimeout(initStudio,30);}
+function initStudio(){
+  const el=document.getElementById('studio-canvas');if(!el)return;
+  const wrap=document.getElementById('studio-canvas-wrap');
+  const W=wrap?Math.max(300,wrap.clientWidth):520;
+  const H=Math.round(W*(LABEL_H/LABEL_W));
+  if(fabricCanvas){fabricCanvas.dispose();fabricCanvas=null;}
+  fabricCanvas=new fabric.Canvas('studio-canvas',{width:W,height:H,backgroundColor:'#ffffff',preserveObjectStacking:true});
+  fabric.Object.prototype.set({borderColor:'#1557b0',cornerColor:'#1557b0',cornerSize:8,cornerStyle:'circle',transparentCorners:false,padding:4});
+  if(studioJSON){fabricCanvas.loadFromJSON(studioJSON,()=>{fabricCanvas.renderAll();studioUpdateProps();});}
+  else{fabricCanvas.setBackgroundColor('#f0f0f0',()=>fabricCanvas.renderAll());studioUpdateProps();}
+  fabricCanvas.on('selection:created',studioUpdateProps);fabricCanvas.on('selection:updated',studioUpdateProps);
+  fabricCanvas.on('selection:cleared',studioUpdateProps);fabricCanvas.on('object:modified',studioSave);fabricCanvas.on('object:added',studioSave);
+}
+function studioSave(){if(fabricCanvas)studioJSON=fabricCanvas.toJSON();}
+function studioAddText(){
+  if(!fabricCanvas)return;
+  const fs=Math.round(fabricCanvas.height*0.13);
+  const txt=new fabric.IText(LANG==='ru'?'\u0412\u0430\u0448 \u0442\u0435\u043a\u0441\u0442':'Your Text',{left:fabricCanvas.width*.5,top:fabricCanvas.height*.5,originX:'center',originY:'center',fontFamily:'Montserrat',fontSize:fs,fill:'#0f172a',fontWeight:'bold',textAlign:'center'});
+  fabricCanvas.add(txt);fabricCanvas.setActiveObject(txt);fabricCanvas.renderAll();studioSave();studioUpdateProps();txt.enterEditing();txt.selectAll();
+}
+function studioAddRect(){
+  if(!fabricCanvas)return;
+  const rect=new fabric.Rect({left:fabricCanvas.width*.15,top:fabricCanvas.height*.2,width:fabricCanvas.width*.7,height:fabricCanvas.height*.6,fill:'#1557b0',opacity:.85,rx:6,ry:6});
+  fabricCanvas.add(rect);fabricCanvas.setActiveObject(rect);fabricCanvas.renderAll();studioSave();studioUpdateProps();
+}
+function studioAddCircle(){
+  if(!fabricCanvas)return;
+  const r=Math.round(fabricCanvas.height*.22);
+  const c=new fabric.Circle({left:fabricCanvas.width*.5-r,top:fabricCanvas.height*.5-r,radius:r,fill:'#1557b0',opacity:.85});
+  fabricCanvas.add(c);fabricCanvas.setActiveObject(c);fabricCanvas.renderAll();studioSave();studioUpdateProps();
+}
+function studioSetBg(hex){if(!fabricCanvas)return;fabricCanvas.setBackgroundColor(hex,()=>fabricCanvas.renderAll());studioSave();}
+function studioDelete(){
+  if(!fabricCanvas)return;const obj=fabricCanvas.getActiveObject();if(!obj)return;
+  if(obj.type==='activeSelection'){obj.forEachObject(o=>fabricCanvas.remove(o));fabricCanvas.discardActiveObject();}
+  else fabricCanvas.remove(obj);fabricCanvas.renderAll();studioSave();studioUpdateProps();
+}
+function toggleEmojiPicker(){const p=document.getElementById('emoji-panel');if(p)p.classList.toggle('open');}
+function setEmojiCat(cat){
+  emojiCat=cat;
+  const list=cat==='All'?EMOJI_ALL:(EMOJIS[cat]||[]);
+  const grid=document.getElementById('emoji-grid');if(!grid)return;
+  grid.innerHTML=_buildEmojiGrid(list);
+  document.querySelectorAll('.emoji-cat-btn').forEach(b=>b.classList.toggle('on',b.dataset.cat===cat));
+}
+function studioAddEmoji(emoji){
+  if(!fabricCanvas)return;
+  const fs=Math.round(fabricCanvas.height*.22);
+  const txt=new fabric.IText(emoji,{left:fabricCanvas.width*.5,top:fabricCanvas.height*.5,originX:'center',originY:'center',fontSize:fs,fontFamily:'Apple Color Emoji,Segoe UI Emoji,Noto Color Emoji,Arial,sans-serif',textAlign:'center'});
+  fabricCanvas.add(txt);fabricCanvas.setActiveObject(txt);fabricCanvas.renderAll();studioSave();studioUpdateProps();
+  const p=document.getElementById('emoji-panel');if(p)p.classList.remove('open');
+}
+function studioTriggerImageUpload(){const inp=document.getElementById('studio-img-input');if(inp)inp.click();}
+function studioUploadImage(e){
+  const file=e.target.files[0];if(!file||!fabricCanvas)return;
+  const objectURL=URL.createObjectURL(file);const tempImg=new Image();tempImg.crossOrigin='anonymous';
+  tempImg.onload=()=>{
+    const oc=document.createElement('canvas');oc.width=tempImg.naturalWidth;oc.height=tempImg.naturalHeight;
+    oc.getContext('2d').drawImage(tempImg,0,0);URL.revokeObjectURL(objectURL);
+    let cleanURL;try{cleanURL=oc.toDataURL('image/png');}catch(_){cleanURL=objectURL;}
+    fabric.Image.fromURL(cleanURL,img=>{
+      const maxW=fabricCanvas.width*.6,maxH=fabricCanvas.height*.7;
+      const scale=Math.min(maxW/img.width,maxH/img.height,1);
+      img.set({left:fabricCanvas.width*.5,top:fabricCanvas.height*.5,originX:'center',originY:'center',scaleX:scale,scaleY:scale,crossOrigin:'anonymous'});
+      fabricCanvas.add(img);fabricCanvas.setActiveObject(img);fabricCanvas.renderAll();studioSave();studioUpdateProps();
+    },{crossOrigin:'anonymous'});
   };
+  tempImg.onerror=()=>{URL.revokeObjectURL(objectURL);alert('Could not load image.');};
+  tempImg.src=objectURL;e.target.value='';
+}
+function studioSetTextProp(prop,val){
+  if(!fabricCanvas)return;const obj=fabricCanvas.getActiveObject();if(!obj)return;
+  if(prop==='fontSize')val=parseInt(val)||12;obj.set(prop,val);fabricCanvas.renderAll();studioSave();
+}
+function studioSetShapeProp(prop,val){
+  if(!fabricCanvas)return;const obj=fabricCanvas.getActiveObject();if(!obj)return;
+  if(prop==='opacity')val=parseFloat(val);if(prop==='strokeWidth')val=parseInt(val)||0;
+  obj.set(prop,val);fabricCanvas.renderAll();studioSave();
+}
+function studioUpdateProps(){
+  const el=document.getElementById('studio-props');if(!el||!fabricCanvas)return;
+  const obj=fabricCanvas.getActiveObject();
+  if(!obj){el.innerHTML=`<span class="studio-hint">${t('studioSelectHint')}</span>`;return;}
+  const isText=obj.type==='i-text'||obj.type==='text';
+  const isShape=obj.type==='rect'||obj.type==='circle'||obj.type==='ellipse';
+  const isImage=obj.type==='image';
+  if(isText){
+    const fontOpts=STUDIO_FONTS.map(f=>`<option value="${f}" ${obj.fontFamily===f?'selected':''} style="font-family:${f}">${f}</option>`).join('');
+    el.innerHTML=`<div class="spr-group"><span class="spr-lbl">${t('studioFont')}</span><select class="spr-select" onchange="studioSetTextProp('fontFamily',this.value)">${fontOpts}</select></div>
+      <div class="spr-group"><span class="spr-lbl">${t('studioSize')}</span><input class="spr-num" type="number" min="6" max="400" value="${Math.round(obj.fontSize||40)}" oninput="studioSetTextProp('fontSize',this.value)"></div>
+      <div class="spr-group"><span class="spr-lbl">${t('studioColor')}</span><input type="color" class="spr-color" value="${obj.fill||'#000000'}" oninput="studioSetTextProp('fill',this.value)"></div>
+      <div class="spr-group" style="gap:3px">
+        <button class="spr-toggle${obj.fontWeight==='bold'?' on':''}" onclick="studioSetTextProp('fontWeight',fabricCanvas.getActiveObject().fontWeight==='bold'?'normal':'bold');studioUpdateProps()"><b>B</b></button>
+        <button class="spr-toggle${obj.fontStyle==='italic'?' on':''}" onclick="studioSetTextProp('fontStyle',fabricCanvas.getActiveObject().fontStyle==='italic'?'normal':'italic');studioUpdateProps()"><i>I</i></button>
+      </div>`;
+  } else if(isShape){
+    const fillVal=(typeof obj.fill==='string')?obj.fill:'#1557b0';
+    el.innerHTML=`<div class="spr-group"><span class="spr-lbl">${t('studioFill')}</span><input type="color" class="spr-color" value="${fillVal}" oninput="studioSetShapeProp('fill',this.value)"></div>
+      <div class="spr-group"><span class="spr-lbl">${t('studioOpacity')}</span><input type="range" min="0.05" max="1" step="0.05" value="${obj.opacity||1}" style="width:72px;cursor:pointer" oninput="studioSetShapeProp('opacity',this.value)"><span style="font-size:10px;color:var(--muted)">${Math.round((obj.opacity||1)*100)}%</span></div>`;
+  } else if(isImage){
+    const pct=Math.round((obj.scaleX||1)*obj.width/fabricCanvas.width*100);
+    el.innerHTML=`<div class="spr-group"><span class="spr-lbl">Scale</span><input type="range" min="5" max="200" value="${pct}" style="width:90px;cursor:pointer" oninput="(function(v){const o=fabricCanvas.getActiveObject();if(!o)return;const s=v/100*(fabricCanvas.width/o.width);o.set({scaleX:s,scaleY:s});fabricCanvas.renderAll();studioSave();})(this.value)"><span style="font-size:10px;color:var(--muted)">${pct}%</span></div>`;
+  } else {el.innerHTML=`<span class="studio-hint">${obj.type}</span>`;}
+}
+function applyStudio(){
+  if(!fabricCanvas)return;studioSave();fabricCanvas.discardActiveObject();fabricCanvas.renderAll();
+  function doApply(dataURL){
+    const img=new Image();
+    img.onload=()=>{S.designImg=img;S.bareMode=false;S.selectedTemplate=null;studioApplied=true;S.labelScale=1.0;S.labelPosY=0.5;generateLabel();rebox();setTimeout(initStudio,30);};
+    img.onerror=()=>alert('Image load failed.');
+    img.src=dataURL;
+  }
+  try{const scale=LABEL_W/fabricCanvas.width;doApply(fabricCanvas.toDataURL({format:'png',multiplier:scale,enableRetinaScaling:false}));}
+  catch(e1){try{doApply(fabricCanvas.toDataURL({format:'png',enableRetinaScaling:false}));}catch(e2){alert('Export failed. Try removing any uploaded images and re-applying.');}}
+}
+
+/* ════ STEP RENDERERS ════ */
+
+/* Step 1: Can Selection with per-product volumes */
+function rStep1(){
+  const cats={beauty:t('catBeauty'),airfresh:t('catAir'),home:t('catHome')};
+  const catIco={beauty:IC.can,airfresh:IC.spray,home:IC.home};
+  const prods=PRODUCTS[S.category]||[];
+  const prodKeys={
+    deodorant:{name:'pDeodorant',sub:'pDeodorantSub'},hairspray:{name:'pHairspray',sub:'pHairspraySub'},
+    bodymist:{name:'pBodymist',sub:'pBodymistSub'},perfume:{name:'pPerfume',sub:'pPerfumeSub'},
+    afwater:{name:'pAFWater',sub:'pAFWaterSub'},afalcohol:{name:'pAFAlcohol',sub:'pAFAlcoholSub'},
+    afrefill:{name:'pAFRefill',sub:'pAFRefillSub'},
+    homespray:{name:'pHomeSpray',sub:'pHomeSpraySub'},fabricfresh:{name:'pFabricFresh',sub:'pFabricFreshSub'},
+  };
+  const currentSizes=S.prod?S.prod.sizes:[];
   return`<h2 class="sec-title">${t('s1title')}</h2>
     <span class="field-label">${t('prodCat')}</span>
     <div class="cat-tabs">
-      ${Object.entries(cats).map(([k,v])=>`<div class="ct${S.category===k?" on":""}"
-        onclick="S.category='${k}';S.prod=PRODUCTS['${k}'][0];rebox()">
-        <span style="display:flex;align-items:center">${catIco[k]}</span>${v}</div>`).join("")}
+      ${Object.entries(cats).map(([k,v])=>`<div class="ct${S.category===k?" on":""}" onclick="selectCategory('${k}')">
+        <span style="display:inline-flex;align-items:center;margin-right:4px">${catIco[k]}</span>${v}</div>`).join("")}
     </div>
     <span class="field-label">${t('prodType')}</span>
     <div class="prod-grid">
       ${prods.map(p=>{
         const keys=prodKeys[p.id]||{name:'',sub:''};
-        const pName=keys.name?t(keys.name):p.name;
-        const pSub=keys.sub?t(keys.sub):p.sub;
-        return`<div class="pcard${S.prod.id===p.id?" on":""}"
-          onclick="S.prod=PRODUCTS[S.category].find(x=>x.id==='${p.id}');updateCamera();updateBadge();rebox()">
+        return`<div class="pcard${S.prod&&S.prod.id===p.id?" on":""}" onclick="selectProduct('${p.id}')">
           <div class="pcard-icon">${IC.can}</div>
-          <div><div class="pcard-name">${pName}</div><div class="pcard-sub">${pSub}</div></div>
+          <div class="pcard-text"><div class="pcard-name">${keys.name?t(keys.name):p.name}</div><div class="pcard-sub">${keys.sub?t(keys.sub):p.sub}</div></div>
         </div>`;
       }).join("")}
     </div>
     <span class="field-label">${t('fillVol')}</span>
     <div class="size-row">
-      ${SIZES.map(sz=>`<div class="sz${S.size.ml===sz.ml?" on":""}"
-        onclick="S.size=SIZES.find(x=>x.ml==='${sz.ml}');updateCamera();updateBadge();rebox()">${sz.ml}</div>`).join("")}
+      ${(_sizeRef=currentSizes,currentSizes.map((sz,i)=>`<div class="sz${S.size===sz?" on":""}" onclick="setSize(${i})">${sz}</div>`).join(""))}
     </div>
-    <div class="navrow"><div></div><button class="btn-next" onclick="ns()">${t('btnBodyCol')} ${IC.chevron}</button></div>`;
+    <div class="navrow"><div></div><button class="btn-next" onclick="ns()">${t('btnCapFinish')} ${IC.chevron}</button></div>`;
 }
 
+/* Step 2: Cap Style & Finish (body colour removed) */
 function rStep2(){
+  const finishKeys={matte:'fMatte',semimatte:'fSemiMatte',gloss:'fGloss',pearl:'fPearl'};
   return`<h2 class="sec-title">${t('s2title')}</h2>
-    <span class="field-label">${t('pantoneSel')}</span>
-    ${renderPicker("bodyColor")}
-    <div class="navrow">
-      <button class="btn-back" onclick="ps()">${t('btnBack')}</button>
-      <button class="btn-next" onclick="ns()">${t('btnCapFinish')} ${IC.chevron}</button>
-    </div>`;
-}
-
-function rStep3(){
-  const finishKeys={matte:'fMatte',satin:'fSatin',gloss:'fGloss',metallic:'fMetallic',chrome:'fChrome'};
-  return`<h2 class="sec-title">${t('s3title')}</h2>
-    <div class="spec-box">
-      <div class="spec-head">${t('stdCapHead')}</div>
-      <div style="font-size:11px;color:var(--sub);line-height:1.6">${t('stdCapDesc')}</div>
-    </div>
+    <span class="field-label">${t('capStyleHead')}</span>
+    ${renderCapStyleGrid()}
     <span class="field-label">${t('surfaceFinish')}</span>
     <div class="fin-grid">
-      ${FINISHES.map(f=>`<div class="fg${S.finish.id===f.id?" on":""}"
-        onclick="S.finish=FINISHES.find(x=>x.id==='${f.id}');tR=S.finish.r;tM=S.finish.m;generateLabel();updateBadge();rebox()">
+      ${FINISHES.map(f=>`<div class="fg${S.finish.id===f.id?" on":""}" onclick="S.finish=FINISHES.find(x=>x.id==='${f.id}');tR=S.finish.r;tM=S.finish.m;applyColors();rebox()">
         <div class="fg-ball" style="background:${f.ball}"></div>
-        <div class="fg-name">${t(finishKeys[f.id]||f.id)}</div>
+        <div class="fg-name">${t(finishKeys[f.id])}</div>
+        <div class="fg-check"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg></div>
       </div>`).join("")}
     </div>
     <span class="field-label">${t('capColour')}</span>
-    <div class="match-toggle${S.capMatchBody?" on":""}" onclick="S.capMatchBody=!S.capMatchBody;rebox()">
+    <div class="match-toggle${S.capMatchBody?" on":""}" onclick="S.capMatchBody=!S.capMatchBody;applyColors();rebox()">
       ${IC.match}
       <span class="match-text">${S.capMatchBody?t('matchedBody'):t('useBodyCol')}</span>
       <div class="match-check">${S.capMatchBody?IC.check:""}</div>
@@ -1739,397 +1301,286 @@ function rStep3(){
     </div>`;
 }
 
-function rStep4(){
-  const hasImg = !!S.designImg;
-  const isStudio = S.artTab === 'studio';
-  const bgForStudio = (fabricCanvas ? fabricCanvas.backgroundColor : S.bodyColor.hex) || S.bodyColor.hex;
+/* Step 3: Design & Artwork */
+function rStep3(){
+  const hasImg=!!S.designImg;
+  const isStudio=S.artTab==='studio';
+  const bgForStudio=(fabricCanvas?fabricCanvas.backgroundColor:'#f0f0f0')||'#f0f0f0';
+  const emojiList=(emojiCat==='All'?EMOJI_ALL:(EMOJIS[emojiCat]||[]));
+  const emojiCatKeys=[{k:'All',lk:'emojiCatAll'},{k:'Face',lk:'emojiCatFace'},{k:'Nature',lk:'emojiCatNature'},{k:'Food',lk:'emojiCatFood'},{k:'Symbol',lk:'emojiCatSymbol'},{k:'Objects',lk:'emojiCatObjects'}];
 
-  /* ── studio tab HTML ── */
-  const emojiList = (emojiCat==='All' ? EMOJI_ALL : (EMOJIS[emojiCat]||[]));
-  const emojiCatKeys = [{k:'All',lk:'emojiCatAll'},{k:'Face',lk:'emojiCatFace'},{k:'Nature',lk:'emojiCatNature'},{k:'Food',lk:'emojiCatFood'},{k:'Symbol',lk:'emojiCatSymbol'},{k:'Objects',lk:'emojiCatObjects'}];
-
-  const studioHTML = `
-    <div class="studio-wrap">
-      <!-- hidden image file input -->
-      <input type="file" id="studio-img-input" accept="image/*" style="display:none" onchange="studioUploadImage(event)">
-      <div class="studio-toolbar">
-        <button class="studio-tbtn" onclick="studioAddText()">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
-          ${t('studioText')}
-        </button>
-        <button class="studio-tbtn" onclick="studioAddRect()">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="6" width="18" height="12" rx="2"/></svg>
-          ${t('studioRect')}
-        </button>
-        <button class="studio-tbtn" onclick="studioAddCircle()">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9"/></svg>
-          ${t('studioCircle')}
-        </button>
-        <button class="studio-tbtn" onclick="toggleEmojiPicker()" style="font-size:14px;gap:3px">
-          😊 ${t('studioEmoji')}
-        </button>
-        <button class="studio-tbtn" onclick="studioTriggerImageUpload()">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          ${t('studioImage')}
-        </button>
-        <div class="studio-sep"></div>
-        <div class="spr-group" style="margin:0">
-          <span class="spr-lbl">${t('studioBg')}</span>
-          <input type="color" class="spr-color" value="${bgForStudio}" oninput="studioSetBg(this.value)">
-        </div>
-        <div style="flex:1"></div>
-        <button class="studio-tbtn del" onclick="studioDelete()">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg>
-          ${t('studioDelete')}
-        </button>
-      </div>
-      <!-- Emoji picker panel (toggled) -->
-      <div class="studio-emoji-panel" id="emoji-panel">
-        <div class="emoji-cats">
-          ${emojiCatKeys.map(({k,lk})=>`<button class="emoji-cat-btn${emojiCat===k?' on':''}" data-cat="${k}" onclick="setEmojiCat('${k}')">${t(lk)}</button>`).join('')}
-        </div>
-        <div class="emoji-grid" id="emoji-grid">
-          ${emojiList.map(e=>`<button class="emoji-btn" data-e="${encodeURIComponent(e)}" onclick="studioAddEmoji(decodeURIComponent(this.dataset.e))" title="${e}">${e}</button>`).join('')}
-        </div>
-      </div>
-      <div class="studio-canvas-wrap" id="studio-canvas-wrap">
-        <canvas id="studio-canvas"></canvas>
-      </div>
-      <div class="studio-props" id="studio-props">
-        <span class="studio-hint">${t('studioSelectHint')}</span>
-      </div>
-      <div class="studio-footer">
-        <span class="studio-hint">${t('studioHint')}</span>
-        <button class="btn-next" onclick="applyStudio()" style="font-size:11px;padding:7px 16px">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          ${t('studioApply')}
-        </button>
-      </div>
+  const studioHTML=`<div class="studio-wrap">
+    <input type="file" id="studio-img-input" accept="image/*" style="display:none" onchange="studioUploadImage(event)">
+    <div class="studio-toolbar">
+      <button class="studio-tbtn" onclick="studioAddText()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>${t('studioText')}</button>
+      <button class="studio-tbtn" onclick="studioAddRect()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="6" width="18" height="12" rx="2"/></svg>${t('studioRect')}</button>
+      <button class="studio-tbtn" onclick="studioAddCircle()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9"/></svg>${t('studioCircle')}</button>
+      <button class="studio-tbtn" onclick="toggleEmojiPicker()" style="font-size:14px;gap:3px">\ud83d\ude0a ${t('studioEmoji')}</button>
+      <button class="studio-tbtn" onclick="studioTriggerImageUpload()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>${t('studioImage')}</button>
+      <div class="studio-sep"></div>
+      <div class="spr-group" style="margin:0"><span class="spr-lbl">${t('studioBg')}</span><input type="color" class="spr-color" value="${bgForStudio}" oninput="studioSetBg(this.value)"></div>
+      <div style="flex:1"></div>
+      <button class="studio-tbtn del" onclick="studioDelete()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg>${t('studioDelete')}</button>
     </div>
-    ${studioApplied && hasImg ? `<div class="studio-applied" style="margin-top:10px">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-      ${t('studioApplied')}
-    </div>` : ''}`;
-
-  /* ── upload tab HTML ── */
-  const uploadHTML = `
-    <div style="background:var(--blue-bg);border:1px solid rgba(21,87,176,.14);border-radius:7px;padding:13px 15px;margin-bottom:12px">
-      <div style="font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.9px;margin-bottom:9px">${t('artSpecHead')}</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11.5px;margin-bottom:10px">
-        <div><span style="color:var(--muted)">${t('canvasSize')}</span><br><strong>2048 × 1080 px</strong></div>
-        <div><span style="color:var(--muted)">${t('aspectRatio')}</span><br><strong>1.9 : 1</strong></div>
-        <div><span style="color:var(--muted)">${t('frontZone')}</span><br><strong>Centre 50%</strong></div>
-        <div><span style="color:var(--muted)">${t('safePanel')}</span><br><strong>Centre 70%</strong></div>
-      </div>
-      <div style="font-size:10.5px;color:var(--muted);margin-bottom:10px;line-height:1.5">${t('artCentreHint')}</div>
-      <span class="field-label" style="margin-top:6px;display:block">${t('tplLabel')}</span>
-      <div class="tpl-grid">${renderTemplateGrid()}</div>
-      <div style="font-size:9.5px;color:var(--muted);margin-top:2px;margin-bottom:10px">${t('uploadHint')}</div>
-      <button onclick="downloadTemplate()" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--blue);border-radius:5px;background:white;color:var(--blue);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">${IC.dl} ${t('dlTemplate')}</button>
+    <div class="studio-emoji-panel" id="emoji-panel">
+      <div class="emoji-cats">${emojiCatKeys.map(({k,lk})=>`<button class="emoji-cat-btn${emojiCat===k?' on':''}" data-cat="${k}" onclick="setEmojiCat('${k}')">${t(lk)}</button>`).join('')}</div>
+      <div class="emoji-grid" id="emoji-grid">${_buildEmojiGrid(emojiList)}</div>
     </div>
-    <div class="upload-zone${hasImg?" has":""}" onclick="document.getElementById('fup').click()">
-      <input type="file" id="fup" accept="image/*" style="display:none" onchange="onUpload(event)">
-      ${!hasImg?`<div class="up-icon-wrap">${IC.upload}</div><div class="up-txt">${t('uploadZoneTxt')}</div><div class="up-hint">${t('uploadHint2')}</div>`:""}
-      <img id="uprev" class="up-preview${hasImg?" on":""}" src="${hasImg?S.designImg.src:""}">
-      <button class="up-clear" onclick="clearDesign(event)">${t('removeLbl')}</button>
+    <div class="studio-canvas-wrap" id="studio-canvas-wrap"><canvas id="studio-canvas"></canvas></div>
+    <div class="studio-props" id="studio-props"><span class="studio-hint">${t('studioSelectHint')}</span></div>
+    <div class="studio-footer">
+      <span class="studio-hint">${t('studioHint')}</span>
+      <button class="btn-next" onclick="applyStudio()" style="font-size:11px;padding:7px 16px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>${t('studioApply')}</button>
     </div>
-    ${hasImg?`<div class="lsliders on">
-      <div class="sl-row"><label>${t('posLbl')}</label>
-        <input type="range" min="15" max="85" value="${Math.round(S.labelPosY*100)}"
-          oninput="S.labelPosY=this.value/100;document.getElementById('lpyv').textContent=this.value+'%';generateLabel()">
-        <span class="sl-val" id="lpyv">${Math.round(S.labelPosY*100)}%</span></div>
-      <div class="sl-row"><label>${t('scaleLbl')}</label>
-        <input type="range" min="30" max="110" value="${Math.round(S.labelScale*100)}"
-          oninput="S.labelScale=this.value/100;document.getElementById('lscv').textContent=this.value+'%';generateLabel()">
-        <span class="sl-val" id="lscv">${Math.round(S.labelScale*100)}%</span></div>
-    </div>`:""}`;
+  </div>`;
 
-  return `<h2 class="sec-title">${t('s4title')}</h2>
+  const uploadHTML=`<div style="background:var(--blue-bg);border:1px solid rgba(21,87,176,.14);border-radius:7px;padding:13px 15px;margin-bottom:12px">
+    <div style="font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.9px;margin-bottom:9px">${t('artSpecHead')}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11.5px;margin-bottom:10px">
+      <div><span style="color:var(--muted)">${t('canvasSize')}</span><br><strong>1633 \u00d7 1950 px</strong></div>
+      <div><span style="color:var(--muted)">${t('aspectRatio')}</span><br><strong>\u03c0\u00d752 : 195 mm</strong></div>
+      <div><span style="color:var(--muted)">${t('frontZone')}</span><br><strong>Centre 50%</strong></div>
+      <div><span style="color:var(--muted)">${t('safePanel')}</span><br><strong>Centre 70%</strong></div>
+    </div>
+    <div style="font-size:10.5px;color:var(--muted);margin-bottom:10px;line-height:1.5">${t('artCentreHint')}</div>
+    <span class="field-label" style="margin-top:6px;display:block">${t('tplLabel')}</span>
+    <div class="tpl-grid">${renderTemplateGrid()}</div>
+    <div style="font-size:9.5px;color:var(--muted);margin-top:2px;margin-bottom:10px">${t('uploadHint')}</div>
+    <button onclick="downloadTemplate()" style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--blue);border-radius:5px;background:white;color:var(--blue);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">${IC.dl} ${t('dlTemplate')}</button>
+  </div>
+  <div class="upload-zone${hasImg?" has":""}" onclick="document.getElementById('fup').click()">
+    <input type="file" id="fup" accept="image/*" style="display:none" onchange="onUpload(event)">
+    ${!hasImg?`<div class="up-icon-wrap">${IC.upload}</div><div class="up-txt">${t('uploadZoneTxt')}</div><div class="up-hint">${t('uploadHint2')}</div>`:""}
+    <img id="uprev" class="up-preview${hasImg?" on":""}" src="${hasImg?S.designImg.src:""}">
+    <button class="up-clear" onclick="clearDesign(event)">${t('removeLbl')}</button>
+  </div>
+  ${hasImg?`<div class="lsliders on">
+    <div class="sl-row"><label>${t('scaleLbl')}</label>
+      <input type="range" min="30" max="110" value="${Math.round(S.labelScale*100)}"
+        oninput="S.labelScale=this.value/100;document.getElementById('lscv').textContent=this.value+'%';generateLabel()">
+      <span class="sl-val" id="lscv">${Math.round(S.labelScale*100)}%</span></div>
+    <div class="sl-row"><label>${t('posLbl')}</label>
+      <input type="range" min="10" max="90" value="${Math.round(S.labelPosY*100)}"
+        oninput="S.labelPosY=this.value/100;document.getElementById('lpyv').textContent=this.value+'%';generateLabel()">
+      <span class="sl-val" id="lpyv">${Math.round(S.labelPosY*100)}%</span></div>
+  </div>`:""}`;
+
+  return`<h2 class="sec-title">${t('s3title')}</h2>
     <div class="bare-row">
       <div><div class="bare-lbl">${t('bareCanLbl')}</div><div class="bare-sub">${t('bareCanSub')}</div></div>
-      <label class="toggle"><input type="checkbox" ${S.bareMode?"checked":""}
-        onchange="S.bareMode=this.checked;generateLabel();rebox()"><span class="tgl"></span></label>
+      <label class="toggle"><input type="checkbox" ${S.bareMode?"checked":""} onchange="S.bareMode=this.checked;generateLabel();rebox()"><span class="tgl"></span></label>
     </div>
-    ${!S.bareMode ? `
-    <!-- Artwork source tabs -->
+    ${!S.bareMode?`
     <div class="art-tabs">
-      <div class="art-tab${!isStudio?' on':''}" onclick="switchArtTab('upload')">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>
-        ${t('artTabUpload')}
-      </div>
-      <div class="art-tab${isStudio?' on':''}" onclick="switchArtTab('studio')">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="0.5" fill="currentColor"/><circle cx="17.5" cy="10.5" r="0.5" fill="currentColor"/><circle cx="8.5" cy="7.5" r="0.5" fill="currentColor"/><circle cx="6.5" cy="12.5" r="0.5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 011.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
-        ${t('artTabStudio')}
-      </div>
+      <div class="art-tab${!isStudio?' on':''}" onclick="switchArtTab('upload')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3"/></svg>${t('artTabUpload')}</div>
+      <div class="art-tab${isStudio?' on':''}" onclick="switchArtTab('studio')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="0.5" fill="currentColor"/><circle cx="17.5" cy="10.5" r="0.5" fill="currentColor"/><circle cx="8.5" cy="7.5" r="0.5" fill="currentColor"/><circle cx="6.5" cy="12.5" r="0.5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 011.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>${t('artTabStudio')}</div>
     </div>
-    ${isStudio ? studioHTML : uploadHTML}
-    ` : `<div style="padding:16px 0;font-size:12px;color:var(--muted);text-align:center">${t('bareModeText')}</div>`}
+    ${isStudio?studioHTML:uploadHTML}
+    `:`<div style="padding:16px 0;font-size:12px;color:var(--muted);text-align:center">${t('bareModeText')}</div>`}
     <div class="navrow">
       <button class="btn-back" onclick="ps()">${t('btnBack')}</button>
       <button class="btn-next" onclick="ns()">${t('btnReview')} ${IC.chevron}</button>
     </div>`;
 }
 
-function rStep5(){
-  const capStr=S.capMatchBody?t('matchBodyStr')+' — '+S.bodyColor.name:'PMS '+S.capColor.code+' — '+S.capColor.name;
+/* Step 4: Review & Submit — cap colour uses actual cap colour ✅ */
+function rStep4(){
+  const capName=CAP_STYLES.find(c=>c.id===S.capStyle);
+  const capStyleName=capName?t(capName.nameKey):S.capStyle;
+  /* Fix: cap colour correctly shows selected cap colour, not body colour */
+  const capColStr=S.capMatchBody
+    ?t('matchBodyStr')+' \u2014 '+BODY_BASE.name
+    :'PMS '+S.capColor.code+' \u2014 '+S.capColor.name;
+  /* Fix: cap swatch shows actual cap colour */
+  const capHex=S.capMatchBody?BODY_BASE.hex:S.capColor.hex;
+  const capCode=S.capMatchBody?'Aluminium':S.capColor.code;
   const artStr=S.bareMode?t('sumBare'):S.designImg?t('sumCustomArt'):t('sumNoArt');
-  return`<h2 class="sec-title">${t('s5title')}</h2>
+  return`<h2 class="sec-title">${t('s4title')}</h2>
     <div class="summary">
       <div class="sum-head">${t('configSummary')}</div>
-      <div class="sum-row"><span class="sk">${t('sumProduct')}</span><span class="sv">${S.prod.name} · ${S.size.ml}</span></div>
-      <div class="sum-row"><span class="sk">${t('sumBodyCol')}</span><span class="sv">PMS ${S.bodyColor.code} — ${S.bodyColor.name}</span></div>
+      <div class="sum-row"><span class="sk">${t('sumProduct')}</span><span class="sv">${S.prod?S.prod.name:'—'} \u00b7 ${S.size}</span></div>
       <div class="sum-row"><span class="sk">${t('sumFinish')}</span><span class="sv">${S.finish.name}</span></div>
-      <div class="sum-row"><span class="sk">${t('sumCapStyle')}</span><span class="sv">${t('sumCapStyleVal')}</span></div>
-      <div class="sum-row"><span class="sk">${t('sumCapCol')}</span><span class="sv">${capStr}</span></div>
+      <div class="sum-row"><span class="sk">${t('sumCapStyle')}</span><span class="sv">${capStyleName}</span></div>
+      <div class="sum-row"><span class="sk">${t('sumCapCol')}</span><span class="sv">${capColStr}</span></div>
       <div class="sum-row"><span class="sk">${t('sumArtwork')}</span><span class="sv">${artStr}</span></div>
+    </div>
+    <div style="display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:10px;background:var(--blue-bg);border-radius:7px;padding:10px 14px;border:1px solid rgba(21,87,176,.12);flex:1;min-width:140px">
+        <div style="width:32px;height:32px;border-radius:50%;background:#d4d4d6;border:1px solid rgba(0,0,0,.1);flex-shrink:0"></div>
+        <div><div style="font-size:9px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px">Body</div><div style="font-size:11px;color:var(--sub)">Aluminium</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;background:var(--blue-bg);border-radius:7px;padding:10px 14px;border:1px solid rgba(21,87,176,.12);flex:1;min-width:140px">
+        <div style="width:32px;height:32px;border-radius:50%;background:${capHex};border:1px solid rgba(0,0,0,.1);flex-shrink:0"></div>
+        <div><div style="font-size:9px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px">Cap</div><div style="font-size:11px;color:var(--sub)">PMS ${capCode}</div></div>
+      </div>
     </div>
     <div class="action-row">
       <div class="action-card" onclick="downloadPDF()">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
-        <div class="action-card-title">${t('dlPdfTitle')}</div>
-        <div class="action-card-sub">${t('dlPdfSub')}</div>
+        <div class="action-card-title">${t('dlPdfTitle')}</div><div class="action-card-sub">${t('dlPdfSub')}</div>
       </div>
       <div class="action-card" onclick="sendEmail()">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        <div class="action-card-title">${t('emailTitle')}</div>
-        <div class="action-card-sub">${t('emailSub')}</div>
+        <div class="action-card-title">${t('emailTitle')}</div><div class="action-card-sub">${t('emailSub')}</div>
       </div>
     </div>
-    <div class="navrow">
-      <button class="btn-back" onclick="ps()">${t('btnBack')}</button>
-    </div>`;
+    <div class="navrow"><button class="btn-back" onclick="ps()">${t('btnBack')}</button></div>`;
 }
 
-/* ════════════════════════════════════════════
-   ACTIONS
-════════════════════════════════════════════ */
+/* ════ ACTIONS & INIT ════ */
 function rebox(){
   renderNav();
   const b=document.getElementById("sbox");
-  if(S.step===1) b.innerHTML=rStep1();
-  else if(S.step===2) b.innerHTML=rStep2();
-  else if(S.step===3) b.innerHTML=rStep3();
-  else if(S.step===4) b.innerHTML=rStep4();
-  else if(S.step===5) b.innerHTML=rStep5();
-  if(S.step===4 && S.artTab==='studio') setTimeout(initStudio, 30);
+  if(S.step===1)b.innerHTML=rStep1();
+  else if(S.step===2)b.innerHTML=rStep2();
+  else if(S.step===3)b.innerHTML=rStep3();
+  else if(S.step===4)b.innerHTML=rStep4();
+  if(S.step===3&&S.artTab==='studio')setTimeout(initStudio,30);
+  /* cap only visible from step 2 onwards */
+  capGroup.visible=(S.step>=2);
 }
-function ns(){if(S.step<5){S.step++;rebox();}}
+function ns(){if(S.step<4){S.step++;rebox();}}
 function ps(){if(S.step>1){S.step--;rebox();}}
 function goStep(n){S.step=n;rebox();}
 
+/* Index-based size setter — avoids inline string quoting issues in onclick */
+let _sizeRef=[];
+function setSize(i){S.size=_sizeRef[i];updateCamera();updateBadge();rebox();}
+
+function selectCategory(cat){
+  S.category=cat;
+  S.prod=PRODUCTS[cat][0];
+  S.size=S.prod.sizes[0];
+  updateCamera();updateBadge();rebox();
+}
+function selectProduct(id){
+  const prods=PRODUCTS[S.category]||[];
+  const p=prods.find(x=>x.id===id);if(!p)return;
+  S.prod=p;S.size=p.sizes[0];
+  updateCamera();updateBadge();rebox();
+}
+
 function pickColor(prop,code){
-  const c=PANTONE.find(x=>x.code===code); if(!c)return;
+  const c=PANTONE.find(x=>x.code===code);if(!c)return;
   S[prop]=c;
-  if(prop==="bodyColor"){setLinear(tBodyCol,c.hex);generateLabel();updateBadge();}
-  if(prop==="capColor"){setLinear(tCapCol,c.hex);}
+  if(prop==="capColor"){setLinear(tCapCol,c.hex);applyColors();}
   rebox();
 }
 function pickHex(prop,hex){
   if(!/^#[0-9a-fA-F]{6}$/.test(hex))return;
-  S[prop]={code:"Custom",name:"Custom colour",hex,f:"N"};
-  if(prop==="bodyColor"){setLinear(tBodyCol,hex);generateLabel();updateBadge();}
-  if(prop==="capColor"){setLinear(tCapCol,hex);}
+  S[prop]={code:"Custom",name:"Custom",hex,f:"N"};
+  if(prop==="capColor"){setLinear(tCapCol,hex);applyColors();}
   rebox();
 }
 function onUpload(e){
-  const f=e.target.files[0]; if(!f)return;
+  const f=e.target.files[0];if(!f)return;
   const reader=new FileReader();
-  reader.onload=ev=>{const img=new Image(); img.onload=()=>{S.designImg=img;generateLabel();rebox();}; img.src=ev.target.result;};
+  reader.onload=ev=>{
+    const img=new Image();
+    img.onload=()=>{S.designImg=img;S.labelScale=1.0;S.labelPosY=0.5;generateLabel();rebox();};
+    img.src=ev.target.result;
+  };
   reader.readAsDataURL(f);
 }
 function clearDesign(e){
-  e.stopPropagation(); S.designImg=null; S.selectedTemplate=null;
-  const fup=document.getElementById("fup"); if(fup)fup.value="";
-  generateLabel(); rebox();
+  e.stopPropagation();S.designImg=null;S.selectedTemplate=null;
+  const fup=document.getElementById("fup");if(fup)fup.value="";
+  generateLabel();rebox();
 }
+
 function downloadPDF(){
-  // Build an off-screen summary div that the browser renders natively
-  // (handles Cyrillic, Latin, and any other script via CSS fonts)
-  const capStr = S.capMatchBody
-    ? t('matchBodyStr') + ' — ' + S.bodyColor.name
-    : 'PMS ' + S.capColor.code + ' — ' + S.capColor.name;
-  const artStr = S.bareMode ? t('sumBare') : S.designImg ? t('sumCustomArt') : t('sumNoArt');
-  const now = new Date();
-  const dateStr = now.toLocaleDateString(LANG==='ru' ? 'ru-RU' : 'en-GB', {day:'2-digit', month:'long', year:'numeric'});
-
-  const capHex  = S.capMatchBody ? S.bodyColor.hex : S.capColor.hex;
-  const capCode = S.capMatchBody ? S.bodyColor.code : S.capColor.code;
-
-  const rows = [
-    [t('sumProduct'),   S.prod.name + ' · ' + S.size.ml],
-    [t('sumBodyCol'),   'PMS ' + S.bodyColor.code + ' — ' + S.bodyColor.name],
-    [t('sumFinish'),    S.finish.name],
-    [t('sumCapStyle'),  t('sumCapStyleVal')],
-    [t('sumCapCol'),    capStr],
-    [t('sumArtwork'),   artStr],
+  const capHex=S.capMatchBody?BODY_BASE.hex:S.capColor.hex;
+  const capCode=S.capMatchBody?'Aluminium':S.capColor.code;
+  const capStr=S.capMatchBody?t('matchBodyStr')+' \u2014 '+BODY_BASE.name:'PMS '+S.capColor.code+' \u2014 '+S.capColor.name;
+  const artStr=S.bareMode?t('sumBare'):S.designImg?t('sumCustomArt'):t('sumNoArt');
+  const capName=CAP_STYLES.find(c=>c.id===S.capStyle);
+  const now=new Date();
+  const dateStr=now.toLocaleDateString(LANG==='ru'?'ru-RU':'en-GB',{day:'2-digit',month:'long',year:'numeric'});
+  const rows=[
+    [t('sumProduct'),(S.prod?S.prod.name:'')+' \u00b7 '+S.size],
+    ['Body','Aluminium (standard)'],
+    [t('sumFinish'),S.finish.name],
+    [t('sumCapStyle'),capName?t(capName.nameKey):S.capStyle],
+    [t('sumCapCol'),capStr],
+    [t('sumArtwork'),artStr],
   ];
-
-  // Force a render so the WebGL buffer is fresh
-  renderer.render(scene, camera);
-  const renderDataURL = (() => { try { return renderer.domElement.toDataURL('image/png'); } catch(e){ return null; } })();
-
-  const rowsHTML = rows.map(([k,v], i) => `
-    <tr style="background:${i%2===0?'#f0f5fc':'#ffffff'}">
-      <td style="padding:7px 10px;font-size:12px;color:#64748b;font-weight:600;width:42%">${k}</td>
-      <td style="padding:7px 10px;font-size:12px;color:#0f172a;font-weight:700">${v}</td>
-    </tr>`).join('');
-
-  // Capture the real canvas dimensions so the image is never distorted
-  const cW = renderer.domElement.width;
-  const cH = renderer.domElement.height;
-  const imgW = 190;
-  const imgH = Math.round(imgW * (cH / cW));   // preserve true aspect ratio
-  const renderImgHTML = renderDataURL
-    ? `<img src="${renderDataURL}" style="width:${imgW}px;height:${imgH}px;border-radius:8px;border:1px solid #dde5f0;background:#ecf0f7;display:block">`
-    : '';
-
-  const html = `
-    <div id="pdf-root" style="
-      width:794px;background:#ffffff;font-family:'Lato','Helvetica Neue',Arial,sans-serif;
-      box-sizing:border-box;overflow:hidden">
-
-      <!-- Header -->
-      <div style="background:#0d3a7a;padding:18px 28px;display:flex;align-items:center;justify-content:space-between">
-        <div>
-          <div style="font-size:20px;font-weight:700;color:#ffffff;letter-spacing:0.5px">AEROSTAR CONTRACT</div>
-          <div style="font-size:11px;color:#a0b8d8;margin-top:3px">${LANG==='ru'?'Конфигуратор упаковки — Сводка конфигурации':'Packaging Configurator — Configuration Summary'}</div>
-        </div>
-        <div style="font-size:11px;color:#a0b8d8;text-align:right">${dateStr}</div>
-      </div>
-
-      <!-- Body -->
-      <div style="padding:28px;display:flex;gap:24px;align-items:flex-start">
-
-        <!-- Left: summary table + swatches -->
-        <div style="flex:1;min-width:0">
-          <div style="font-size:10px;font-weight:700;color:#1557b0;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">
-            ${t('configSummary')}
+  renderer.render(scene,camera);
+  const renderDataURL=(()=>{try{return renderer.domElement.toDataURL('image/png');}catch(e){return null;}})();
+  const rowsHTML=rows.map(([k,v],i)=>`<tr style="background:${i%2===0?'#f0f5fc':'#fff'}"><td style="padding:7px 10px;font-size:12px;color:#64748b;font-weight:600;width:42%">${k}</td><td style="padding:7px 10px;font-size:12px;color:#0f172a;font-weight:700">${v}</td></tr>`).join('');
+  const cW=renderer.domElement.width,cH=renderer.domElement.height;
+  const imgW=190,imgH=Math.round(imgW*(cH/cW));
+  const renderImgHTML=renderDataURL?`<img src="${renderDataURL}" style="width:${imgW}px;height:${imgH}px;border-radius:8px;border:1px solid #dde5f0;background:#1a1c22;display:block">`:'';
+  const html=`<div id="pdf-root" style="width:794px;background:#fff;font-family:'Lato','Helvetica Neue',Arial,sans-serif;box-sizing:border-box;overflow:hidden">
+    <div style="background:#0d3a7a;padding:18px 28px;display:flex;align-items:center;justify-content:space-between">
+      <div><div style="font-size:20px;font-weight:700;color:#fff;letter-spacing:0.5px">AEROSTAR CONTRACT</div>
+      <div style="font-size:11px;color:#a0b8d8;margin-top:3px">Packaging Configurator \u2014 Configuration Summary</div></div>
+      <div style="font-size:11px;color:#a0b8d8">${dateStr}</div>
+    </div>
+    <div style="padding:28px;display:flex;gap:24px;align-items:flex-start">
+      <div style="flex:1;min-width:0">
+        <div style="font-size:10px;font-weight:700;color:#1557b0;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">${t('configSummary')}</div>
+        <table style="width:100%;border-collapse:collapse;border:1px solid #dde5f0">${rowsHTML}</table>
+        <div style="margin-top:20px;display:flex;gap:14px;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:10px;background:#f0f5fc;border-radius:7px;padding:10px 14px;border:1px solid #dde5f0">
+            <div style="width:32px;height:32px;border-radius:50%;background:#d4d4d6;border:1px solid rgba(0,0,0,.1);flex-shrink:0"></div>
+            <div><div style="font-size:10px;font-weight:700;color:#0a3578">Body</div><div style="font-size:11px;color:#334155">Aluminium</div></div>
           </div>
-          <table style="width:100%;border-collapse:collapse;border-radius:8px;overflow:hidden;border:1px solid #dde5f0">
-            ${rowsHTML}
-          </table>
-
-          <!-- Colour swatches -->
-          <div style="margin-top:20px">
-            <div style="font-size:10px;font-weight:700;color:#1557b0;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px">
-              ${LANG==='ru'?'ЦВЕТА':'COLOURS'}
-            </div>
-            <div style="display:flex;gap:16px">
-              <div style="display:flex;align-items:center;gap:10px;background:#f0f5fc;border-radius:7px;padding:10px 14px;border:1px solid #dde5f0">
-                <div style="width:36px;height:36px;border-radius:50%;background:${S.bodyColor.hex};border:1px solid rgba(0,0,0,0.1);flex-shrink:0"></div>
-                <div>
-                  <div style="font-size:10px;font-weight:700;color:#0a3578">${LANG==='ru'?'Корпус':'Body'}</div>
-                  <div style="font-size:11px;color:#334155">PMS ${S.bodyColor.code}</div>
-                  <div style="font-size:10px;color:#64748b">${S.bodyColor.name}</div>
-                </div>
-              </div>
-              <div style="display:flex;align-items:center;gap:10px;background:#f0f5fc;border-radius:7px;padding:10px 14px;border:1px solid #dde5f0">
-                <div style="width:36px;height:36px;border-radius:50%;background:${capHex};border:1px solid rgba(0,0,0,0.1);flex-shrink:0"></div>
-                <div>
-                  <div style="font-size:10px;font-weight:700;color:#0a3578">${LANG==='ru'?'Крышка':'Cap'}</div>
-                  <div style="font-size:11px;color:#334155">PMS ${capCode}</div>
-                  <div style="font-size:10px;color:#64748b">${S.capMatchBody?S.bodyColor.name:S.capColor.name}</div>
-                </div>
-              </div>
-            </div>
+          <div style="display:flex;align-items:center;gap:10px;background:#f0f5fc;border-radius:7px;padding:10px 14px;border:1px solid #dde5f0">
+            <div style="width:32px;height:32px;border-radius:50%;background:${capHex};border:1px solid rgba(0,0,0,.1);flex-shrink:0"></div>
+            <div><div style="font-size:10px;font-weight:700;color:#0a3578">Cap</div><div style="font-size:11px;color:#334155">PMS ${capCode}</div></div>
           </div>
         </div>
-
-        <!-- Right: 3D render -->
-        ${renderImgHTML ? `
-        <div style="flex-shrink:0;text-align:center">
-          ${renderImgHTML}
-          <div style="font-size:9px;color:#94a3b8;margin-top:5px;font-style:italic">
-            ${LANG==='ru'?'3D-рендер':'3D Render'}
-          </div>
-        </div>` : ''}
       </div>
-
-      <!-- Footer -->
-      <div style="background:#f0f5fc;border-top:1px solid #dde5f0;padding:10px 28px;display:flex;justify-content:space-between;align-items:center">
-        <div style="font-size:10px;color:#64748b">aerostar.com</div>
-        <div style="font-size:10px;color:#94a3b8">
-          ${LANG==='ru'?'Конфиденциально — только для внутреннего использования':'Confidential — for internal use only'}
-        </div>
-        <div style="font-size:10px;color:#64748b">${dateStr}</div>
-      </div>
-    </div>`;
-
-  // Inject off-screen
-  const wrapper = document.createElement('div');
-  wrapper.style.cssText = 'position:fixed;left:-9999px;top:0;z-index:-1';
-  wrapper.innerHTML = html;
-  document.body.appendChild(wrapper);
-
-  const node = wrapper.querySelector('#pdf-root');
-
-  html2canvas(node, {
-    scale: 2,
-    useCORS: true,
-    backgroundColor: '#ffffff',
-    logging: false,
-  }).then(canvas => {
+      ${renderImgHTML?`<div style="flex-shrink:0;text-align:center">${renderImgHTML}<div style="font-size:9px;color:#94a3b8;margin-top:5px;font-style:italic">3D Render</div></div>`:''}
+    </div>
+    <div style="background:#f0f5fc;border-top:1px solid #dde5f0;padding:10px 28px;display:flex;justify-content:space-between">
+      <div style="font-size:10px;color:#64748b">aerostar.com</div>
+      <div style="font-size:10px;color:#94a3b8">Confidential</div>
+      <div style="font-size:10px;color:#64748b">${dateStr}</div>
+    </div>
+  </div>`;
+  const wrapper=document.createElement('div');wrapper.style.cssText='position:fixed;left:-9999px;top:0;z-index:-1';wrapper.innerHTML=html;document.body.appendChild(wrapper);
+  const node=wrapper.querySelector('#pdf-root');
+  html2canvas(node,{scale:2,useCORS:true,backgroundColor:'#ffffff',logging:false}).then(canvas=>{
     document.body.removeChild(wrapper);
-    const { jsPDF } = window.jspdf;
-    // A4 = 210×297mm; canvas width = 794px at 96dpi ≈ 210mm
-    const PW = 210;
-    const canvasH_mm = (canvas.height / canvas.width) * PW;
-    const doc = new jsPDF({ orientation: canvasH_mm > 297 ? 'portrait':'portrait', unit:'mm', format:'a4' });
-    const imgData = canvas.toDataURL('image/png');
-    doc.addImage(imgData, 'PNG', 0, 0, PW, Math.min(canvasH_mm, 297));
+    const {jsPDF}=window.jspdf;const PW=210;
+    const canvasH_mm=(canvas.height/canvas.width)*PW;
+    const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+    doc.addImage(canvas.toDataURL('image/png'),'PNG',0,0,PW,Math.min(canvasH_mm,297));
     doc.save('Aerostar-Configuration.pdf');
-  }).catch(err => {
-    document.body.removeChild(wrapper);
-    console.error('PDF generation failed:', err);
-    alert('PDF generation failed. Please try again.');
-  });
+  }).catch(err=>{document.body.removeChild(wrapper);console.error(err);alert('PDF generation failed.');});
 }
 
 function sendEmail(){
-  const capStr = S.capMatchBody ? 'Match Body — ' + S.bodyColor.name : 'PMS ' + S.capColor.code + ' — ' + S.capColor.name;
-  const artStr = S.bareMode ? 'Bare can' : S.designImg ? 'Custom artwork uploaded' : 'No artwork';
-  const subject = encodeURIComponent(t('emailSubject'));
-  const body = encodeURIComponent(
-    (LANG==='ru'
-      ? 'Сводка конфигурации упаковки Aerostar\n\n'
-      : 'Aerostar Packaging Configuration Summary\n\n') +
-    t('sumProduct')   + ': ' + S.prod.name + ' · ' + S.size.ml + '\n' +
-    t('sumBodyCol')   + ': PMS ' + S.bodyColor.code + ' — ' + S.bodyColor.name + '\n' +
-    t('sumFinish')    + ': ' + S.finish.name + '\n' +
-    t('sumCapStyle')  + ': ' + t('sumCapStyleVal') + '\n' +
-    t('sumCapCol')    + ': ' + capStr + '\n' +
-    t('sumArtwork')   + ': ' + artStr + '\n\n' +
-    (LANG==='ru' ? 'Сгенерировано с помощью конфигуратора упаковки Aerostar.' : 'Generated using the Aerostar Packaging Configurator.')
+  const capStr=S.capMatchBody?t('matchBodyStr')+' \u2014 '+BODY_BASE.name:'PMS '+S.capColor.code+' \u2014 '+S.capColor.name;
+  const artStr=S.bareMode?'Bare can':S.designImg?'Custom artwork uploaded':'No artwork';
+  const subject=encodeURIComponent(t('emailSubject'));
+  const body=encodeURIComponent(
+    'Aerostar Packaging Configuration Summary\n\n'+
+    t('sumProduct')+': '+(S.prod?S.prod.name:'')+' \u00b7 '+S.size+'\n'+
+    'Body: Aluminium (standard)\n'+
+    t('sumFinish')+': '+S.finish.name+'\n'+
+    t('sumCapStyle')+': '+S.capStyle+'\n'+
+    t('sumCapCol')+': '+capStr+'\n'+
+    t('sumArtwork')+': '+artStr+'\n\n'+
+    'Generated using the Aerostar Packaging Configurator.'
   );
-  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  window.location.href=`mailto:?subject=${subject}&body=${body}`;
 }
 
-function submitForm(){
-  document.getElementById("sbox").innerHTML=`<div class="success-wrap">
-    <div class="ok-mark"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>
-    <div style="font-size:21px;font-weight:300;color:var(--blue-dark);margin-bottom:10px">${t('submitted')}</div>
-    <div style="font-size:13px;color:var(--muted);line-height:1.7;max-width:320px;margin:0 auto">${t('submittedDesc')}</div>
-    <button class="btn-next" style="margin:24px auto 0;display:inline-flex" onclick="resetAll()">${t('btnNewConfig')} ${IC.chevron}</button>
-  </div>`;
-}
 function resetAll(){
-  S={step:1,category:"beauty",prod:PRODUCTS.beauty[0],size:SIZES[2],
-    bodyColor:PANTONE.find(p=>p.code==="877 C"),capMatchBody:false,
-    capColor:PANTONE.find(p=>p.code==="Black C"),
-    finish:FINISHES[1],designImg:null,labelPosY:0.48,labelScale:0.82,bareMode:false,
+  S={step:1,category:"airfresh",prod:PRODUCTS.airfresh[0],size:"300 ml",
+    capMatchBody:true,capColor:PANTONE.find(p=>p.code==="877 C"),capStyle:"standard",
+    finish:FINISHES[0],designImg:null,labelPosY:0.5,labelScale:1.0,bareMode:false,
     pfam:"All",psearch:"",selectedTemplate:null,artTab:'upload'};
-  // Reset studio state
-  if(fabricCanvas){ fabricCanvas.dispose(); fabricCanvas=null; }
-  studioJSON=null; studioApplied=false; emojiCat='All';
-  setLinear(tBodyCol,S.bodyColor.hex); setLinear(tCapCol,S.capColor.hex);
-  tR=S.finish.r; tM=S.finish.m;
-  updateCamera(); generateLabel(); updateBadge(); rebox();
+  if(fabricCanvas){fabricCanvas.dispose();fabricCanvas=null;}
+  studioJSON=null;studioApplied=false;emojiCat='All';
+  setLinear(tCapCol,S.capColor.hex);tR=S.finish.r;tM=S.finish.m;
+  buildCapGeometry(S.capStyle);
+  updateCamera();generateLabel();applyColors();rebox();
 }
 
-
-
-
-/* ── INIT ── */
+/* ════ INIT ════ */
 initMobile();
 resize();
 updateCamera();

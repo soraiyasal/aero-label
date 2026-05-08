@@ -555,7 +555,7 @@ let S={
   category:"airfresh",
   prod:null, /* set after init */
   size:null, /* set after product init */
-  capMatchBody:true,
+  capMatchBody:false,
   capColor:null, /* set after init */
   capStyle:"standard",
   finish:FINISHES[0],
@@ -565,7 +565,7 @@ let S={
 /* init after data */
 S.prod=PRODUCTS.airfresh[0];
 S.size=S.prod.sizes[0]; /* start at smallest size */
-S.capColor=PANTONE.find(p=>p.code==="877 C");
+S.capColor=PANTONE.find(p=>p.code==="Black C");
 
 /* ════ NAV STEPS (4 steps — body colour removed) ════ */
 const NAV_STEPS=[
@@ -683,7 +683,7 @@ let labelMat=new THREE.MeshBasicMaterial({
   polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2
 });
 let capMat=new THREE.MeshStandardMaterial({
-  color:toLinear(PANTONE.find(p=>p.code==="877 C").hex),
+  color:toLinear(PANTONE.find(p=>p.code==="Black C").hex),
   metalness:0.04,roughness:0.42
 });
 const valveMat=new THREE.MeshStandardMaterial({
@@ -691,7 +691,7 @@ const valveMat=new THREE.MeshStandardMaterial({
 });
 const ringMat=silverMat; /* bottom lip/bead same silver as reference */
 
-let tCapCol=toLinear(PANTONE.find(p=>p.code==="877 C").hex);
+let tCapCol=toLinear(PANTONE.find(p=>p.code==="Black C").hex);
 let tR=S.finish.r,tM=S.finish.m;
 
 /* GLB CAP MODEL
@@ -1655,7 +1655,7 @@ function sendEmail(){
 
 function resetAll(){
   S={step:1,category:"airfresh",prod:PRODUCTS.airfresh[0],size:"300 ml",
-    capMatchBody:true,capColor:PANTONE.find(p=>p.code==="877 C"),capStyle:"standard",
+    capMatchBody:false,capColor:PANTONE.find(p=>p.code==="Black C"),capStyle:"standard",
     finish:FINISHES[0],designImg:null,labelPosY:0.5,labelScale:1.0,bareMode:false,
     pfam:"All",psearch:"",selectedTemplate:null,artTab:'upload'};
   if(fabricCanvas){fabricCanvas.dispose();fabricCanvas=null;}

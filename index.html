@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aerostar Contract — Packaging Configurator</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
@@ -695,6 +696,24 @@ const ringMat=silverMat; /* bottom lip/bead same silver as reference */
 let tCapCol=toLinear(PANTONE.find(p=>p.code==="877 C").hex);
 let tR=S.finish.r,tM=S.finish.m;
 
+/* GLB CAP MODEL
+   Place your cap file in the same folder as this HTML file.
+   Default expected filename: cleaned_cap_largest_component.glb
+*/
+const GLB_CAP_URL = "./cleaned_cap_largest_component.glb";
+let loadedCapModel = null;
+
+function applyCapMaterialToModel(model){
+  model.traverse(function(child){
+    if(child.isMesh){
+      child.material = capMat;
+      child.castShadow = true;
+      child.receiveShadow = true;
+      child.frustumCulled = false;
+    }
+  });
+}
+
 /* can group — y=0 at base */
 const canGroup=new THREE.Group();
 scene.add(canGroup);
@@ -786,17 +805,15 @@ function makeAngledCapGeom(outerR,height,rSegs,hSegs){
   g.computeVertexNormals();return g;
 }
 
-function buildCapGeometry(styleId){
-  while(capGroup.children.length)capGroup.remove(capGroup.children[0]);
+function buildFallbackCapGeometry(styleId){
   const R=CAN.capR,H=CAN.capH;
   if(styleId==="standard"){
     const stdMesh=new THREE.Mesh(makeAngledCapGeom(R,H),capMat);
-    stdMesh.position.y=H/2; /* shift up so BOTTOM sits at capGroup.y — avoids body z-fighting */
+    stdMesh.position.y=H/2;
     capGroup.add(stdMesh);
     const lip=new THREE.Mesh(new THREE.TorusGeometry(R*1.002,0.015,8,96),ringMat);
     lip.rotation.x=Math.PI/2;lip.position.y=0.018;capGroup.add(lip);
   } else if(styleId==="dome"){
-    /* dome: lathe profile — cylinder body topped by quarter-sphere */
     const pts=[];
     for(let i=0;i<=40;i++){
       const tt=i/40;
@@ -821,6 +838,78 @@ function buildCapGeometry(styleId){
     lip.rotation.x=Math.PI/2;lip.position.y=0.018;capGroup.add(lip);
   }
 }
+
+function buildCapGeometry(styleId){
+  while(capGroup.children.length)capGroup.remove(capGroup.children[0]);
+
+  // Use your imported GLB cap when it is available.
+  if(loadedCapModel){
+    const model=loadedCapModel.clone(true);
+    applyCapMaterialToModel(model);
+
+    // Reset first so bounding-box maths is reliable.
+    model.position.set(0,0,0);
+    model.rotation.set(0,0,0);
+    model.scale.set(1,1,1);
+
+    // If your cap loads lying sideways, uncomment ONE of these lines:
+    // model.rotation.x = Math.PI / 2;
+    // model.rotation.y = Math.PI / 2;
+    // model.rotation.z = Math.PI / 2;
+
+    // Centre the GLB in X/Z and put its bottom on y=0.
+    let box=new THREE.Box3().setFromObject(model);
+    let size=new THREE.Vector3();
+    let center=new THREE.Vector3();
+    box.getSize(size);
+    box.getCenter(center);
+
+    model.position.x -= center.x;
+    model.position.z -= center.z;
+    model.position.y -= box.min.y;
+
+    // Scale imported cap to match the can top diameter.
+    const targetDiameter=CAN.capR*2.0;
+    const currentDiameter=Math.max(size.x,size.z) || 1;
+    const scale=targetDiameter/currentDiameter;
+    model.scale.setScalar(scale);
+
+    // Recalculate after scale, then make the bottom sit on capGroup base.
+    box=new THREE.Box3().setFromObject(model);
+    model.position.y -= box.min.y;
+
+    // Fine tune these if needed:
+    model.position.y += 0.00; // increase if cap sinks into can, decrease if it floats
+    model.scale.multiplyScalar(1.00); // use 0.95 or 1.05 if slightly too big/small
+
+    capGroup.add(model);
+    return;
+  }
+
+  // Temporary fallback while the GLB is still loading, or if it fails.
+  buildFallbackCapGeometry(styleId);
+}
+
+if(typeof THREE.GLTFLoader !== "undefined"){
+  const gltfLoader=new THREE.GLTFLoader();
+  gltfLoader.load(
+    GLB_CAP_URL,
+    function(gltf){
+      loadedCapModel=gltf.scene;
+      applyCapMaterialToModel(loadedCapModel);
+      buildCapGeometry(S.capStyle);
+      rebox();
+    },
+    undefined,
+    function(error){
+      console.error("Could not load GLB cap. Check filename, folder, and localhost:", error);
+      buildCapGeometry(S.capStyle);
+    }
+  );
+} else {
+  console.error("GLTFLoader is not available. Check the GLTFLoader script tag.");
+}
+
 buildCapGeometry(S.capStyle);
 capGroup.visible=false; /* hidden until step 2 */
 

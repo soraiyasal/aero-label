@@ -541,11 +541,9 @@ const SIZE_SCALES={
   "300 ml":1.10,"350 ml":1.17,"400 ml":1.25,
 };
 
-/* ════ CAP STYLES ════ */
+/* ════ CAP STYLES — single GLB cap only ════ */
 const CAP_STYLES=[
   {id:"standard",nameKey:"capStdName",descKey:"capStdDesc"},
-  {id:"dome",    nameKey:"capDomeName",descKey:"capDomeDesc"},
-  {id:"slim",    nameKey:"capSlimName",descKey:"capSlimDesc"},
 ];
 
 /* ════ FIXED BODY BASE (no user colour selection) ════ */
@@ -784,7 +782,7 @@ bottomBead.rotation.x=Math.PI/2;bottomBead.position.y=0.09;canGroup.add(bottomBe
 
 /* CAP GROUP */
 const capGroup=new THREE.Group();
-capGroup.position.y=CAN.bodyH+0.47; /* just above shoulder top (0.45) — no z-fighting */
+capGroup.position.y=CAN.bodyH+0.0; /* base of shoulder — adjust up/down if needed */
 canGroup.add(capGroup);
 
 function makeAngledCapGeom(outerR,height,rSegs,hSegs){
@@ -1367,8 +1365,6 @@ function rStep1(){
 function rStep2(){
   const finishKeys={matte:'fMatte',semimatte:'fSemiMatte',gloss:'fGloss',pearl:'fPearl'};
   return`<h2 class="sec-title">${t('s2title')}</h2>
-    <span class="field-label">${t('capStyleHead')}</span>
-    ${renderCapStyleGrid()}
     <span class="field-label">${t('surfaceFinish')}</span>
     <div class="fin-grid">
       ${FINISHES.map(f=>`<div class="fg${S.finish.id===f.id?" on":""}" onclick="S.finish=FINISHES.find(x=>x.id==='${f.id}');tR=S.finish.r;tM=S.finish.m;applyColors();rebox()">

@@ -633,6 +633,8 @@ function selectCapStyle(id){
   S.capStyle=id;
   buildCapGeometry(id);
   capGroup.visible=true;
+  topRim.visible=false; /* hidden under cap — its radius is wider than the cap so it bleeds through */
+  shoulderMesh.visible=false; /* likewise hide shoulder silver when cap is on */
   rebox();
 }
 
@@ -782,7 +784,7 @@ bottomBead.rotation.x=Math.PI/2;bottomBead.position.y=0.09;canGroup.add(bottomBe
 
 /* CAP GROUP */
 const capGroup=new THREE.Group();
-capGroup.position.y=CAN.bodyH+0.0; /* base of shoulder — adjust up/down if needed */
+capGroup.position.y=CAN.bodyH+0.0; /* base of shoulder */
 canGroup.add(capGroup);
 
 function makeAngledCapGeom(outerR,height,rSegs,hSegs){
@@ -809,7 +811,7 @@ function buildFallbackCapGeometry(styleId){
     const stdMesh=new THREE.Mesh(makeAngledCapGeom(R,H),capMat);
     stdMesh.position.y=H/2;
     capGroup.add(stdMesh);
-    const lip=new THREE.Mesh(new THREE.TorusGeometry(R*1.002,0.015,8,96),ringMat);
+    const lip=new THREE.Mesh(new THREE.TorusGeometry(R*1.002,0.015,8,96),capMat);
     lip.rotation.x=Math.PI/2;lip.position.y=0.018;capGroup.add(lip);
   } else if(styleId==="dome"){
     const pts=[];
@@ -824,7 +826,7 @@ function buildFallbackCapGeometry(styleId){
       }
     }
     capGroup.add(new THREE.Mesh(new THREE.LatheGeometry(pts,96),capMat));
-    const lip=new THREE.Mesh(new THREE.TorusGeometry(R*0.96,0.015,8,96),ringMat);
+    const lip=new THREE.Mesh(new THREE.TorusGeometry(R*0.96,0.015,8,96),capMat);
     lip.rotation.x=Math.PI/2;lip.position.y=0.018;capGroup.add(lip);
   } else if(styleId==="slim"){
     const sR=R*0.68,sH=H*1.08;
@@ -832,7 +834,7 @@ function buildFallbackCapGeometry(styleId){
     body.position.y=sH/2;capGroup.add(body);
     const top=new THREE.Mesh(new THREE.CylinderGeometry(sR*0.86,sR*0.86,0.04,96),capMat);
     top.position.y=sH+0.02;capGroup.add(top);
-    const lip=new THREE.Mesh(new THREE.TorusGeometry(sR,0.015,8,96),ringMat);
+    const lip=new THREE.Mesh(new THREE.TorusGeometry(sR,0.015,8,96),capMat);
     lip.rotation.x=Math.PI/2;lip.position.y=0.018;capGroup.add(lip);
   }
 }
@@ -1523,6 +1525,9 @@ function rebox(){
   if(S.step===3&&S.artTab==='studio')setTimeout(initStudio,30);
   /* cap only visible from step 2 onwards */
   capGroup.visible=(S.step>=2);
+  /* hide silver rim parts that bleed through the cap when it's on */
+  topRim.visible=!(S.step>=2);
+  shoulderMesh.visible=!(S.step>=2);
 }
 function ns(){if(S.step<4){S.step++;rebox();}}
 function ps(){if(S.step>1){S.step--;rebox();}}
@@ -1662,6 +1667,7 @@ function resetAll(){
   studioJSON=null;studioApplied=false;emojiCat='All';
   setLinear(tCapCol,S.capColor.hex);tR=S.finish.r;tM=S.finish.m;
   buildCapGeometry(S.capStyle);
+  topRim.visible=true;shoulderMesh.visible=true;
   updateCamera();generateLabel();applyColors();rebox();
 }
 
